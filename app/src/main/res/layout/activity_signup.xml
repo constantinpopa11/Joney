@@ -21,6 +21,34 @@
         android:background="@drawable/shape_email"
         android:drawableLeft="@drawable/ic_user"
         android:drawablePadding="10dp"
+        android:hint="First Name"
+        android:padding="15dp"
+        android:inputType="textPersonName"
+        android:textColor="@color/darkGreyText"
+        android:textColorHighlight="@color/white"
+        android:textColorHint="@color/darkGreyText" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_email"
+        android:drawableLeft="@drawable/ic_user"
+        android:drawablePadding="10dp"
+        android:hint="Last Name"
+        android:padding="15dp"
+        android:inputType="textPersonName"
+        android:textColor="@color/darkGreyText"
+        android:textColorHighlight="@color/white"
+        android:textColorHint="@color/darkGreyText" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_email"
+        android:drawableLeft="@drawable/ic_email"
+        android:drawablePadding="10dp"
         android:hint="Email"
         android:padding="15dp"
         android:inputType="textEmailAddress"
@@ -42,41 +70,24 @@
         android:textColorHighlight="@color/white"
         android:textColorHint="@color/darkGreyText" />
 
-    <LinearLayout
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:buttonTint="@color/colorPrimary"
-            android:checked="true"
-            android:text="Remember Me"
-            android:textColor="@color/darkGreyText" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:drawableLeft="@drawable/ic_lock_open"
-            android:drawablePadding="6dp"
-            android:padding="4dp"
-            android:text="Forget Password"
-            android:textColor="@color/darkGreyText" />
+        android:layout_margin="10dp"
+        android:background="@drawable/shape_email"
+        android:drawableLeft="@drawable/ic_lock"
+        android:drawablePadding="10dp"
+        android:hint="Repeat Password"
+        android:padding="15dp"
+        android:inputType="textPassword"
+        android:textColor="@color/darkGreyText"
+        android:textColorHighlight="@color/white"
+        android:textColorHint="@color/darkGreyText" />
 
 
-    </LinearLayout>
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -87,10 +98,10 @@
         android:padding="15dp"
         android:shadowColor="@android:color/transparent"
         android:textColor="@color/white"
-        android:text="Log In" />
+        android:text="Sign Up" />
 
     <Button
-        android:id="@+id/btn_signup"
+        android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -100,7 +111,7 @@
         android:background="@drawable/button_signup_selector"
         android:padding="15dp"
         android:shadowColor="@android:color/transparent"
-        android:text="Sign Up"
+        android:text="Already Registered? Login"
         android:textColor="@color/white" />
 
 </LinearLayout>

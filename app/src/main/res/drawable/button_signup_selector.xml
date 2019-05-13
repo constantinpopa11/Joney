@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true"
-        android:color="@color/colorSecondaryDark"/>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:exitFadeDuration="@android:integer/config_shortAnimTime">
 
-    <item android:state_focused="true"
-        android:color="@color/colorSecondaryDark"/>
+    <item android:drawable="@drawable/shape_dark_signup" android:state_focused="true"/>
+    <item android:drawable="@drawable/shape_dark_signup" android:state_pressed="true"/>
+    <item android:drawable="@drawable/shape_signup"/>
 
-    <item android:color="@color/colorSecondary"/>
 </selector>
