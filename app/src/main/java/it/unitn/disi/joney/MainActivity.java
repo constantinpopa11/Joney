@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnLogin, btnSignup;
+    TextView tvForgotPassword;
 
     SQLiteDatabase dbJoney;
     Constants c = Constants.getInstance();
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnSignup = (Button) findViewById(R.id.btn_signup);
+        tvForgotPassword = (TextView) findViewById(R.id.forgot_password);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,11 +64,20 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
             }
         });
+
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intSignup = new Intent(MainActivity.this,SignupActivity.class);
                 startActivity(intSignup);
+            }
+        });
+
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intResetPassword = new Intent(MainActivity.this,ResetPasswordActivity.class);
+                startActivity(intResetPassword);
             }
         });
 

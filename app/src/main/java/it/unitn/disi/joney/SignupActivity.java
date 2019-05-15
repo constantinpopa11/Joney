@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String firstName, lastName, email, password, repeatPassword;
                 EditText etFirstName, etLastName, etEmail, etPassword, etRepeatPassword;
+                CheckBox cbTos;
 
                 etFirstName = (EditText) findViewById(R.id.first_name);
                 firstName = etFirstName.getText().toString();
@@ -48,26 +50,31 @@ public class SignupActivity extends AppCompatActivity {
                 password = etPassword.getText().toString();
                 etRepeatPassword = (EditText) findViewById(R.id.repeat_password);
                 repeatPassword = etRepeatPassword.getText().toString();
+                cbTos = (CheckBox) findViewById(R.id.tos);
 
-                if(isValidEmail(email))
-                {
-                    if(password.equals(repeatPassword))
-                    {
-                        password = c.md5(password);
+                if(firstName.length() == 0 || lastName.length() == 0 || email.length() == 0 || password.length() == 0 || repeatPassword.length() == 0)
+                    Toast.makeText(getApplicationContext(), "You must fill every field!", Toast.LENGTH_SHORT).show();
+                else {
+                    if (isValidEmail(email)) {
+                        if (isValidPassword(password)) {
+                            if (password.equals(repeatPassword)) {
+                                if(cbTos.isChecked()) {
+                                    password = c.md5(password);
 
-                        String createUser = "INSERT INTO User(Email, FirstName, LastName, Password) VALUES('"+email+"','"+firstName+"','"+lastName+"','"+password+"');";
-                        SQLiteDatabase dbJoney = openOrCreateDatabase(c.getDbName(),MODE_PRIVATE,null);
+                                    createUser(firstName, lastName, email, password);
 
-                        dbJoney.execSQL(createUser);
-                        Toast.makeText(getApplicationContext(), "Account created!", Toast.LENGTH_SHORT).show();
-                        Intent intLogin = new Intent(SignupActivity.this,MainActivity.class);
-                        startActivity(intLogin);
-                    }
-                    else
-                        Toast.makeText(getApplicationContext(), "Passwords are not the same!", Toast.LENGTH_SHORT).show();
+                                    Intent intLogin = new Intent(SignupActivity.this, MainActivity.class);
+                                    startActivity(intLogin);
+                                }
+                                else
+                                    Toast.makeText(getApplicationContext(), "You must accept the Terms of Service!", Toast.LENGTH_SHORT).show();
+                            } else
+                                Toast.makeText(getApplicationContext(), "Passwords are not the same!", Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(getApplicationContext(), "Password must be at least 8 character long and must contain at least 1 number", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(getApplicationContext(), "Not valid Email Address!", Toast.LENGTH_SHORT).show();
                 }
-                else
-                    Toast.makeText(getApplicationContext(), "Not valid Email Address!", Toast.LENGTH_SHORT).show();
             }
         });
         //Login Button opens back the Login Activity
@@ -83,6 +90,24 @@ public class SignupActivity extends AppCompatActivity {
     //Check Email validity
     public static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
+
+    public static boolean isValidPassword(String p)    {
+        boolean valid = false;
+
+        if(p.length() > 7)
+            for(int i = 0;i < p.length();i++)
+                if(Character.isDigit(p.charAt(i)))
+                    valid = true;
+        return valid;
+    }
+
+    public void createUser(String firstName, String lastName, String email, String password){
+        String createUser = "INSERT INTO User(Email, FirstName, LastName, Password) VALUES('" + email + "','" + firstName + "','" + lastName + "','" + password + "');";
+        SQLiteDatabase dbJoney = openOrCreateDatabase(c.getDbName(), MODE_PRIVATE, null);
+
+        dbJoney.execSQL(createUser);
+        Toast.makeText(getApplicationContext(), "Account created!", Toast.LENGTH_SHORT).show();
     }
 
 }
