@@ -12,6 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -19,6 +25,9 @@ public class LoginActivity extends AppCompatActivity {
     TextView tvForgotPassword;
 
     SQLiteDatabase dbJoney;
+
+    //Facebook Login
+    CallbackManager cbm = CallbackManager.Factory.create();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +91,32 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //Facebook Login
+        LoginManager.getInstance().registerCallback(cbm,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                    }
 
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+                });
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        cbm.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void createDatabase()
