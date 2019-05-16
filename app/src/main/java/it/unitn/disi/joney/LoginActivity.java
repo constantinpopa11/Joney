@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
 
         //fixing view when keyboard appear
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         createDatabase();
 
@@ -97,16 +97,19 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
+                        Toast.makeText(getApplicationContext(), "Successfully logged in with FB!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCancel() {
                         // App code
+                        Toast.makeText(getApplicationContext(), "Unsuccessfully logged in!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         // App code
+                        Toast.makeText(getApplicationContext(), "Porco dio!", Toast.LENGTH_SHORT).show();
                     }
                 });
 

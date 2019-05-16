@@ -29,7 +29,7 @@ public class SignupActivity extends AppCompatActivity {
         dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
 
         //fixing view when keyboard appear
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         btnSignup = (Button) findViewById(R.id.btn_signup);
         tvLogin = (TextView) findViewById(R.id.tv_login);

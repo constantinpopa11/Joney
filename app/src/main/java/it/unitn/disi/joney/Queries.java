@@ -13,5 +13,5 @@ public class Queries {
 
     public static String INSERT_USER = "INSERT INTO Users(email, firstName, lastName, password) VALUES(?, ?, ?, ?);";
 
-    public static String FETCH_PASSWORD_BY_EMAIL = "SELECT password FROM Users WHERE email='?';";
+    public static String FETCH_PASSWORD_BY_EMAIL = "SELECT password FROM Users WHERE email=?;";
 }
