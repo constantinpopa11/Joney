@@ -3,6 +3,7 @@ package it.unitn.disi.joney;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,18 +13,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin, btnSignup;
     TextView tvForgotPassword;
 
     SQLiteDatabase dbJoney;
-    Constants c = Constants.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
 
         //fixing view when keyboard appear
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -45,18 +46,18 @@ public class MainActivity extends AppCompatActivity {
                 etPassword = (EditText) findViewById(R.id.password);
                 password = etPassword.getText().toString();
 
-                String checkUser = "SELECT Password FROM USER WHERE Email='"+email+"';";
-                SQLiteDatabase dbJoney = openOrCreateDatabase(c.getDbName(),MODE_PRIVATE,null);
+                Cursor resultSet = dbJoney.rawQuery(
+                        Queries.FETCH_PASSWORD_BY_EMAIL,
+                        new String[] {email}
+                );
 
-
-                Cursor resultSet = dbJoney.rawQuery(checkUser,null);
                 resultSet.moveToFirst();
                 if(resultSet.getCount() != 0)
                 {
                     dbPassword = resultSet.getString(0);
-                    password = c.md5(password);
+                    password = Constants.md5(password);
                     if (password.equals(dbPassword))
-                        Toast.makeText(getApplicationContext(), "Login ok!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
                 }
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intSignup = new Intent(MainActivity.this,SignupActivity.class);
+                Intent intSignup = new Intent(LoginActivity.this,SignupActivity.class);
                 startActivity(intSignup);
             }
         });
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         tvForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intResetPassword = new Intent(MainActivity.this,ResetPasswordActivity.class);
+                Intent intResetPassword = new Intent(LoginActivity.this,ResetPasswordActivity.class);
                 startActivity(intResetPassword);
             }
         });
@@ -86,15 +87,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void createDatabase()
     {
-        dbJoney = openOrCreateDatabase(c.getDbName(),MODE_PRIVATE,null);
-        dbJoney.execSQL(c.getCreateTableUser());
-        dbJoney.execSQL(c.getCreateTableJobCategory());
-        dbJoney.execSQL(c.getCreateTableJob());
-        dbJoney.execSQL(c.getCreateTableJobImage());
-        dbJoney.execSQL(c.getCreateTableJobCandidate());
-        dbJoney.execSQL(c.getCreateTableFeedback());
-        dbJoney.execSQL(c.getCreateTableTicket());
-        dbJoney.execSQL(c.getCreateTableTicketImage());
+        dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
+        dbJoney.execSQL(Queries.CREATE_TABLE_USERS);
+        dbJoney.execSQL(Queries.CREATE_TABLE_JOB_CATEGORIES);
+        dbJoney.execSQL(Queries.CREATE_TABLE_JOBS);
+        dbJoney.execSQL(Queries.CREATE_TABLE_JOB_IMAGES);
+        dbJoney.execSQL(Queries.CREATE_TABLE_JOB_CANDIDATES);
+        dbJoney.execSQL(Queries.CREATE_TABLE_FEEDBACKS);
+        dbJoney.execSQL(Queries.CREATE_TABLE_TICKETS);
+        dbJoney.execSQL(Queries.CREATE_TABLE_TICKET_IMAGES);
 
         Toast.makeText(getApplicationContext(), "Database created!", Toast.LENGTH_SHORT).show();
     }

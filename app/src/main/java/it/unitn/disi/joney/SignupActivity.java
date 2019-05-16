@@ -2,6 +2,7 @@ package it.unitn.disi.joney;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,26 +12,27 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class SignupActivity extends AppCompatActivity {
 
-    Button btnSignup, btnLogin;
-    Constants c = Constants.getInstance();
+    SQLiteDatabase dbJoney;
+
+    Button btnSignup;
+    TextView tvLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+        dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
 
         //fixing view when keyboard appear
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         btnSignup = (Button) findViewById(R.id.btn_signup);
-        btnLogin = (Button) findViewById(R.id.btn_login);
+        tvLogin = (TextView) findViewById(R.id.tv_login);
 
         //Signup Button create a new entry in the database
         btnSignup.setOnClickListener(new View.OnClickListener() {
@@ -59,11 +61,11 @@ public class SignupActivity extends AppCompatActivity {
                         if (isValidPassword(password)) {
                             if (password.equals(repeatPassword)) {
                                 if(cbTos.isChecked()) {
-                                    password = c.md5(password);
+                                    password = Constants.md5(password);
 
                                     createUser(firstName, lastName, email, password);
 
-                                    Intent intLogin = new Intent(SignupActivity.this, MainActivity.class);
+                                    Intent intLogin = new Intent(SignupActivity.this, LoginActivity.class);
                                     startActivity(intLogin);
                                 }
                                 else
@@ -77,11 +79,11 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
-        //Login Button opens back the Login Activity
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        //Login textView opens back the Login Activity
+        tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intLogin = new Intent(SignupActivity.this,MainActivity.class);
+                Intent intLogin = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intLogin);
             }
         });
@@ -103,10 +105,14 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void createUser(String firstName, String lastName, String email, String password){
-        String createUser = "INSERT INTO User(Email, FirstName, LastName, Password) VALUES('" + email + "','" + firstName + "','" + lastName + "','" + password + "');";
-        SQLiteDatabase dbJoney = openOrCreateDatabase(c.getDbName(), MODE_PRIVATE, null);
+        SQLiteStatement statement = dbJoney.compileStatement(Queries.INSERT_USER);
 
-        dbJoney.execSQL(createUser);
+        statement.bindString(1, email);
+        statement.bindString(2, firstName);
+        statement.bindString(3, lastName);
+        statement.bindString(4, password);
+
+        statement.executeInsert();
         Toast.makeText(getApplicationContext(), "Account created!", Toast.LENGTH_SHORT).show();
     }
 
