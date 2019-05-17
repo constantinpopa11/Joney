@@ -3,21 +3,21 @@ package it.unitn.disi.joney;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Facebook Login
     CallbackManager cbm = CallbackManager.Factory.create();
-
+    //ciao
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(LoginResult loginResult) {
                         // App code
                         Toast.makeText(getApplicationContext(), "Successfully logged in with FB!", Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
@@ -110,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onError(FacebookException exception) {
                         // App code
                         Toast.makeText(getApplicationContext(), "Porco dio!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), exception.getMessage().toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
 

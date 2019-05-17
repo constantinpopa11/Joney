@@ -18,7 +18,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reset_password);
 
         //fixing view when keyboard appear
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         btnSendPassword = (Button) findViewById(R.id.btn_send_email);
         btnLogin = (Button) findViewById(R.id.btn_login);
