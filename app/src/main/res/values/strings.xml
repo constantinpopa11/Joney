@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Joney</string>
-    <string name="facebook_app_id">[APP_ID]</string>
-    <string name="fb_login_protocol_scheme">fb[APP_ID]</string>
-
+    <string name="facebook_app_id">1812010585565044</string>
+    <string name="fb_login_protocol_scheme">1812010585565044</string>
 </resources>
