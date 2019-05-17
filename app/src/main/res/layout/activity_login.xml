@@ -23,7 +23,7 @@
         android:drawableLeft="@drawable/ic_user"
         android:drawablePadding="10dp"
         android:hint="Email"
-        android:padding="15dp"
+        android:padding="@dimen/input_field_padding"
         android:inputType="textEmailAddress"
         android:textColor="@color/darkGreyText"
         android:textColorHighlight="@color/white"
@@ -38,7 +38,7 @@
         android:drawableLeft="@drawable/ic_lock"
         android:drawablePadding="10dp"
         android:hint="Password"
-        android:padding="15dp"
+        android:padding="@dimen/input_field_padding"
         android:inputType="textPassword"
         android:textColor="@color/darkGreyText"
         android:textColorHighlight="@color/white"
@@ -105,5 +105,14 @@
         android:shadowColor="@android:color/transparent"
         android:text="Sign Up"
         android:textColor="@color/white" />
+
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/btn_login_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp" />
 
 </LinearLayout>
