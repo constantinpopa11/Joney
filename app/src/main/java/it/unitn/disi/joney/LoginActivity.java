@@ -1,14 +1,18 @@
 package it.unitn.disi.joney;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,31 +22,30 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin, btnSignup;
     TextView tvForgotPassword;
 
-    SQLiteDatabase dbJoney;
+    DatabaseHandler db = new DatabaseHandler(this);
 
     //Facebook Login
     CallbackManager cbm = CallbackManager.Factory.create();
-    //ciao
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
 
         //fixing view when keyboard appear
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        createDatabase();
-
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnSignup = (Button) findViewById(R.id.btn_signup);
-        tvForgotPassword = (TextView) findViewById(R.id.forgot_password);
+        View wrapper = (View) findViewById(R.id.forgot_password_wrapper);
+        tvForgotPassword = (TextView) wrapper.findViewById(R.id.forgot_password);
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,22 +58,14 @@ public class LoginActivity extends AppCompatActivity {
                 etPassword = (EditText) findViewById(R.id.password);
                 password = etPassword.getText().toString();
 
-                Cursor resultSet = dbJoney.rawQuery(
-                        Queries.FETCH_PASSWORD_BY_EMAIL,
-                        new String[] {email}
-                );
-
-                resultSet.moveToFirst();
-                if(resultSet.getCount() != 0)
-                {
-                    dbPassword = resultSet.getString(0);
+                dbPassword = db.getUserPasswordByEmail(email);
+                if(dbPassword != null) {
                     password = Constants.md5(password);
                     if (password.equals(dbPassword))
                         Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
-                }
-                else
+                } else
                     Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -98,7 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(LoginResult loginResult) {
                         // App code
                         Toast.makeText(getApplicationContext(), "Successfully logged in with FB!", Toast.LENGTH_SHORT).show();
-
                     }
 
                     @Override
@@ -123,21 +117,4 @@ public class LoginActivity extends AppCompatActivity {
         cbm.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    public void createDatabase()
-    {
-        dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
-        dbJoney.execSQL(Queries.CREATE_TABLE_USERS);
-        dbJoney.execSQL(Queries.CREATE_TABLE_JOB_CATEGORIES);
-        dbJoney.execSQL(Queries.CREATE_TABLE_JOBS);
-        dbJoney.execSQL(Queries.CREATE_TABLE_JOB_IMAGES);
-        dbJoney.execSQL(Queries.CREATE_TABLE_JOB_CANDIDATES);
-        dbJoney.execSQL(Queries.CREATE_TABLE_FEEDBACKS);
-        dbJoney.execSQL(Queries.CREATE_TABLE_TICKETS);
-        dbJoney.execSQL(Queries.CREATE_TABLE_TICKET_IMAGES);
-
-        Toast.makeText(getApplicationContext(), "Database created!", Toast.LENGTH_SHORT).show();
-    }
-
-
 }

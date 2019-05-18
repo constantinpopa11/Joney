@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class SignupActivity extends AppCompatActivity {
 
-    SQLiteDatabase dbJoney;
+    DatabaseHandler db = new DatabaseHandler(this);
 
     Button btnSignup;
     TextView tvLogin;
@@ -26,7 +26,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        dbJoney = openOrCreateDatabase(Constants.DB_NAME,MODE_PRIVATE,null);
 
         //fixing view when keyboard appear
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -63,7 +62,8 @@ public class SignupActivity extends AppCompatActivity {
                                 if(cbTos.isChecked()) {
                                     password = Constants.md5(password);
 
-                                    createUser(firstName, lastName, email, password);
+                                    User user = new User(email, firstName, lastName, password);
+                                    db.addUser(user);
 
                                     Intent intLogin = new Intent(SignupActivity.this, LoginActivity.class);
                                     startActivity(intLogin);
@@ -103,17 +103,4 @@ public class SignupActivity extends AppCompatActivity {
                     valid = true;
         return valid;
     }
-
-    public void createUser(String firstName, String lastName, String email, String password){
-        SQLiteStatement statement = dbJoney.compileStatement(Queries.INSERT_USER);
-
-        statement.bindString(1, email);
-        statement.bindString(2, firstName);
-        statement.bindString(3, lastName);
-        statement.bindString(4, password);
-
-        statement.executeInsert();
-        Toast.makeText(getApplicationContext(), "Account created!", Toast.LENGTH_SHORT).show();
-    }
-
 }
