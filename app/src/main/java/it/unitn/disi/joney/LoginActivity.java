@@ -61,9 +61,11 @@ public class LoginActivity extends AppCompatActivity {
                 dbPassword = db.getUserPasswordByEmail(email);
                 if(dbPassword != null) {
                     password = Constants.md5(password);
-                    if (password.equals(dbPassword))
+                    if (password.equals(dbPassword)) {
                         Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
-                    else
+                        Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
+                        startActivity(intHome);
+                    } else
                         Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
