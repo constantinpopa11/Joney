@@ -4,21 +4,22 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
 
-    TextView tvFindJob, tvPostJob;
+    LinearLayout llFindJob, llPostJob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        tvFindJob = (TextView) findViewById(R.id.tv_find_job);
-        tvPostJob = (TextView) findViewById(R.id.tv_post_job);
+        llFindJob = (LinearLayout) findViewById(R.id.ll_find_job);
+        llPostJob = (LinearLayout) findViewById(R.id.ll_post_job);
 
-        tvFindJob.setOnClickListener(new View.OnClickListener() {
+        llFindJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intFindJob = new Intent(HomeActivity.this, FindJobActivity.class);
@@ -26,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        tvPostJob.setOnClickListener(new View.OnClickListener() {
+        llPostJob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intPostJob = new Intent(HomeActivity.this, PostJobActivity.class);
