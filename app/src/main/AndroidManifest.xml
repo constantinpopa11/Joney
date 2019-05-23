@@ -11,12 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PostJobActivity"></activity>
-        <activity android:name=".FindJobActivity" />
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar" /> <!-- Facebook Login -->
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".PostJobActivity" />
+        <activity android:name=".FindJobActivity" />
+         <!-- Facebook Login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
