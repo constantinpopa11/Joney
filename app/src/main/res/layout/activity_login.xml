@@ -30,7 +30,7 @@
         android:inputType="textEmailAddress"
         android:textColor="@color/darkGreyText"
         android:textColorHighlight="@color/white"
-        android:textColorHint="@color/darkGreyText" />
+        android:textColorHint="@color/lightGreyText" />
 
     <EditText
         android:id="@+id/password"
@@ -48,9 +48,10 @@
         android:inputType="textPassword"
         android:textColor="@color/darkGreyText"
         android:textColorHighlight="@color/white"
-        android:textColorHint="@color/darkGreyText" />
+        android:textColorHint="@color/lightGreyText" />
 
     <LinearLayout
+        android:id="@+id/forgot_password_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">

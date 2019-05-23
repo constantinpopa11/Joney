@@ -35,7 +35,7 @@
             android:padding="@dimen/input_field_padding"
             android:textColor="@color/darkGreyText"
             android:textColorHighlight="@color/white"
-            android:textColorHint="@color/darkGreyText" />
+            android:textColorHint="@color/lightGreyText" />
 
         <EditText
             android:id="@+id/last_name"
@@ -53,7 +53,7 @@
             android:padding="@dimen/input_field_padding"
             android:textColor="@color/darkGreyText"
             android:textColorHighlight="@color/white"
-            android:textColorHint="@color/darkGreyText" />
+            android:textColorHint="@color/lightGreyText" />
 
         <EditText
             android:id="@+id/email"
@@ -71,7 +71,7 @@
             android:padding="@dimen/input_field_padding"
             android:textColor="@color/darkGreyText"
             android:textColorHighlight="@color/white"
-            android:textColorHint="@color/darkGreyText" />
+            android:textColorHint="@color/lightGreyText" />
 
         <EditText
             android:id="@+id/password"
@@ -89,7 +89,7 @@
             android:padding="@dimen/input_field_padding"
             android:textColor="@color/darkGreyText"
             android:textColorHighlight="@color/white"
-            android:textColorHint="@color/darkGreyText" />
+            android:textColorHint="@color/lightGreyText" />
 
         <EditText
             android:id="@+id/repeat_password"
@@ -107,7 +107,7 @@
             android:padding="@dimen/input_field_padding"
             android:textColor="@color/darkGreyText"
             android:textColorHighlight="@color/white"
-            android:textColorHint="@color/darkGreyText" />
+            android:textColorHint="@color/lightGreyText" />
 
 
         <CheckBox

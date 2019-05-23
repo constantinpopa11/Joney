@@ -7,7 +7,7 @@ public class Constants {
     private static Constants instance;
 
     // Global variables
-    public static String DB_NAME = "JoneyDB";
+
 
     //hashing function
     public static String md5(String s) {
