@@ -15,7 +15,8 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".PostJobActivity" />
+        <activity android:name=".PostJobActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".FindJobActivity" />
          <!-- Facebook Login -->
         <meta-data
