@@ -12,13 +12,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".MyJobsActivity"
+            android:label="@string/title_activity_my_jobs"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".PostJobActivity"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".FindJobActivity" />
-         <!-- Facebook Login -->
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PostJobActivity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".FindJobActivity" /> <!-- Facebook Login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

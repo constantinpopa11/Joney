@@ -9,7 +9,7 @@ public class Job {
     float longitude;
     int categoryId;
     int authorId;
-    int workerId;
+    Integer workerId; //this can be null, so Integer is needed
 
     public Job() {
     }
@@ -101,7 +101,7 @@ public class Job {
         this.authorId = authorId;
     }
 
-    public int getWorkerId() {
+    public Integer getWorkerId() {
         return workerId;
     }
 

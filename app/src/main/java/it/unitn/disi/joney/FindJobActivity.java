@@ -3,15 +3,11 @@ package it.unitn.disi.joney;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FindJobActivity extends AppCompatActivity {
@@ -43,7 +39,7 @@ public class FindJobActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, jobCategoryList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCategory.setAdapter(dataAdapter);
-        spnCategory.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        spnCategory.setOnItemSelectedListener(new OnJobCategorySelectedListener());
 
     }
 

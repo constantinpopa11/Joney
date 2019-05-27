@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -40,7 +39,7 @@ public class PostJobActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, jobCategoryList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCategory.setAdapter(dataAdapter);
-        spnCategory.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        spnCategory.setOnItemSelectedListener(new OnJobCategorySelectedListener());
 
         btnPostJob = (Button) findViewById(R.id.btn_post_job);
         btnPostJob.setOnClickListener(new PostJobListener());
@@ -92,7 +91,7 @@ public class PostJobActivity extends AppCompatActivity {
                 Job job = new Job(jobTitle, description, false, 0.0f, 0.0f, jobCategory.getId(), currentUserId, null);
                 db.addJob(job);
 
-                Intent intMyJobs = new Intent(PostJobActivity.this, HomeActivity.class);
+                Intent intMyJobs = new Intent(PostJobActivity.this, MyJobsActivity.class);
                 startActivity(intMyJobs);
             }
         }
