@@ -141,6 +141,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TICKETS);
         db.execSQL(CREATE_TABLE_TICKET_IMAGES);
         db.execSQL(CREATE_TABLE_FEEDBACKS);
+
+        JobCategory jobCategory = new JobCategory("Teaching and Tutoring", null);
+        addJobCategory(db, jobCategory);
+
+        jobCategory = new JobCategory("Creative Design", null);
+        addJobCategory(db, jobCategory);
+
+        jobCategory = new JobCategory("Mobile App Development", null);
+        addJobCategory(db, jobCategory);
+
+        jobCategory = new JobCategory("Gardening", null);
+        addJobCategory(db, jobCategory);
     }
 
     // Upgrading database
@@ -178,11 +190,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
-    String getUserPasswordByEmail(String email) {
+    User getUserByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS,
-                new String[] { COL_USER_PASSWORD },
+                new String[] { COL_USER_ID, COL_USER_PASSWORD },
                 COL_USER_EMAIL + "=?",
                 new String[] { email },
                 null,
@@ -190,12 +202,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 null,
                 null);
 
-        String password = null;
+        User user = null;
         if (cursor != null && cursor.moveToFirst()) {
-            password = cursor.getString(0);
+            user = new User();
+            user.setId(cursor.getInt(0));
+            user.setPassword(cursor.getString(1));;
         }
-        Log.i("PWD", password == null ? "" : password);
-        return password;
+        return user;
+    }
+
+    // code to add the new job
+    void addJob(Job job) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_JOB_TITLE, job.getTitle());
+        values.put(COL_JOB_DESCRIPTION, job.getDescription());
+        values.put(COL_JOB_COMPLETED, job.isCompleted());
+        values.put(COL_JOB_LATITUDE, job.getLatitude());
+        values.put(COL_JOB_LONGITUDE, job.getLongitude());
+        values.put(COL_JOB_JOB_CATEGORY_ID, job.getCategoryId());
+        values.put(COL_JOB_AUTHOR_ID, job.getAuthorId());
+        values.put(COL_JOB_WORKER_ID, job.getWorkerId());
+
+        // Inserting Row
+        db.insert(TABLE_JOBS, null, values);
+        //2nd argument is String containing nullColumnHack
+        db.close(); // Closing database connection
+    }
+
+    void addJobCategory(SQLiteDatabase db, JobCategory jobCategory) {
+
+        ContentValues values = new ContentValues();
+        values.put(COL_JOB_CAT_NAME, jobCategory.getName());
+        values.put(COL_JOB_CAT_DESCRIPTION, jobCategory.getDescription());
+
+        // Inserting Row
+        db.insert(TABLE_JOB_CATEGORIES, null, values);
     }
 
     //SOTTO CI SONO ESEMPI DI QUERY DA SEGUIRE PER SCRIVERE FUTURE QUERY
@@ -229,31 +272,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // return contact
         return contact;
     }
+    */
 
-    // code to get all contacts in a list view
-    public List<Contact> getAllContacts() {
-        List<Contact> contactList = new ArrayList<Contact>();
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_CONTACTS;
+    //code to get all job categories
+    public List<JobCategory> getAllJobCategories() {
+        List<JobCategory> jobCategoryList = new ArrayList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.query(TABLE_JOB_CATEGORIES,
+                new String[] { COL_JOB_CAT_ID, COL_JOB_CAT_NAME },
+                null,
+                null,
+                null,
+                null,
+                COL_JOB_CAT_NAME,
+                null);
 
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Contact contact = new Contact();
-                contact.setID(Integer.parseInt(cursor.getString(0)));
-                contact.setName(cursor.getString(1));
-                contact.setPhoneNumber(cursor.getString(2));
+                JobCategory jobCategory = new JobCategory();
+                jobCategory.setId(cursor.getInt(0));
+                jobCategory.setName(cursor.getString(1));
                 // Adding contact to list
-                contactList.add(contact);
+                jobCategoryList.add(jobCategory);
             } while (cursor.moveToNext());
         }
 
         // return contact list
-        return contactList;
+        return jobCategoryList;
     }
+    /*
 
     // code to update the single contact
     public int updateContact(Contact contact) {

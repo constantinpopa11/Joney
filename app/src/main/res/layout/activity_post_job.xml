@@ -3,13 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/background"
-    android:orientation="vertical"
-    android:padding="20dp">
+    android:paddingTop="18dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
         android:layout_marginBottom="6dp"
         android:drawableLeft="@drawable/ic_title"
         android:text="Job Title"
@@ -17,61 +18,64 @@
         android:textColor="@color/darkGreyText"
         android:textSize="18dp" />
 
-    <LinearLayout
+
+
+    <EditText
+        android:id="@+id/et_job_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
+        android:inputType="text"
+        android:textColor="@color/darkGreyText"
+        android:textSize="18dp"
+        android:hint="Job title"
+        android:textColorHighlight="@color/white"
+        android:textColorHint="@color/lightGreyText"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:inputType="text"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="6dp"
-        android:drawableLeft="@drawable/ic_descrption"
+        android:drawableLeft="@drawable/ic_description"
         android:text=" Description"
         android:textAlignment="textStart"
         android:textColor="@color/darkGreyText"
         android:textSize="18dp" />
 
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/et_job_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="12dp"
-        android:orientation="horizontal">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_border"
-            android:gravity="top|left"
-            android:inputType="textMultiLine"
-            android:lines="4"
-            android:maxLines="8"
-            android:minLines="4"
-            android:scrollbars="vertical" />
-    </LinearLayout>
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:hint="Add an (optional) description for the job"
+        android:lines="4"
+        android:maxLines="6"
+        android:minLines="4"
+        android:scrollbars="vertical" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="32dp"
+        android:drawableLeft="@drawable/ic_business"
+        android:text="Category"
+        android:textAlignment="textStart"
+        android:textSize="18dp"
+        android:textColor="@color/darkGreyText" />
+
+    <Spinner
+        android:id="@+id/spn_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="6dp"
         android:drawableLeft="@drawable/ic_pictures"
@@ -81,20 +85,15 @@
         android:textSize="18dp" />
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="12dp"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="@dimen/box_size"
-            android:layout_height="@dimen/box_size"
-            android:src="@drawable/ic_add_image"
-            android:background="@drawable/button_blue_selector"/>
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/btn_add_pictures"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/ic_add_image"
+        android:background="@drawable/button_blue_selector"/>
+
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -134,14 +133,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/button_red_selector"
         android:drawableRight="@drawable/ic_post"
         android:padding="15dp"
         android:shadowColor="@android:color/transparent"
-        android:text="Post job "
+        android:text="Post job"
         android:textColor="@color/white" />
 
 

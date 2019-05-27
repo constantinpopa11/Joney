@@ -1,5 +1,9 @@
 package it.unitn.disi.joney;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -8,8 +12,10 @@ import android.view.MenuItem;
 public class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener  {
 
     DrawerLayout drawer;
+    Context context;
 
-    public NavigationItemSelectedListener(DrawerLayout drawer) {
+    public NavigationItemSelectedListener(Context context, DrawerLayout drawer) {
+        this.context = context;
         this.drawer = drawer;
     }
 
@@ -31,6 +37,13 @@ public class NavigationItemSelectedListener implements NavigationView.OnNavigati
 
         } else if (id == R.id.nav_send_ticket) {
 
+        } else if (id == R.id.nav_logout) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            prefs.edit().putBoolean(Constants.PREF_REMEMBER_ME, false).commit();
+            prefs.edit().putInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN).commit();
+            Intent intLogIn = new Intent(context, LoginActivity.class);
+            intLogIn.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intLogIn);
         }
 
         drawer.closeDrawer(GravityCompat.START);

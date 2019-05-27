@@ -7,7 +7,12 @@ public class Constants {
     private static Constants instance;
 
     // Global variables
+    public static final String PREF_REMEMBER_ME = "is_user_logged_in";
+    public static final String PREF_CURRENT_USER_ID = "current_user_id";
+    public static final int NO_USER_LOGGED_IN = -1;
 
+    public static final int INVALID_JOB_CATEGORY = -1;
+    public static final String NO_JOB_CATEGORY_SELECTED = "No selection";
 
     //hashing function
     public static String md5(String s) {

@@ -1,10 +1,14 @@
 package it.unitn.disi.joney;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,8 +34,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //fixing view when keyboard appear
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        boolean isLoggedIn = prefs.getBoolean(Constants.PREF_REMEMBER_ME, false); // get value of last login status
+        int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
+
+        //login user and redirect to home
+        if(isLoggedIn && currentUserId != Constants.NO_USER_LOGGED_IN) {
+            Log.i("Already logged in ", isLoggedIn + " " + currentUserId);
+            Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intHome);
+            finish();
+        }
+
+        //otherwise show login form
 
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnSignup = (Button) findViewById(R.id.btn_signup);
@@ -41,25 +57,40 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email, password, dbPassword;
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String email, password;
                 EditText etEmail, etPassword;
+                CheckBox cbRememberMe;
 
                 etEmail = (EditText) findViewById(R.id.email);
                 email = etEmail.getText().toString();
                 etPassword = (EditText) findViewById(R.id.password);
                 password = etPassword.getText().toString();
+                cbRememberMe = (CheckBox) findViewById(R.id.cb_remember_me);
 
-                dbPassword = db.getUserPasswordByEmail(email);
-                if(dbPassword != null) {
-                    password = Constants.md5(password);
-                    if (password.equals(dbPassword)) {
-                        Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
-                        Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
-                        startActivity(intHome);
+                if(email.length() == 0 || password.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "Please fill in the fields first", Toast.LENGTH_SHORT).show();
+                } else {
+                    User user = db.getUserByEmail(email);
+                    if(user != null) {
+                        password = Constants.md5(password);
+                        if (password.equals(user.getPassword())) {
+                            if(cbRememberMe.isChecked()) {
+                                prefs.edit().putBoolean(Constants.PREF_REMEMBER_ME, true).commit();
+                            } else {
+                                prefs.edit().putBoolean(Constants.PREF_REMEMBER_ME, false).commit();
+                            }
+                            prefs.edit().putInt(Constants.PREF_CURRENT_USER_ID, user.getId()).commit();
+                            Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
+                            Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(intHome);
+                            finish();
+                        } else
+                            Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
                     } else
-                        Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
-                } else
-                    Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Account does not exist!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -109,5 +140,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         cbm.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //do nothing
     }
 }

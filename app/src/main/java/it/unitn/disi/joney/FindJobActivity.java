@@ -2,6 +2,7 @@ package it.unitn.disi.joney;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,10 +20,15 @@ public class FindJobActivity extends AppCompatActivity {
     TextView tvDistance;
     Spinner spnCategory;
 
+    DatabaseHandler db = new DatabaseHandler(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_job);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         tvDistance = (TextView) findViewById(R.id.tv_distance);
 
@@ -30,9 +36,27 @@ public class FindJobActivity extends AppCompatActivity {
         addSeekBarDistanceListener();
 
         spnCategory = (Spinner) findViewById(R.id.spn_category);
-        addItemsToSpinnerCategory();
+        List<JobCategory> jobCategoryList = db.getAllJobCategories();
+        //add "no selection" choice manually at the beginning
+        jobCategoryList.add(0, new JobCategory(Constants.INVALID_JOB_CATEGORY, Constants.NO_JOB_CATEGORY_SELECTED, null));
+        ArrayAdapter<JobCategory> dataAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, jobCategoryList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnCategory.setAdapter(dataAdapter);
         spnCategory.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void addSeekBarDistanceListener(){
@@ -54,31 +78,5 @@ public class FindJobActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(),"seekbar touch stopped!", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    public void addItemsToSpinnerCategory() {
-        List<String> list = new ArrayList<String>();
-        list.add("Category 1");
-        list.add("Category 2");
-        list.add("Category 3");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnCategory.setAdapter(dataAdapter);
-    }
-
-    private class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
-
-        public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-            Toast.makeText(parent.getContext(),
-                    "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
-        }
-
     }
 }

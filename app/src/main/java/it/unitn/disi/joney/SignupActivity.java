@@ -1,8 +1,10 @@
 package it.unitn.disi.joney;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -67,6 +69,7 @@ public class SignupActivity extends AppCompatActivity {
 
                                     Intent intLogin = new Intent(SignupActivity.this, LoginActivity.class);
                                     startActivity(intLogin);
+                                    finish();
                                 }
                                 else
                                     Toast.makeText(getApplicationContext(), "You must accept the Terms of Service!", Toast.LENGTH_SHORT).show();
@@ -102,5 +105,10 @@ public class SignupActivity extends AppCompatActivity {
                 if(Character.isDigit(p.charAt(i)))
                     valid = true;
         return valid;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //do nothing
     }
 }

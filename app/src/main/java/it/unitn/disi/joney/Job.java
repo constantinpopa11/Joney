@@ -14,7 +14,7 @@ public class Job {
     public Job() {
     }
 
-    public Job(int jobID, String title, String description, boolean completed, float latitude, float longitude, int categoryID, int authorID, int workerID) {
+    public Job(int jobID, String title, String description, boolean completed, float latitude, float longitude, int categoryID, int authorID, Integer workerID) {
         this.id = jobID;
         this.title = title;
         this.description = description;
@@ -26,7 +26,7 @@ public class Job {
         this.workerId = workerID;
     }
 
-    public Job(String title, String description, boolean completed, float latitude, float longitude, int categoryId, int authorId, int workerId) {
+    public Job(String title, String description, boolean completed, float latitude, float longitude, int categoryId, int authorId, Integer workerId) {
         this.title = title;
         this.description = description;
         this.completed = completed;
