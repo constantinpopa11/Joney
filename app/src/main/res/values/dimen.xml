@@ -2,4 +2,5 @@
 <resources>
     <dimen name="input_field_padding">12dp</dimen>
     <dimen name="box_size">50dp</dimen>
+    <dimen name="user_pic_size">100dp</dimen>
 </resources>

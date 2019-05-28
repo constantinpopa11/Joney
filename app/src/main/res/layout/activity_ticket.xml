@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:paddingTop="18dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:drawableLeft="@drawable/ic_title"
+        android:text="Select Job"
+        android:textAlignment="textStart"
+        android:textColor="@color/darkGreyText"
+        android:textSize="18dp" />
+
+
+
+    <Spinner
+        android:id="@+id/spn_job"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="6dp"
+        android:drawableLeft="@drawable/ic_description"
+        android:text=" Describe the issue"
+        android:textAlignment="textStart"
+        android:textColor="@color/darkGreyText"
+        android:textSize="18dp" />
+
+
+    <EditText
+        android:id="@+id/et_issue_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:hint="What went wrong?"
+        android:lines="4"
+        android:maxLines="6"
+        android:minLines="4"
+        android:scrollbars="vertical" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="6dp"
+        android:drawableLeft="@drawable/ic_pictures"
+        android:text=" Pictures"
+        android:textAlignment="textStart"
+        android:textColor="@color/darkGreyText"
+        android:textSize="18dp" />
+
+
+
+    <ImageView
+        android:id="@+id/btn_add_pictures"
+        android:layout_width="@dimen/box_size"
+        android:layout_height="@dimen/box_size"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/ic_add_image"
+        android:background="@drawable/button_blue_selector"/>
+
+
+
+    <Button
+        android:id="@+id/btn_send_ticket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/button_red_selector"
+        android:drawableRight="@drawable/ic_send"
+        android:padding="15dp"
+        android:shadowColor="@android:color/transparent"
+        android:text="Send ticket "
+        android:textColor="@color/white" />
+
+
+</LinearLayout>

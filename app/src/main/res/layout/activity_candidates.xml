@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingTop="18dp"
+    android:paddingRight="24dp"
+    android:paddingBottom="18dp">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:orientation="horizontal"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp">
+
+        <ImageView
+            android:layout_width="@dimen/user_pic_size"
+            android:layout_height="@dimen/user_pic_size"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="12dp"
+            android:src="@drawable/ic_pictures" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="User name"
+                android:textAlignment="textStart"
+                android:textColor="@color/darkGreyText"
+                android:textSize="18dp" />
+
+            <RatingBar
+                android:id="@+id/rating_bar_user"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="12dp"
+                android:numStars="5"
+                android:progressTint="@color/golden"
+                android:rating="4"
+                android:stepSize="1" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_blue_selector"
+                    android:drawableLeft="@drawable/ic_send"
+                    android:shadowColor="@android:color/transparent"
+                    android:text="Text"
+                    android:textColor="@color/white" />
+
+
+                <Button
+                    android:id="@+id/btn_accept"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/button_red_selector"
+                    android:drawableLeft="@drawable/ic_done"
+                    android:shadowColor="@android:color/transparent"
+                    android:text="Accept Request"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:color/darker_gray" />
+
+</LinearLayout>
