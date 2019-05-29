@@ -35,18 +35,12 @@ public class MyJobsActivity extends AppCompatActivity implements PostedJobsFragm
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener(getApplicationContext(), drawer));
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tl_my_jobs);
-        tabLayout.addTab(tabLayout.newTab().setText("POSTED"));
-        tabLayout.addTab(tabLayout.newTab().setText("PENDING"));
-        tabLayout.addTab(tabLayout.newTab().setText("COMPLETED"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         MyJobsPagerAdapter myPagerAdapter = new MyJobsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(myPagerAdapter);
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tl_my_jobs);
         tabLayout.setupWithViewPager(viewPager);
     }
 

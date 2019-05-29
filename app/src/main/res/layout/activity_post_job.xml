@@ -15,7 +15,7 @@
         android:drawableLeft="@drawable/ic_title"
         android:text="Job Title"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textSize="18dp" />
 
 
@@ -25,11 +25,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textSize="18dp"
         android:hint="Job title"
         android:textColorHighlight="@color/white"
-        android:textColorHint="@color/lightGreyText"/>
+        android:textColorHint="@color/lightGrey"/>
 
 
     <TextView
@@ -40,7 +40,7 @@
         android:drawableLeft="@drawable/ic_description"
         android:text=" Description"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textSize="18dp" />
 
 
@@ -65,7 +65,7 @@
         android:text="Category"
         android:textAlignment="textStart"
         android:textSize="18dp"
-        android:textColor="@color/darkGreyText" />
+        android:textColor="@color/darkGrey" />
 
     <Spinner
         android:id="@+id/spn_category"
@@ -81,7 +81,7 @@
         android:drawableLeft="@drawable/ic_pictures"
         android:text=" Pictures"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textSize="18dp" />
 
 
@@ -108,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pay"
-            android:textColor="@color/darkGreyText"
+            android:textColor="@color/darkGrey"
             android:textSize="16dp" />
 
         <EditText
@@ -122,9 +122,9 @@
             android:inputType="numberDecimal"
             android:maxLength="3"
             android:textAlignment="textEnd"
-            android:textColor="@color/darkGreyText"
+            android:textColor="@color/darkGrey"
             android:textColorHighlight="@color/white"
-            android:textColorHint="@color/lightGreyText" />
+            android:textColorHint="@color/lightGrey" />
     </LinearLayout>
 
 

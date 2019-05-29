@@ -7,8 +7,9 @@
     <color name="colorAccent">#151f87</color>
     <color name="background">#efefef</color>
     <color name="white">#FFFFFF</color>
-    <color name="darkGreyText">#444444</color>
-    <color name="lightGreyText">#a5a5a5</color>
+    <color name="lightGrey">#a5a5a5</color>
+    <color name="mediumGrey">#6b6b6b</color>
+    <color name="darkGrey">#444444</color>
     <color name="black">#000000</color>
     <color name="golden">#FFD700</color>
 </resources>

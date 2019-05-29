@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/lightGrey"
+        android:textSize="20dp"
+        android:text="There are no jobs to display"
+        android:gravity="center"
+        android:layout_marginTop="128dp"
+        android:visibility="gone"/>
+
+    <ExpandableListView
+        android:id="@+id/elv_posted_jobs"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:divider="@color/lightGrey"
+        android:dividerHeight="0.5dp"
+        android:childDivider="#00000000" />
+
+</RelativeLayout>

@@ -1,12 +1,20 @@
 package it.unitn.disi.joney;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 
 /**
@@ -26,6 +34,9 @@ public class CompletedJobsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ExpandableListView expandableListView;
+    ExpandableListAdapter expandableListAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,7 +75,65 @@ public class CompletedJobsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_completed_jobs, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_jobs, container, false);
+
+        final Context context = getActivity().getApplicationContext();
+        DatabaseHandler db = new DatabaseHandler(context);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
+
+        final List<Job> completedJobs = db.getUserCompletedJobs(currentUserId);
+        for(Job job : completedJobs) {
+            job.setJobCategory(db.getJobCategoryById(job.getCategoryId()));
+            job.setWorker(db.getUserById(job.getWorkerId()));
+            job.setAuthor(db.getUserById(job.getAuthorId()));
+        }
+
+        if(completedJobs.size() > 0) {
+            expandableListView = (ExpandableListView) view.findViewById(R.id.elv_posted_jobs);
+            expandableListAdapter = new ExpandableJobListAdapter(context, completedJobs, Constants.POSTED_JOB_TAB);
+            expandableListView.setAdapter(expandableListAdapter);
+            expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+
+                @Override
+                public void onGroupExpand(int groupPosition) {
+                    Toast.makeText(context,
+                            completedJobs.get(groupPosition).getTitle() + " List Expanded.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+
+                @Override
+                public void onGroupCollapse(int groupPosition) {
+                    Toast.makeText(context,
+                            completedJobs.get(groupPosition).getTitle() + " List Collapsed.",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+            expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                @Override
+                public boolean onChildClick(ExpandableListView parent, View v,
+                                            int groupPosition, int childPosition, long id) {
+                    Toast.makeText(
+                            context,
+                            completedJobs.get(groupPosition).getTitle()
+                                    + " -> "
+                                    + completedJobs.get(groupPosition).getDescription(), Toast.LENGTH_SHORT
+                    ).show();
+                    return false;
+                }
+            });
+        } else {
+            TextView tvInfo = (TextView) view.findViewById(R.id.tv_info);
+            tvInfo.setVisibility(View.VISIBLE);
+        }
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

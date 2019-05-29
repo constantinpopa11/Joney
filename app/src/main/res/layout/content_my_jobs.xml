@@ -18,7 +18,26 @@
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:tabGravity="fill"
         app:tabIndicatorColor="@color/white">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/ti_posted_jobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="POSTED"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/ti_pending_jobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PENDING"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/ti_completed_jobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="COMPLETED"/>
 
     </android.support.design.widget.TabLayout>
 

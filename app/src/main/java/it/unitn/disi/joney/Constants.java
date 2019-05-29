@@ -14,6 +14,10 @@ public class Constants {
     public static final int INVALID_JOB_CATEGORY = -1;
     public static final String NO_JOB_CATEGORY_SELECTED = "No selection";
 
+    public static final int POSTED_JOB_TAB = 0;
+    public static final int PENDING_JOB_TAB = 1;
+    public static final int COMPLETED_JOB_TAB = 2;
+
     //hashing function
     public static String md5(String s) {
         try {

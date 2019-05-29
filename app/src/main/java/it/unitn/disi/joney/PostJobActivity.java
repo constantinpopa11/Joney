@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class PostJobActivity extends AppCompatActivity {
@@ -88,7 +91,10 @@ public class PostJobActivity extends AppCompatActivity {
             else if(pay <= 0.0)
                 Toast.makeText(getApplicationContext(), "You have inserted an invalid pay amount", Toast.LENGTH_SHORT).show();
             else {
-                Job job = new Job(jobTitle, description, false, 0.0f, 0.0f, jobCategory.getId(), currentUserId, null);
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();
+                String now = dateFormat.format(date);
+                Job job = new Job(jobTitle, description, false, now, 0.0f, 0.0f, jobCategory.getId(), currentUserId, null);
                 db.addJob(job);
 
                 Intent intMyJobs = new Intent(PostJobActivity.this, MyJobsActivity.class);

@@ -50,6 +50,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COL_JOB_TITLE = "title";
     private static final String COL_JOB_DESCRIPTION = "description";
     private static final String COL_JOB_COMPLETED = "completed";
+    private static final String COL_JOB_CREATED_AT = "createdAt";
     private static final String COL_JOB_LATITUDE = "latitude";
     private static final String COL_JOB_LONGITUDE = "longitude";
     private static final String COL_JOB_JOB_CATEGORY_ID = "categoryId";
@@ -75,6 +76,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             COL_JOB_TITLE + " varchar(100) NOT NULL, " +
             COL_JOB_DESCRIPTION + " varchar(1000), " +
             COL_JOB_COMPLETED + " boolean NOT NULL DEFAULT(0), " +
+            COL_JOB_CREATED_AT + " date NOT NULL, " +
             COL_JOB_LATITUDE + " float NOT NULL, " +
             COL_JOB_LONGITUDE + " float NOT NULL, " +
             COL_JOB_JOB_CATEGORY_ID + " integer NOT NULL, " +
@@ -102,7 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static String CREATE_TABLE_JOB_CATEGORIES  = "CREATE TABLE IF NOT EXISTS " + TABLE_JOB_CATEGORIES +
             "(" + COL_JOB_CAT_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-            COL_JOB_CAT_NAME + " varchar(30) NOT NULL, " +
+            COL_JOB_CAT_NAME + " varchar(50) NOT NULL, " +
             COL_JOB_CAT_DESCRIPTION + " varchar(255));";
 
     private static String CREATE_TABLE_JOB_IMAGES  = "CREATE TABLE IF NOT EXISTS " + TABLE_JOB_IMAGES +
@@ -176,8 +178,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     void addUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.i("USER" , user.getFirstName() + " " + user.getLastName() + " " + user.getPassword() + " " + user.getEmail());
-
         ContentValues values = new ContentValues();
         values.put(COL_USER_FIRST_NAME, user.getFirstName());
         values.put(COL_USER_LAST_NAME, user.getLastName());
@@ -211,6 +211,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return user;
     }
 
+    User getUserById(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_USERS,
+                new String[] { COL_USER_FIRST_NAME, COL_USER_LAST_NAME, COL_USER_EMAIL },
+                COL_USER_ID + "=?",
+                new String[] { Integer.toString(userId) },
+                null,
+                null,
+                null,
+                null);
+
+        User user = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            user = new User();
+            user.setId(userId);
+            user.setFirstName(cursor.getString(0));
+            user.setLastName(cursor.getString(1));
+            user.setEmail(cursor.getString(2));
+        }
+        return user;
+    }
+
     // code to add the new job
     void addJob(Job job) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -219,6 +242,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COL_JOB_TITLE, job.getTitle());
         values.put(COL_JOB_DESCRIPTION, job.getDescription());
         values.put(COL_JOB_COMPLETED, job.isCompleted());
+        values.put(COL_JOB_CREATED_AT, job.getCreatedAt());
         values.put(COL_JOB_LATITUDE, job.getLatitude());
         values.put(COL_JOB_LONGITUDE, job.getLongitude());
         values.put(COL_JOB_JOB_CATEGORY_ID, job.getCategoryId());
@@ -239,6 +263,177 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // Inserting Row
         db.insert(TABLE_JOB_CATEGORIES, null, values);
+    }
+
+    //code to get all job categories
+    public List<JobCategory> getAllJobCategories() {
+        List<JobCategory> jobCategoryList = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_JOB_CATEGORIES,
+                new String[] { COL_JOB_CAT_ID, COL_JOB_CAT_NAME },
+                null,
+                null,
+                null,
+                null,
+                COL_JOB_CAT_NAME,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                JobCategory jobCategory = new JobCategory();
+                jobCategory.setId(cursor.getInt(0));
+                jobCategory.setName(cursor.getString(1));
+                // Adding contact to list
+                jobCategoryList.add(jobCategory);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return jobCategoryList;
+    }
+
+    //code to get all user's posted jobs
+    public List<Job> getUserPostedJobs(int currentUserId) {
+        List<Job> postedJobs = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_JOBS,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION,
+                        COL_JOB_JOB_CATEGORY_ID, COL_JOB_COMPLETED, COL_JOB_CREATED_AT,
+                        COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
+                COL_JOB_AUTHOR_ID + "=?",
+                new String[] {Integer.toString(currentUserId)},
+                null,
+                null,
+                null,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Job job = new Job();
+                job.setId(cursor.getInt(0));
+                job.setTitle(cursor.getString(1));
+                job.setDescription(cursor.getString(2));
+                job.setCategoryId(cursor.getInt(3));
+                job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
+                job.setCreatedAt(cursor.getString(5));
+                job.setLatitude(cursor.getFloat(6));
+                job.setLongitude(cursor.getFloat(7));
+                job.setAuthorId(cursor.getInt(8));
+                job.setWorkerId(cursor.getInt(9));
+                postedJobs.add(job);
+
+            } while (cursor.moveToNext());
+        }
+
+        // return job list
+        return postedJobs;
+    }
+
+    //code to get all user's pending jobs
+    public List<Job> getUserPendingJobs(int currentUserId) {
+        List<Job> pendingJobs = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_JOBS + ", " + TABLE_JOB_CANDIDATES,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION,
+                        COL_JOB_JOB_CATEGORY_ID, COL_JOB_COMPLETED, COL_JOB_CREATED_AT,
+                        COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
+                "(" +
+                        "(" + COL_JOB_WORKER_ID + "=?) " +
+                        "OR (" + COL_JOB_CANDIDATE_CANDIDATE_ID + "=? AND " + COL_JOB_ID + "=" + COL_JOB_CANDIDATE_JOB_ID + ")" +
+                        ") AND " + COL_JOB_COMPLETED + "=0",
+                new String[] {Integer.toString(currentUserId), Integer.toString(currentUserId)},
+                null,
+                null,
+                COL_JOB_COMPLETED,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Job job = new Job();
+                job.setId(cursor.getInt(0));
+                job.setTitle(cursor.getString(1));
+                job.setDescription(cursor.getString(2));
+                job.setCategoryId(cursor.getInt(3));
+                job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
+                job.setCreatedAt(cursor.getString(5));
+                job.setLatitude(cursor.getFloat(6));
+                job.setLongitude(cursor.getFloat(7));
+                job.setAuthorId(cursor.getInt(8));
+                job.setWorkerId(cursor.getInt(9));
+                pendingJobs.add(job);
+
+            } while (cursor.moveToNext());
+        }
+
+        // return job list
+        return pendingJobs;
+    }
+
+    //code to get all user's posted jobs
+    public List<Job> getUserCompletedJobs(int currentUserId) {
+        List<Job> completedJobs = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_JOBS,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION,
+                        COL_JOB_JOB_CATEGORY_ID, COL_JOB_COMPLETED, COL_JOB_CREATED_AT,
+                        COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
+                COL_JOB_WORKER_ID + "=? AND " + COL_JOB_COMPLETED + "=1",
+                new String[] {Integer.toString(currentUserId)},
+                null,
+                null,
+                null,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Job job = new Job();
+                job.setId(cursor.getInt(0));
+                job.setTitle(cursor.getString(1));
+                job.setDescription(cursor.getString(2));
+                job.setCategoryId(cursor.getInt(3));
+                job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
+                job.setCreatedAt(cursor.getString(5));
+                job.setLatitude(cursor.getFloat(6));
+                job.setLongitude(cursor.getFloat(7));
+                job.setAuthorId(cursor.getInt(8));
+                job.setWorkerId(cursor.getInt(9));
+                completedJobs.add(job);
+
+            } while (cursor.moveToNext());
+        }
+
+        // return job list
+        return completedJobs;
+    }
+
+    JobCategory getJobCategoryById(int jobCategoryId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_JOB_CATEGORIES,
+                new String[] { COL_JOB_CAT_NAME, COL_JOB_CAT_DESCRIPTION },
+                COL_JOB_CAT_ID + "=?",
+                new String[] { Integer.toString(jobCategoryId) },
+                null,
+                null,
+                null,
+                null);
+
+        JobCategory jobCategory = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            jobCategory = new JobCategory();
+            jobCategory.setId(jobCategoryId);
+            jobCategory.setName(cursor.getString(0));
+            jobCategory.setDescription(cursor.getString(1));;
+        }
+        return jobCategory;
     }
 
     //SOTTO CI SONO ESEMPI DI QUERY DA SEGUIRE PER SCRIVERE FUTURE QUERY
@@ -274,34 +469,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     */
 
-    //code to get all job categories
-    public List<JobCategory> getAllJobCategories() {
-        List<JobCategory> jobCategoryList = new ArrayList<>();
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_JOB_CATEGORIES,
-                new String[] { COL_JOB_CAT_ID, COL_JOB_CAT_NAME },
-                null,
-                null,
-                null,
-                null,
-                COL_JOB_CAT_NAME,
-                null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                JobCategory jobCategory = new JobCategory();
-                jobCategory.setId(cursor.getInt(0));
-                jobCategory.setName(cursor.getString(1));
-                // Adding contact to list
-                jobCategoryList.add(jobCategory);
-            } while (cursor.moveToNext());
-        }
-
-        // return contact list
-        return jobCategoryList;
-    }
     /*
 
     // code to update the single contact

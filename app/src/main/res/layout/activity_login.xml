@@ -28,9 +28,9 @@
         android:hint="Email"
         android:padding="@dimen/input_field_padding"
         android:inputType="textEmailAddress"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textColorHighlight="@color/white"
-        android:textColorHint="@color/lightGreyText" />
+        android:textColorHint="@color/lightGrey" />
 
     <EditText
         android:id="@+id/password"
@@ -46,9 +46,9 @@
         android:hint="Password"
         android:padding="@dimen/input_field_padding"
         android:inputType="textPassword"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textColorHighlight="@color/white"
-        android:textColorHint="@color/lightGreyText" />
+        android:textColorHint="@color/lightGrey" />
 
     <LinearLayout
         android:id="@+id/forgot_password_wrapper"
@@ -67,7 +67,7 @@
             android:buttonTint="@color/colorPrimary"
             android:checked="true"
             android:text="Remember Me"
-            android:textColor="@color/darkGreyText" />
+            android:textColor="@color/darkGrey" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -86,7 +86,7 @@
                 android:drawablePadding="6dp"
                 android:padding="4dp"
                 android:text="Forgot your Password?"
-                android:textColor="@color/darkGreyText" />
+                android:textColor="@color/darkGrey" />
 
         </RelativeLayout>
 

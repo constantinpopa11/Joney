@@ -16,7 +16,7 @@
         android:text="Distance"
         android:textAlignment="textStart"
         android:textSize="18dp"
-        android:textColor="@color/darkGreyText" />
+        android:textColor="@color/darkGrey" />
 
     <SeekBar
         android:id="@+id/sb_distance"
@@ -38,7 +38,7 @@
         android:layout_weight="1"
         android:gravity="left"
         android:textSize="12dp"
-        android:textColor="@color/lightGreyText" />
+        android:textColor="@color/lightGrey" />
 
         <TextView
             android:id="@+id/tv_distance"
@@ -48,7 +48,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="12dp"
-            android:textColor="@color/darkGreyText" />
+            android:textColor="@color/darkGrey" />
 
         <TextView
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:textSize="12dp"
-            android:textColor="@color/lightGreyText" />
+            android:textColor="@color/lightGrey" />
     </LinearLayout>
 
     <TextView
@@ -69,7 +69,7 @@
         android:text="Category"
         android:textAlignment="textStart"
         android:textSize="18dp"
-        android:textColor="@color/darkGreyText" />
+        android:textColor="@color/darkGrey" />
 
     <Spinner
         android:id="@+id/spn_category"
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:text="Min"
                 android:textSize="16dp"
-                android:textColor="@color/darkGreyText" />
+                android:textColor="@color/darkGrey" />
 
             <EditText
                 android:id="@+id/et_min_pay"
@@ -109,9 +109,9 @@
                 android:maxLength="3"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
-                android:textColor="@color/darkGreyText"
+                android:textColor="@color/darkGrey"
                 android:textColorHighlight="@color/white"
-                android:textColorHint="@color/lightGreyText" />
+                android:textColorHint="@color/lightGrey" />
         </LinearLayout>
 
         <LinearLayout
@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:text="Max"
                 android:textSize="16dp"
-                android:textColor="@color/darkGreyText" />
+                android:textColor="@color/darkGrey" />
 
             <EditText
                 android:id="@+id/et_max_pay"
@@ -140,9 +140,9 @@
                 android:maxLength="3"
                 android:inputType="numberDecimal"
                 android:textAlignment="textEnd"
-                android:textColor="@color/darkGreyText"
+                android:textColor="@color/darkGrey"
                 android:textColorHighlight="@color/white"
-                android:textColorHint="@color/lightGreyText" />
+                android:textColorHint="@color/lightGrey" />
         </LinearLayout>
     </LinearLayout>
 

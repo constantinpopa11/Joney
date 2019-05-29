@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_job_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/darkGrey"
+        android:drawableLeft="@drawable/ic_place"
+        android:drawablePadding="8dp"
+        android:text="Via San Pio X, 40, TN, Italia"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+
+    <TextView
+        android:id="@+id/tv_job_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/darkGrey"
+        android:drawableLeft="@drawable/ic_description"
+        android:drawablePadding="8dp"
+        android:text="Job description goes here"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/lightGrey"/>
+
+</LinearLayout>

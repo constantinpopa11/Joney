@@ -26,15 +26,24 @@ public class NavigationItemSelectedListener implements NavigationView.OnNavigati
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            // Handle the my jobs action
+            Intent intHome = new Intent(context, HomeActivity.class);
+            intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intHome);
         } else if (id == R.id.nav_profile) {
-            // Handle the my jobs action
+
         } else if (id == R.id.nav_my_jobs) {
             // Handle the my jobs action
+            Intent intMyJobs = new Intent(context, MyJobsActivity.class);
+            intMyJobs.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intMyJobs);
         } else if (id == R.id.nav_find_jobs) {
-
+            Intent intFindJobs = new Intent(context, FindJobActivity.class);
+            intFindJobs.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intFindJobs);
         } else if (id == R.id.nav_post_job) {
-
+            Intent intPostJob = new Intent(context, PostJobActivity.class);
+            intPostJob.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intPostJob);
         } else if (id == R.id.nav_send_ticket) {
 
         } else if (id == R.id.nav_logout) {
