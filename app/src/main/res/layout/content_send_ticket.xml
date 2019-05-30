@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/background"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:paddingTop="18dp"
     android:paddingLeft="24dp"
     android:paddingRight="24dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".SendTicketActivity"
+    tools:showIn="@layout/app_bar_send_ticket">
 
     <TextView
         android:layout_width="match_parent"
@@ -17,8 +22,6 @@
         android:textAlignment="textStart"
         android:textColor="@color/darkGrey"
         android:textSize="18dp" />
-
-
 
     <Spinner
         android:id="@+id/spn_job"
@@ -65,7 +68,7 @@
 
 
     <ImageView
-        android:id="@+id/btn_add_pictures"
+        android:id="@+id/iv_add_pictures_send_ticket"
         android:layout_width="@dimen/box_size"
         android:layout_height="@dimen/box_size"
         android:layout_marginTop="12dp"

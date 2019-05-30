@@ -30,6 +30,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    //Pick image from gallery || camera
+    implementation 'com.karumi:dexter:5.0.0'
+
     //Database with Room
     /*def room_version = "2.1.0-alpha07"
     implementation "androidx.room:room-runtime:2.1.0-alpha07"

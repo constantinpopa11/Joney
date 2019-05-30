@@ -43,6 +43,13 @@ public class Job {
         this.workerId = workerId;
     }
 
+    public Job(int jobID, String title, String description)
+    {
+        this.id = jobID;
+        this.title = title;
+        this.description = description;
+    }
+
     public int getId() {
         return id;
     }

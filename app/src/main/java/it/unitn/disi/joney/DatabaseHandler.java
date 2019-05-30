@@ -265,6 +265,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(TABLE_JOB_CATEGORIES, null, values);
     }
 
+    void addTicket(Ticket ticket){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_TICKET_JOB_ID,ticket.getJobId());
+        values.put(COL_TICKET_ISSUE, ticket.getIssue());
+
+        db.insert(TABLE_TICKETS,null,values);
+        db.close();
+    }
+
     //code to get all job categories
     public List<JobCategory> getAllJobCategories() {
         List<JobCategory> jobCategoryList = new ArrayList<>();
@@ -292,6 +303,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // return contact list
         return jobCategoryList;
+    }
+
+    //code to get all jobs from user
+    public List<Job> getAllJobsFromUser(int userId) {
+        List<Job> jobList = new ArrayList<>();
+
+        jobList.addAll(getUserPendingJobs(userId));
+        jobList.addAll(getUserCompletedJobs(userId));
+
+        return jobList;
     }
 
     //code to get all user's posted jobs

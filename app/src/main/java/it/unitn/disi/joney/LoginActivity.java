@@ -2,6 +2,8 @@ package it.unitn.disi.joney;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin, btnSignup;
     TextView tvForgotPassword;
-
     DatabaseHandler db = new DatabaseHandler(this);
 
     //Facebook Login

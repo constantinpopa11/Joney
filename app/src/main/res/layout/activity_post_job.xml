@@ -87,7 +87,7 @@
 
 
     <ImageView
-        android:id="@+id/btn_add_pictures"
+        android:id="@+id/iv_add_pictures_post_job"
         android:layout_width="@dimen/box_size"
         android:layout_height="@dimen/box_size"
         android:layout_marginTop="12dp"

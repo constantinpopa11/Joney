@@ -3,6 +3,9 @@
     package="it.unitn.disi.joney">
     <!-- Facebook Login -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Pick image from gallery || camera -->
+    <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
@@ -11,10 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserProfileActivity"></activity>
+        <activity
+            android:name=".SendTicketActivity"
+            android:label="@string/title_activity_send_ticket"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name=".UserProfileActivity" />
         <activity android:name=".ChooseCandidateActivity" />
-        <activity android:name=".SendTicketActivity"
-            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".MyJobsActivity"
             android:label="@string/title_activity_my_jobs"

@@ -46,7 +46,7 @@
                 android:layout_marginRight="60dp"
                 android:text="User name"
                 android:textAlignment="textStart"
-                android:textColor="@color/darkGreyText"
+                android:textColor="@color/darkGrey"
                 android:textSize="18dp" />
 
                 <Button
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:text="About me:"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textSize="18dp"/>
 
     <EditText
@@ -111,7 +111,7 @@
         android:layout_height="wrap_content"
         android:text="Reviews"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGreyText"
+        android:textColor="@color/darkGrey"
         android:textSize="26dp"/>
 
     <LinearLayout
@@ -144,7 +144,7 @@
                     android:layout_gravity="center"
                     android:text="User name reviewer"
                     android:textAlignment="textStart"
-                    android:textColor="@color/darkGreyText"
+                    android:textColor="@color/darkGrey"
                     android:textSize="18dp" />
 
 

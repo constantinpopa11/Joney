@@ -8,6 +8,9 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener  {
 
@@ -45,7 +48,9 @@ public class NavigationItemSelectedListener implements NavigationView.OnNavigati
             intPostJob.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intPostJob);
         } else if (id == R.id.nav_send_ticket) {
-
+            Intent intSendTicket = new Intent(context, SendTicketActivity.class);
+            intSendTicket.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intSendTicket);
         } else if (id == R.id.nav_logout) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             prefs.edit().putBoolean(Constants.PREF_REMEMBER_ME, false).commit();
