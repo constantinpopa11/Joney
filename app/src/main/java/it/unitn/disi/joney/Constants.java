@@ -11,11 +11,8 @@ public class Constants {
     public static final String PREF_CURRENT_USER_ID = "current_user_id";
     public static final int NO_USER_LOGGED_IN = -1;
 
-    public static final int INVALID_JOB_CATEGORY = -1;
-    public static final String NO_JOB_CATEGORY_SELECTED = "No selection";
-
-    public static final int INVALID_JOB = -1;
-    public static final String NO_JOB_SELECTED = "No selection";
+    public static final int INVALID_ITEM_VALUE = -1;
+    public static final String NO_SPINNER_SELCTION = "No selection";
 
     public static final int POSTED_JOB_TAB = 0;
     public static final int PENDING_JOB_TAB = 1;

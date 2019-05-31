@@ -85,15 +85,56 @@
         android:textSize="18dp" />
 
 
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/hsv_pictures"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" >
 
-    <ImageView
-        android:id="@+id/iv_add_pictures_post_job"
-        android:layout_width="@dimen/box_size"
-        android:layout_height="@dimen/box_size"
-        android:layout_marginTop="12dp"
-        android:src="@drawable/ic_add_image"
-        android:background="@drawable/button_blue_selector"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ll_pictures"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="@dimen/pic_thumbnail_size"
+                android:layout_height="@dimen/pic_thumbnail_size"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_pictures" />
+
+            <ImageView
+                android:layout_width="@dimen/pic_thumbnail_size"
+                android:layout_height="@dimen/pic_thumbnail_size"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_pictures" />
+
+            <ImageView
+                android:layout_width="@dimen/pic_thumbnail_size"
+                android:layout_height="@dimen/pic_thumbnail_size"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_pictures" />
+
+            <ImageView
+                android:layout_width="@dimen/pic_thumbnail_size"
+                android:layout_height="@dimen/pic_thumbnail_size"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/ic_pictures" />
+
+            <ImageView
+                android:id="@+id/btn_add_pictures8"
+                android:layout_width="@dimen/box_size"
+                android:layout_height="@dimen/box_size"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/ic_add_image"
+                android:background="@drawable/button_blue_selector"/>
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="wrap_content"

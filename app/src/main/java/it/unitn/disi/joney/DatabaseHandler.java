@@ -306,7 +306,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     //code to get all jobs from user
-    public List<Job> getAllJobsFromUser(int userId) {
+    public List<Job> getAllUserJobs(int userId) {
         List<Job> jobList = new ArrayList<>();
 
         jobList.addAll(getUserPendingJobs(userId));

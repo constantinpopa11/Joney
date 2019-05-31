@@ -2,18 +2,14 @@ package it.unitn.disi.joney;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 public class MyJobsActivity extends AppCompatActivity implements PostedJobsFragment.OnFragmentInteractionListener,
@@ -33,8 +29,7 @@ public class MyJobsActivity extends AppCompatActivity implements PostedJobsFragm
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener(getApplicationContext(), drawer));
-
+        navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener(getApplicationContext(), drawer));
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         MyJobsPagerAdapter myPagerAdapter = new MyJobsPagerAdapter(getSupportFragmentManager());

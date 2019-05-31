@@ -48,19 +48,21 @@ public class PostJobActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        /*
         ivPicture = (ImageView) findViewById(R.id.iv_add_pictures_post_job);
         ivPicture.setOnClickListener(new AddImageListener());
+*/
 
         spnCategory = (Spinner) findViewById(R.id.spn_category);
 
         List<JobCategory> jobCategoryList = db.getAllJobCategories();
         //add invalid choice manually at the beginning
-        jobCategoryList.add(0, new JobCategory(Constants.INVALID_JOB_CATEGORY, Constants.NO_JOB_CATEGORY_SELECTED, null));
+        jobCategoryList.add(0, new JobCategory(Constants.INVALID_ITEM_VALUE, Constants.NO_SPINNER_SELCTION, null));
         ArrayAdapter<JobCategory> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, jobCategoryList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCategory.setAdapter(dataAdapter);
-        spnCategory.setOnItemSelectedListener(new OnJobCategorySelectedListener());
+        spnCategory.setOnItemSelectedListener(new OnSpinnerItemSelectedListener());
 
         btnPostJob = (Button) findViewById(R.id.btn_post_job);
         btnPostJob.setOnClickListener(new PostJobListener());
@@ -104,7 +106,7 @@ public class PostJobActivity extends AppCompatActivity {
 
             if(jobTitle.length() == 0)
                 Toast.makeText(getApplicationContext(), "You must specify a job title", Toast.LENGTH_SHORT).show();
-            else if(jobCategory.getId() == Constants.INVALID_JOB_CATEGORY)
+            else if(jobCategory.getId() == Constants.INVALID_ITEM_VALUE)
                 Toast.makeText(getApplicationContext(), "You must select a job category from the dropdown", Toast.LENGTH_SHORT).show();
             else if(pay <= 0.0)
                 Toast.makeText(getApplicationContext(), "You have inserted an invalid pay amount", Toast.LENGTH_SHORT).show();

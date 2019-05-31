@@ -34,12 +34,12 @@ public class FindJobActivity extends AppCompatActivity {
         spnCategory = (Spinner) findViewById(R.id.spn_category);
         List<JobCategory> jobCategoryList = db.getAllJobCategories();
         //add "no selection" choice manually at the beginning
-        jobCategoryList.add(0, new JobCategory(Constants.INVALID_JOB_CATEGORY, Constants.NO_JOB_CATEGORY_SELECTED, null));
+        jobCategoryList.add(0, new JobCategory(Constants.INVALID_ITEM_VALUE, Constants.NO_SPINNER_SELCTION, null));
         ArrayAdapter<JobCategory> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, jobCategoryList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCategory.setAdapter(dataAdapter);
-        spnCategory.setOnItemSelectedListener(new OnJobCategorySelectedListener());
+        spnCategory.setOnItemSelectedListener(new OnSpinnerItemSelectedListener());
 
     }
 

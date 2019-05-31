@@ -1,11 +1,9 @@
 package it.unitn.disi.joney;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -13,9 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,10 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class SendTicketActivity extends AppCompatActivity {
@@ -53,8 +44,6 @@ public class SendTicketActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_ticket);
 
@@ -71,28 +60,22 @@ public class SendTicketActivity extends AppCompatActivity {
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        try {
-            navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener(getApplicationContext(), drawer));
-            Toast.makeText(getApplicationContext(),"Done",Toast.LENGTH_SHORT);
+        navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener(getApplicationContext(), drawer));
 
-        }catch (Exception e)
-        {
-            Toast.makeText(getApplicationContext(),e.getMessage().toString(),Toast.LENGTH_LONG);
-        }
         spnJob = (Spinner) findViewById(R.id.spn_job);
         etIssue = (EditText) findViewById(R.id.et_issue_description);
 
         ivPicture = (ImageView) findViewById(R.id.iv_add_pictures_send_ticket);
         ivPicture.setOnClickListener(new AddImageListener());
 
-        List<Job> jobList = db.getAllJobsFromUser(currentUserId);
+        List<Job> jobList = db.getAllUserJobs(currentUserId);
         //add invalid choice manually at the beginning
-        jobList.add(0, new Job(Constants.INVALID_JOB, Constants.NO_JOB_SELECTED, null));
+        jobList.add(0, new Job(Constants.INVALID_ITEM_VALUE, Constants.NO_SPINNER_SELCTION, null));
         ArrayAdapter<Job> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, jobList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnJob.setAdapter(dataAdapter);
-        //spnJob.setOnItemSelectedListener(new OnJobCategorySelectedListener());
+        //spnJob.setOnItemSelectedListener(new OnSpinnerItemSelectedListener());
 
         btnSendTicket = (Button) findViewById(R.id.btn_send_ticket);
         btnSendTicket.setOnClickListener(new SendTicketListener());
@@ -140,7 +123,7 @@ public class SendTicketActivity extends AppCompatActivity {
             job = (Job) spnJob.getSelectedItem();
             issue = etIssue.getText().toString();
 
-            if (job.getId() == Constants.INVALID_JOB)
+            if (job.getId() == Constants.INVALID_ITEM_VALUE)
                 Toast.makeText(getApplicationContext(), "You must select a job from the dropdown", Toast.LENGTH_SHORT).show();
             else if (issue.length() == 0)
                 Toast.makeText(getApplicationContext(), "You must write the issue", Toast.LENGTH_SHORT).show();
@@ -149,8 +132,8 @@ public class SendTicketActivity extends AppCompatActivity {
                 db.addTicket(ticket);
 
                 Toast.makeText(getApplicationContext(), "Ticket sent correctly", Toast.LENGTH_SHORT).show();
-                Intent intMyJobs = new Intent(SendTicketActivity.this, MyJobsActivity.class);
-                startActivity(intMyJobs);
+                Intent intHome = new Intent(SendTicketActivity.this, HomeActivity.class);
+                startActivity(intHome);
             }
 
         }
@@ -176,7 +159,7 @@ public class SendTicketActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                choosePhotoFromGallary();
+                                choosePhotoFromGallery();
                                 break;
                             case 1:
                                 takePhotoFromCamera();
@@ -187,7 +170,7 @@ public class SendTicketActivity extends AppCompatActivity {
         pictureDialog.show();
     }
 
-    public void choosePhotoFromGallary() {
+    public void choosePhotoFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 

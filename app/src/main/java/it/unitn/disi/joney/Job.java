@@ -153,4 +153,9 @@ public class Job {
     public void setWorker(User worker) {
         this.worker = worker;
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

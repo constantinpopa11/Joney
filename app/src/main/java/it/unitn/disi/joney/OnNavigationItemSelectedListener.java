@@ -12,12 +12,12 @@ import android.widget.Toast;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener  {
+public class OnNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener  {
 
     DrawerLayout drawer;
     Context context;
 
-    public NavigationItemSelectedListener(Context context, DrawerLayout drawer) {
+    public OnNavigationItemSelectedListener(Context context, DrawerLayout drawer) {
         this.context = context;
         this.drawer = drawer;
     }

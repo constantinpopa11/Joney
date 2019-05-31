@@ -4,7 +4,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-public class OnJobCategorySelectedListener implements AdapterView.OnItemSelectedListener {
+public class OnSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
+
+
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         JobCategory jobCategory = (JobCategory) parent.getItemAtPosition(pos);
