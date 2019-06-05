@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class SendTicketActivity extends AppCompatActivity {
     EditText etIssue;
     Button btnSendTicket;
     ImageView ivPicture;
+    ArrayList<TicketImage> tImages = new ArrayList<TicketImage>();
 
     DatabaseHandler db = new DatabaseHandler(this);
 
@@ -130,6 +133,7 @@ public class SendTicketActivity extends AppCompatActivity {
             else {
                 Ticket ticket = new Ticket(job.getId(),issue);
                 db.addTicket(ticket);
+                linkImagesToTicket(ticket);
 
                 Toast.makeText(getApplicationContext(), "Ticket sent correctly", Toast.LENGTH_SHORT).show();
                 Intent intHome = new Intent(SendTicketActivity.this, HomeActivity.class);
@@ -216,11 +220,11 @@ public class SendTicketActivity extends AppCompatActivity {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory() + "/Joney/ticket_image/");
+                Environment.getExternalStorageDirectory() + Constants.PATH_TICKET_IMAGES);
         // have the object build the directory structure, if needed.
         if (!wallpaperDirectory.exists()) {
             wallpaperDirectory.mkdirs();
-            Toast.makeText(getApplicationContext(), "Failed to create directory0. Grant storage permission.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Failed to create directory. Grant storage permission.", Toast.LENGTH_LONG).show();
         }
 
         try {
@@ -233,7 +237,9 @@ public class SendTicketActivity extends AppCompatActivity {
                     new String[]{f.getPath()},
                     new String[]{"image/jpeg"}, null);
             fo.close();
-            //Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
+            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
+
+            tImages.add(new TicketImage(f.getAbsolutePath(),-1));
 
             return f.getAbsolutePath();
         } catch (IOException e1) {
@@ -241,6 +247,14 @@ public class SendTicketActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Failed to save image. Grant storage permission.", Toast.LENGTH_LONG).show();
         }
         return "";
+    }
+
+    public void linkImagesToTicket(Ticket ticket){
+        int id = ticket.getId();
+        for(TicketImage ti : tImages){
+            ti.setTicketId(id);
+            db.addTicketImage(ti);
+        }
     }
 
 }

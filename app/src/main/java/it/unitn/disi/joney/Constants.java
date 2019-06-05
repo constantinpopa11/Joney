@@ -21,6 +21,9 @@ public class Constants {
     public static final int GALLERY = 0;
     public static final int CAMERA = 1;
 
+    public static final String PATH_TICKET_IMAGES = "/Joney/ticket_image/";
+    public static final String PATH_JOB_IMAGES = "/Joney/post_job_image/";
+
 
     //hashing function
     public static String md5(String s) {
@@ -40,5 +43,18 @@ public class Constants {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public double getDistance(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(lat1 * Math.PI / 180.0)
+                * Math.sin(lat2 * Math.PI / 180.0)
+                + Math.cos(lat1 * Math.PI / 180.0)
+                * Math.cos(lat2 * Math.PI / 180.0)
+                * Math.cos(theta * Math.PI / 180.0);
+        dist = Math.acos(dist);
+        dist = dist * 180.0 / Math.PI;
+        dist = dist * 60 * 1.1515;
+        return (dist);
     }
 }

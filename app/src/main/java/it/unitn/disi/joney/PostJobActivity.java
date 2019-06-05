@@ -202,7 +202,7 @@ public class PostJobActivity extends AppCompatActivity {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory().toString() + "/Joney/post_job_image/");
+                Environment.getExternalStorageDirectory().toString() + Constants.PATH_JOB_IMAGES);
         //Toast.makeText(getApplicationContext(), Environment.getExternalStorageDirectory().toString() + "/post_job_image/", Toast.LENGTH_SHORT).show();
         // have the object build the directory structure, if needed.
         if (!wallpaperDirectory.exists()) {

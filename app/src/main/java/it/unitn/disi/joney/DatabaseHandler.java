@@ -276,6 +276,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    void addTicketImage(TicketImage ticketImage){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_TICKET_IMG_SOURCE,ticketImage.getSource());
+        values.put(COL_TICKET_IMG_TICKET_ID, ticketImage.getTicketId());
+
+        db.insert(TABLE_TICKET_IMAGES,null,values);
+        db.close();
+    }
+
+
     //code to get all job categories
     public List<JobCategory> getAllJobCategories() {
         List<JobCategory> jobCategoryList = new ArrayList<>();
@@ -455,6 +467,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             jobCategory.setDescription(cursor.getString(1));;
         }
         return jobCategory;
+    }
+
+    public void updatePassword(String email, String password)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(COL_USER_PASSWORD, password);
+
+        db.update(TABLE_USERS, newValues, "email=?", new String[] { String.valueOf(email) });
     }
 
     //SOTTO CI SONO ESEMPI DI QUERY DA SEGUIRE PER SCRIVERE FUTURE QUERY
