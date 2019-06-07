@@ -65,6 +65,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:layout_marginTop="18dp"
+            android:drawableLeft="@drawable/ic_address"
+            android:text="Address"
+            android:textAlignment="textStart"
+            android:textSize="18dp"
+            android:textColor="@color/darkGrey" />
+
+        <EditText
+            android:id="@+id/et_job_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp"
+            android:focusable="false"
+            android:inputType="none"
+            android:hint="Via Padre Pio 69"
+            android:textColorHighlight="@color/white"
+            android:textColorHint="@color/lightGrey"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="32dp"
             android:drawableLeft="@drawable/ic_business"
             android:text="Category"
