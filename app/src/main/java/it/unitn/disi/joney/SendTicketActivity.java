@@ -1,12 +1,10 @@
 package it.unitn.disi.joney;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +24,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -38,20 +35,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
-
-public class SendTicketActivity extends AppCompatActivity implements PictureUploadListener {
+public class SendTicketActivity extends AppCompatActivity {
 
     Spinner spnJob;
     EditText etIssue;
     Button btnSendTicket;
-    ImageView btnAddPicture;
-    LinearLayout llPictures;
-
-    int uploadedPicCounter = 0;
-    int picToBeChangedIndex = -1;
-
-    private Context mContext;
+    ImageView ivPicture;
+    ArrayList<TicketImage> tImages = new ArrayList<TicketImage>();
 
     DatabaseHandler db = new DatabaseHandler(this);
 
@@ -62,8 +52,6 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
-
-        mContext = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -80,16 +68,8 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
         spnJob = (Spinner) findViewById(R.id.spn_job);
         etIssue = (EditText) findViewById(R.id.et_issue_description);
 
-        llPictures = (LinearLayout) findViewById(R.id.ll_pictures);
-        btnAddPicture = (ImageView) findViewById(R.id.btn_add_picture);
-        btnAddPicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
-                    ImageUploadUtils.showPictureOptionDialog(mContext, SendTicketActivity.this, -1);
-                }
-            }
-        });
+        ivPicture = (ImageView) findViewById(R.id.iv_add_pictures_send_ticket);
+        ivPicture.setOnClickListener(new AddImageListener());
 
         List<Job> jobList = db.getAllUserJobs(currentUserId);
         //add invalid choice manually at the beginning
@@ -149,23 +129,13 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
             if (job.getId() == Constants.INVALID_ITEM_VALUE)
                 Toast.makeText(getApplicationContext(), "You must select a job from the dropdown", Toast.LENGTH_SHORT).show();
             else if (issue.length() == 0)
-                Toast.makeText(getApplicationContext(), "Issue can't be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "You must write the issue", Toast.LENGTH_SHORT).show();
             else {
                 Ticket ticket = new Ticket(job.getId(),issue);
-                int ticketId = db.addTicket(ticket);
+                db.addTicket(ticket);
+                linkImagesToTicket(ticket);
 
-
-                int attachmentNum = llPictures.getChildCount();
-                for(int i=0; i<attachmentNum; i++) {
-                    //save image on the device and register it to the database
-                    ImageView imgView = (ImageView) llPictures.getChildAt(i);
-                    Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
-                    String path = saveImage(getApplicationContext(), bitmap);
-                    TicketImage ticketImage = new TicketImage(path, ticketId);
-                    db.addTicketImage(ticketImage);
-                }
-
-                Toast.makeText(getApplicationContext(), "Ticket sent successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Ticket sent correctly", Toast.LENGTH_SHORT).show();
                 Intent intHome = new Intent(SendTicketActivity.this, HomeActivity.class);
                 startActivity(intHome);
             }
@@ -173,7 +143,48 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
         }
     }
 
+    public class AddImageListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            showPictureDialog();
+        }
+    }
 
+    //Pick image from gallery || camera
+    private void showPictureDialog(){
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Select photo from gallery",
+                "Capture photo from camera" };
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                choosePhotoFromGallery();
+                                break;
+                            case 1:
+                                takePhotoFromCamera();
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+
+    public void choosePhotoFromGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, Constants.GALLERY);
+    }
+
+    private void takePhotoFromCamera() {
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, Constants.CAMERA);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -182,84 +193,69 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
         if (resultCode == this.RESULT_CANCELED) {
             return;
         }
-
-        Bitmap bitmap = null;
-        if (requestCode == Constants.UPLOAD_FROM_GALLERY) {
+        if (requestCode == Constants.GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    String path = saveImage(bitmap);
+                    //Toast.makeText(getApplicationContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
+                    ivPicture.setImageBitmap(bitmap);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
-        } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
-            bitmap = (Bitmap) data.getExtras().get("data");
-        }
-
-        if(bitmap != null) {
+        } else if (requestCode == Constants.CAMERA) {
+            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+            ivPicture.setImageBitmap(thumbnail);
+            saveImage(thumbnail);
             //Toast.makeText(getApplicationContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
-
-            ImageView newImgView;
-            if(picToBeChangedIndex != -1) {
-                newImgView = (ImageView) llPictures.getChildAt(picToBeChangedIndex);
-            } else {
-                newImgView = new ImageView(this);
-            }
-
-            final ImageView imageView = newImgView;
-            //setting image resource
-            imageView.setImageBitmap(bitmap);
-
-            if(picToBeChangedIndex == -1) {
-
-                final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_size);
-                final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_margin);
-
-                //setting image size and margins
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
-                layoutParams.setMargins(0, 0, thumbnailMargin, 0);
-                imageView.setLayoutParams(layoutParams);
-
-
-                llPictures.addView(imageView);
-
-                imageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        int clickedImgIndex = llPictures.indexOfChild(imageView);
-                        ImageUploadUtils.showPictureOptionDialog(mContext, SendTicketActivity.this, clickedImgIndex);
-                    }
-                });
-            }
-
-            picToBeChangedIndex = -1;
-            uploadedPicCounter++;
-            //hide add btn if there are 4 pics already
-            if(uploadedPicCounter == Constants.MAX_JOB_PICTURE_NUMBER) {
-                btnAddPicture.setVisibility(View.GONE);
-            }
         }
     }
 
-    public void onRemovePicture(int imgViewIndex) {
+    public String saveImage(Bitmap myBitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        File wallpaperDirectory = new File(
+                Environment.getExternalStorageDirectory() + Constants.PATH_TICKET_IMAGES);
+        // have the object build the directory structure, if needed.
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+            Toast.makeText(getApplicationContext(), "Failed to create directory. Grant storage permission.", Toast.LENGTH_LONG).show();
+        }
 
-        ImageView imgView = (ImageView) llPictures.getChildAt(imgViewIndex);
+        try {
+            File f = new File(wallpaperDirectory, Calendar.getInstance()
+                    .getTimeInMillis() + ".jpg");
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            MediaScannerConnection.scanFile(this,
+                    new String[]{f.getPath()},
+                    new String[]{"image/jpeg"}, null);
+            fo.close();
+            Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
 
-        if(imgView != null) {
-            llPictures.removeView(imgView);
-            uploadedPicCounter--;
+            tImages.add(new TicketImage(f.getAbsolutePath(),-1));
 
-            if(btnAddPicture.getVisibility() == View.GONE) {
-                btnAddPicture.setVisibility(View.VISIBLE);
-            }
+            return f.getAbsolutePath();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Failed to save image. Grant storage permission.", Toast.LENGTH_LONG).show();
+        }
+        return "";
+    }
+
+    public void linkImagesToTicket(Ticket ticket){
+        int id = ticket.getId();
+        for(TicketImage ti : tImages){
+            ti.setTicketId(id);
+            db.addTicketImage(ti);
         }
     }
 
-    public void onChangePicture(int index) {
-        this.picToBeChangedIndex = index;
-    }
 }
 

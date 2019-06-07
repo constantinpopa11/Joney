@@ -44,6 +44,11 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
         }
         TextView tvJobDescription = (TextView) convertView.findViewById(R.id.tv_job_description);
         tvJobDescription.setText(job.getDescription());
+
+        /*TextView tvJobLocation = (TextView) convertView.findViewById(R.id.tv_job_location);
+        String address = Constants.getStreetName(job.getLatitude(),job.getLongitude(),context);
+        tvJobLocation.setText(address);*/
+
         return convertView;
     }
 

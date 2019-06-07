@@ -1,10 +1,23 @@
 package it.unitn.disi.joney;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Pair;
 import android.util.Patterns;
 import android.view.View;
 import android.view.WindowManager;
@@ -12,6 +25,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class ResetPasswordActivity extends AppCompatActivity {
@@ -36,22 +52,17 @@ public class ResetPasswordActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = etEmail.getText().toString();
-                if(email.length() == 0)
-                {
+                if (email.length() == 0) {
                     Toast.makeText(getApplicationContext(), "Please write your email", Toast.LENGTH_SHORT).show();
-                }
-                else if (!isValidEmail(email))
-                {
+                } else if (!isValidEmail(email)) {
                     Toast.makeText(getApplicationContext(), "Not a correct email address", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     User user = db.getUserByEmail(email);
-                    if(user != null) {
+                    if (user != null) {
                         String password = "joney2019";
-                        db.updatePassword(email,Constants.md5(password));
+                        db.updatePassword(email, Constants.md5(password));
                         Toast.makeText(getApplicationContext(), "New password: joney2019", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getApplicationContext(), "There is no account with this email", Toast.LENGTH_LONG).show();
                     }
                 }

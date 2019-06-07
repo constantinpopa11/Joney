@@ -1,7 +1,14 @@
 package it.unitn.disi.joney;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Locale;
 
 public class Constants {
     private static Constants instance;
@@ -41,7 +48,7 @@ public class Constants {
 
             // Create Hex String
             StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
+            for (int i = 0; i < messageDigest.length; i++)
                 hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
             return hexString.toString();
 
@@ -51,7 +58,8 @@ public class Constants {
         return "";
     }
 
-    public double getDistance(double lat1, double lon1, double lat2, double lon2) {
+    //get distance in km
+    public static double getDistance(double lat1, double lon1, double lat2, double lon2) {
         double theta = lon1 - lon2;
         double dist = Math.sin(lat1 * Math.PI / 180.0)
                 * Math.sin(lat2 * Math.PI / 180.0)
@@ -63,4 +71,32 @@ public class Constants {
         dist = dist * 60 * 1.1515;
         return (dist);
     }
+
+    public static String getStreetName(double lat, double lon,Context c)
+    {
+        Geocoder geocoder = new Geocoder(c, Locale.getDefault());
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder();
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append(", ");
+                }
+                strReturnedAddress.append(returnedAddress.getLocality()).append(", ");
+                strReturnedAddress.append(returnedAddress.getCountryName());
+                return strReturnedAddress.toString();
+            }
+            else {
+                return "No Address returned!";
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "Cannot get Address!";
+        }
+    }
+
 }
