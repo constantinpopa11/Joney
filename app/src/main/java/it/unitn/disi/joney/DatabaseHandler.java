@@ -77,8 +77,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             COL_JOB_DESCRIPTION + " varchar(1000), " +
             COL_JOB_COMPLETED + " boolean NOT NULL DEFAULT(0), " +
             COL_JOB_CREATED_AT + " date NOT NULL, " +
-            COL_JOB_LATITUDE + " float NOT NULL, " +
-            COL_JOB_LONGITUDE + " float NOT NULL, " +
+            COL_JOB_LATITUDE + " double NOT NULL, " +
+            COL_JOB_LONGITUDE + " double NOT NULL, " +
             COL_JOB_JOB_CATEGORY_ID + " integer NOT NULL, " +
             COL_JOB_AUTHOR_ID + " integer NOT NULL, " +
             COL_JOB_WORKER_ID + " integer, " +
@@ -368,8 +368,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 job.setCategoryId(cursor.getInt(3));
                 job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
                 job.setCreatedAt(cursor.getString(5));
-                job.setLatitude(cursor.getFloat(6));
-                job.setLongitude(cursor.getFloat(7));
+                job.setLatitude(cursor.getDouble(6));
+                job.setLongitude(cursor.getDouble(7));
                 job.setAuthorId(cursor.getInt(8));
                 job.setWorkerId(cursor.getInt(9));
                 postedJobs.add(job);
@@ -410,8 +410,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 job.setCategoryId(cursor.getInt(3));
                 job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
                 job.setCreatedAt(cursor.getString(5));
-                job.setLatitude(cursor.getFloat(6));
-                job.setLongitude(cursor.getFloat(7));
+                job.setLatitude(cursor.getDouble(6));
+                job.setLongitude(cursor.getDouble(7));
                 job.setAuthorId(cursor.getInt(8));
                 job.setWorkerId(cursor.getInt(9));
                 pendingJobs.add(job);
@@ -449,8 +449,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 job.setCategoryId(cursor.getInt(3));
                 job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
                 job.setCreatedAt(cursor.getString(5));
-                job.setLatitude(cursor.getFloat(6));
-                job.setLongitude(cursor.getFloat(7));
+                job.setLatitude(cursor.getDouble(6));
+                job.setLongitude(cursor.getDouble(7));
                 job.setAuthorId(cursor.getInt(8));
                 job.setWorkerId(cursor.getInt(9));
                 completedJobs.add(job);

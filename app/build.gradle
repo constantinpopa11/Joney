@@ -18,6 +18,10 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.0.2'
@@ -32,6 +36,9 @@ dependencies {
 
     //Pick image from gallery || camera
     implementation 'com.karumi:dexter:5.0.0'
+
+    //pick place from map
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.0.0'
 
     //Database with Room
     /*def room_version = "2.1.0-alpha07"

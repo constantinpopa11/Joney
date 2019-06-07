@@ -8,11 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Picture;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.MediaScannerConnection;
+import android.media.Image;
 import android.net.Uri;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -27,24 +28,36 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PostJobActivity extends AppCompatActivity {
+import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
+
+public class PostJobActivity extends AppCompatActivity implements PictureUploadListener {
 
     Spinner spnCategory;
     Button btnPostJob;
-    ImageView ivPicture;
+    ImageView btnAddPicture;
+    LinearLayout llPictures;
+    EditText etAddress;
+
+    Pair<Double,Double> location = new Pair<Double,Double>(46.068051,11.149887);
+
+    int uploadedPicCounter = 0;
+    int picToBeChangedIndex = -1;
+
+    private Context mContext;
 
     DatabaseHandler db = new DatabaseHandler(this);
 
@@ -53,13 +66,23 @@ public class PostJobActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_job);
 
+        mContext = this;
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        /*
-        ivPicture = (ImageView) findViewById(R.id.iv_add_pictures_post_job);
-        ivPicture.setOnClickListener(new AddImageListener());
-*/
+        llPictures = (LinearLayout) findViewById(R.id.ll_pictures);
+        btnAddPicture = (ImageView) findViewById(R.id.btn_add_picture);
+        btnAddPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                    showMissingPermissionAlert("Storage","Pictures");
+                else if(uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
+                    ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, -1);
+                }
+            }
+        });
 
         spnCategory = (Spinner) findViewById(R.id.spn_category);
 
@@ -75,6 +98,24 @@ public class PostJobActivity extends AppCompatActivity {
         btnPostJob = (Button) findViewById(R.id.btn_post_job);
         btnPostJob.setOnClickListener(new PostJobListener());
 
+        etAddress = (EditText) findViewById(R.id.et_job_address);
+        etAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapIntent = new Intent(PostJobActivity.this,MapActivity.class);
+                startActivityForResult(mapIntent,69);
+            }
+        });
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            showMissingPermissionAlert("Location","GPS");
+        else
+        {
+            location = getLocation();
+            //etAddress.setText(location.first.toString() + "," + location.second.toString());
+            etAddress.setText(Constants.getStreetName(location.first,location.second,mContext));
+        }
+
     }
 
     @Override
@@ -89,7 +130,8 @@ public class PostJobActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class PostJobListener implements View.OnClickListener {
+
+    private class PostJobListener implements  View.OnClickListener {
         @Override
         public void onClick(View view) {
             String jobTitle, description;
@@ -107,26 +149,36 @@ public class PostJobActivity extends AppCompatActivity {
             description = etDescription.getText().toString();
             etPay = (EditText) findViewById(R.id.et_pay);
             payStr = etPay.getText().toString();
-            if (payStr != null && !payStr.trim().equalsIgnoreCase("")) {
+            if(payStr != null && !payStr.trim().equalsIgnoreCase("")) {
                 pay = Double.parseDouble(payStr);
             }
             JobCategory jobCategory = (JobCategory) spnCategory.getSelectedItem();
 
-            if (jobTitle.length() == 0)
+            if(jobTitle.length() == 0)
                 Toast.makeText(getApplicationContext(), "You must specify a job title", Toast.LENGTH_SHORT).show();
-            else if (jobCategory.getId() == Constants.INVALID_ITEM_VALUE)
+            else if(jobCategory.getId() == Constants.INVALID_ITEM_VALUE)
                 Toast.makeText(getApplicationContext(), "You must select a job category from the dropdown", Toast.LENGTH_SHORT).show();
-            else if (pay <= 0.0)
+            else if(pay <= 0.0)
                 Toast.makeText(getApplicationContext(), "You have inserted an invalid pay amount", Toast.LENGTH_SHORT).show();
             else {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = new Date();
                 String now = dateFormat.format(date);
 
-                Pair<Float, Float> location = getLocation();
+                //location = getLocation();
 
                 Job job = new Job(jobTitle, description, false, now, location.first, location.second, jobCategory.getId(), currentUserId, null);
-                db.addJob(job);
+                int jobId = db.addJob(job);
+
+                int attachmentNum = llPictures.getChildCount();
+                for(int i=0; i<attachmentNum; i++) {
+                    //save image on the device and register it to the database
+                    ImageView imgView = (ImageView) llPictures.getChildAt(i);
+                    Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
+                    String path = saveImage(getApplicationContext(), bitmap);
+                    JobImage jobImage = new JobImage(path, jobId);
+                    db.addJobImage(jobImage);
+                }
 
                 Intent intMyJobs = new Intent(PostJobActivity.this, MyJobsActivity.class);
                 startActivity(intMyJobs);
@@ -134,14 +186,14 @@ public class PostJobActivity extends AppCompatActivity {
         }
     }
 
-    private Pair<Float, Float> getLocation() {
+    private Pair<Double, Double> getLocation() {
         Double lat, lon;
         // instantiate the location manager, note you will need to request permissions in your manifest
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         // get the last know location from your location manager.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            showMissingPermissionAlert();
-            return null;
+                showMissingPermissionAlert("Location","GPS");
+                return new Pair<Double,Double>(46.068051,11.149887);
         } else {
             Toast.makeText(this, "Granted", Toast.LENGTH_SHORT);
 
@@ -150,14 +202,14 @@ public class PostJobActivity extends AppCompatActivity {
             lat = location.getLatitude();
             lon = location.getLongitude();
             //Log.d("LATLON",lat.toString() + " " + lon.toString());
-            return new Pair<Float, Float>(lat.floatValue(), lon.floatValue());
+            return new Pair<Double, Double>(lat, lon);
         }
     }
 
-    private void showMissingPermissionAlert() {
+    private void showMissingPermissionAlert(String permission, String hardware) {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Enable Location")
-                .setMessage("Your need to grant Location Permission if you want to use GPS.")
+        dialog.setTitle("Enable " + permission)
+                .setMessage("Your need to grant " + permission + " Permission if you want to use " + hardware +".")
                 .setPositiveButton("App Settings", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {
@@ -176,52 +228,6 @@ public class PostJobActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
-    ////////////////////////////////////////
-
-    private class AddImageListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            showPictureDialog();
-        }
-    }
-
-    //Pick image from gallery || camera
-    private void showPictureDialog() {
-        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
-        pictureDialog.setTitle("Select Action");
-        String[] pictureDialogItems = {
-                "Select photo from gallery",
-                "Capture photo from camera"};
-        pictureDialog.setItems(pictureDialogItems,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                choosePhotoFromGallary();
-                                break;
-                            case 1:
-                                takePhotoFromCamera();
-                                break;
-                        }
-                    }
-                });
-        pictureDialog.show();
-    }
-
-    public void choosePhotoFromGallary() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(galleryIntent, Constants.GALLERY);
-    }
-
-    private void takePhotoFromCamera() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, Constants.CAMERA);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -229,59 +235,91 @@ public class PostJobActivity extends AppCompatActivity {
         if (resultCode == this.RESULT_CANCELED) {
             return;
         }
-        if (requestCode == Constants.GALLERY) {
+
+
+        Bitmap bitmap = null;
+        if (requestCode == Constants.UPLOAD_FROM_GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
                 try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    String path = saveImage(bitmap);
-                    //Toast.makeText(getApplicationContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
-                    ivPicture.setImageBitmap(bitmap);
-
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
-        } else if (requestCode == Constants.CAMERA) {
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            ivPicture.setImageBitmap(thumbnail);
-            saveImage(thumbnail);
+        } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
+            bitmap = (Bitmap) data.getExtras().get("data");
+        } else if (requestCode == Constants.RECEIVED_LOCATION) {
+            if(resultCode == RESULT_OK) {
+                Double lat = data.getDoubleExtra("latitude",0.0);
+                Double lon = data.getDoubleExtra("longitude",0.0);
+                location = new Pair<Double,Double>(lat,lon);
+                etAddress.setText(Constants.getStreetName(lat,lon,mContext));
+            }
+        }
+
+        if(bitmap != null) {
             //Toast.makeText(getApplicationContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
+
+            ImageView newImgView;
+            if(picToBeChangedIndex != -1) {
+                newImgView = (ImageView) llPictures.getChildAt(picToBeChangedIndex);
+            } else {
+                newImgView = new ImageView(this);
+            }
+
+            final ImageView imageView = newImgView;
+            //setting image resource
+            imageView.setImageBitmap(bitmap);
+
+            if(picToBeChangedIndex == -1) {
+
+                final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_size);
+                final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_margin);
+
+                //setting image size and margins
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);
+                layoutParams.setMargins(0, 0, thumbnailMargin, 0);
+                imageView.setLayoutParams(layoutParams);
+
+
+                llPictures.addView(imageView);
+
+                imageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int clickedImgIndex = llPictures.indexOfChild(imageView);
+                        ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, clickedImgIndex);
+                    }
+                });
+            }
+
+            picToBeChangedIndex = -1;
+            uploadedPicCounter++;
+            //hide add btn if there are 4 pics already
+            if(uploadedPicCounter == Constants.MAX_JOB_PICTURE_NUMBER) {
+                btnAddPicture.setVisibility(View.GONE);
+            }
         }
     }
 
-    public String saveImage(Bitmap myBitmap) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory().toString() + Constants.PATH_JOB_IMAGES);
-        //Toast.makeText(getApplicationContext(), Environment.getExternalStorageDirectory().toString() + "/post_job_image/", Toast.LENGTH_SHORT).show();
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs();
-            Toast.makeText(getApplicationContext(), "Failed to create directory. Grant storage permission.", Toast.LENGTH_LONG).show();
-        }
+    public void onRemovePicture(int imgViewIndex) {
 
-        try {
-            File f = new File(wallpaperDirectory, Calendar.getInstance()
-                    .getTimeInMillis() + ".jpg");
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
-            MediaScannerConnection.scanFile(this,
-                    new String[]{f.getPath()},
-                    new String[]{"image/jpeg"}, null);
-            fo.close();
-            //Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
+        ImageView imgView = (ImageView) llPictures.getChildAt(imgViewIndex);
 
-            return f.getAbsolutePath();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-            Toast.makeText(getApplicationContext(), "Failed to save image. Grant storage permission.", Toast.LENGTH_LONG).show();
+        if(imgView != null) {
+            llPictures.removeView(imgView);
+            uploadedPicCounter--;
+
+            if(btnAddPicture.getVisibility() == View.GONE) {
+                btnAddPicture.setVisibility(View.VISIBLE);
+            }
         }
-        return "";
     }
-    ////////////////////////////////////////
+
+    public void onChangePicture(int index) {
+        this.picToBeChangedIndex = index;
+    }
 }

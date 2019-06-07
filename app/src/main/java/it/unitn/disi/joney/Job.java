@@ -6,8 +6,8 @@ public class Job {
     String description;
     boolean completed;
     String createdAt;
-    float latitude;
-    float longitude;
+    double latitude;
+    double longitude;
     int categoryId;
     JobCategory jobCategory;
     int authorId;
@@ -18,7 +18,7 @@ public class Job {
     public Job() {
     }
 
-    public Job(int jobID, String title, String description, boolean completed, String createdAt, float latitude, float longitude, int categoryID, int authorID, Integer workerID) {
+    public Job(int jobID, String title, String description, boolean completed, String createdAt, double latitude, double longitude, int categoryID, int authorID, Integer workerID) {
         this.id = jobID;
         this.title = title;
         this.description = description;
@@ -31,7 +31,7 @@ public class Job {
         this.workerId = workerID;
     }
 
-    public Job(String title, String description, boolean completed, String createdAt,  float latitude, float longitude, int categoryId, int authorId, Integer workerId) {
+    public Job(String title, String description, boolean completed, String createdAt,  double latitude, double longitude, int categoryId, int authorId, Integer workerId) {
         this.title = title;
         this.description = description;
         this.completed = completed;
@@ -82,19 +82,19 @@ public class Job {
         this.completed = completed;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

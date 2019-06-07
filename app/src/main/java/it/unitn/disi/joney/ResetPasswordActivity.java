@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PointF;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,10 +20,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -77,6 +82,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 startActivity(intLogin);
             }
         });
+
+
+
     }
 
     //Check Email validity

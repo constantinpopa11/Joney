@@ -1,8 +1,14 @@
 package it.unitn.disi.joney;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
+import android.provider.Settings;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -29,6 +35,8 @@ public class Constants {
     public static final int UPLOAD_FROM_CAMERA = 1;
     public static final int REMOVE_PICTURE = 2;
 
+    public static final int RECEIVED_LOCATION = 69;
+
     public static final String OLD_IMG_VIEW_INDEX = "old_img_view_index";
 
     public static final int MAX_JOB_PICTURE_NUMBER = 4;
@@ -37,6 +45,7 @@ public class Constants {
     public static final String PATH_TICKET_IMAGES = "/Joney/ticket_image/";
     public static final String PATH_JOB_IMAGES = "/Joney/post_job_image/";
 
+    public static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoibG92YXoiLCJhIjoiY2p3bTdqMGszMDJtOTN6cGY0YjNoZmc0eCJ9.d8C4iygw-U5rGxRlHiPDzw";
 
     //hashing function
     public static String md5(String s) {
@@ -82,11 +91,12 @@ public class Constants {
             if (addresses != null) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder();
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append(", ");
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i));
                 }
-                strReturnedAddress.append(returnedAddress.getLocality()).append(", ");
-                strReturnedAddress.append(returnedAddress.getCountryName());
+                /*strReturnedAddress.append(returnedAddress.getLocality()).append(", ");
+                strReturnedAddress.append(returnedAddress.getAdminArea()).append(", ");
+                strReturnedAddress.append(returnedAddress.getCountryName());*/
                 return strReturnedAddress.toString();
             }
             else {
