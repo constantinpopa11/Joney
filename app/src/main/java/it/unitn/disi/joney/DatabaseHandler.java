@@ -235,7 +235,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // code to add the new job
-    void addJob(Job job) {
+    int addJob(Job job) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -250,9 +250,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COL_JOB_WORKER_ID, job.getWorkerId());
 
         // Inserting Row
-        db.insert(TABLE_JOBS, null, values);
+        int jobId = (int) db.insert(TABLE_JOBS, null, values);
         //2nd argument is String containing nullColumnHack
         db.close(); // Closing database connection
+
+        return jobId;
     }
 
     void addJobCategory(SQLiteDatabase db, JobCategory jobCategory) {
@@ -265,25 +267,38 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.insert(TABLE_JOB_CATEGORIES, null, values);
     }
 
-    void addTicket(Ticket ticket){
+    int addTicket(Ticket ticket){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(COL_TICKET_JOB_ID,ticket.getJobId());
         values.put(COL_TICKET_ISSUE, ticket.getIssue());
 
-        db.insert(TABLE_TICKETS,null,values);
+        int ticketId = (int) db.insert(TABLE_TICKETS,null,values);
         db.close();
+
+        return ticketId;
     }
 
     void addTicketImage(TicketImage ticketImage){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COL_TICKET_IMG_SOURCE,ticketImage.getSource());
+        values.put(COL_TICKET_IMG_SOURCE, ticketImage.getSource());
         values.put(COL_TICKET_IMG_TICKET_ID, ticketImage.getTicketId());
 
         db.insert(TABLE_TICKET_IMAGES,null,values);
+        db.close();
+    }
+
+    void addJobImage(JobImage jobImage){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_JOB_IMG_SOURCE, jobImage.getSource());
+        values.put(COL_JOB_IMG_JOB_ID, jobImage.getJobId());
+
+        db.insert(TABLE_JOB_IMAGES,null,values);
         db.close();
     }
 

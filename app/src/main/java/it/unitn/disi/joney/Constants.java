@@ -18,8 +18,14 @@ public class Constants {
     public static final int PENDING_JOB_TAB = 1;
     public static final int COMPLETED_JOB_TAB = 2;
 
-    public static final int GALLERY = 0;
-    public static final int CAMERA = 1;
+    public static final int UPLOAD_FROM_GALLERY = 0;
+    public static final int UPLOAD_FROM_CAMERA = 1;
+    public static final int REMOVE_PICTURE = 2;
+
+    public static final String OLD_IMG_VIEW_INDEX = "old_img_view_index";
+
+    public static final int MAX_JOB_PICTURE_NUMBER = 4;
+    public static final int MAX_TICKET_PICTURE_NUMBER = 4;
 
     public static final String PATH_TICKET_IMAGES = "/Joney/ticket_image/";
     public static final String PATH_JOB_IMAGES = "/Joney/post_job_image/";
