@@ -4,76 +4,60 @@
     android:layout_height="fill_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    android:paddingLeft="24dp"
-    android:paddingTop="18dp"
-    android:paddingRight="24dp"
-    android:paddingBottom="18dp">
+    android:padding="8dp">
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
-        android:orientation="horizontal"
-        android:paddingTop="12dp"
-        android:paddingBottom="6dp">
+        android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="@dimen/user_pic_size"
-            android:layout_height="@dimen/user_pic_size"
-            android:layout_marginTop="12dp"
+            android:layout_width="@dimen/user_avatar_size_medium"
+            android:layout_height="@dimen/user_avatar_size_medium"
             android:layout_marginRight="12dp"
             android:src="@drawable/ic_pictures" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/background"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/background"
-                android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="60dp"
                 android:text="User name"
                 android:textAlignment="textStart"
                 android:textColor="@color/darkGrey"
                 android:textSize="18dp" />
 
-                <Button
-                    android:id="@+id/btn_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/button_blue_selector"
-                    android:drawableLeft="@drawable/ic_send"
-                    android:shadowColor="@android:color/transparent"
-                    android:text="Text"
-                    android:textColor="@color/white" />
-
-            </LinearLayout>
 
             <RatingBar
-                android:id="@+id/rating_bar_user"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="12dp"
+                android:id="@+id/rb_rating_average"
+                style="@style/joneyRatingBar"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="12dp"
                 android:numStars="5"
-                android:progressTint="@color/golden"
-                android:rating="4"
-                android:stepSize="1" />
+                android:rating="3.5"
+                android:isIndicator="true"/>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/button_blue_selector"
+            android:drawableLeft="@drawable/ic_send"
+            android:shadowColor="@android:color/transparent"
+            android:text="Text"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 
@@ -81,6 +65,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:text="About me:"
         android:textAlignment="textStart"
         android:textColor="@color/darkGrey"
@@ -114,66 +99,12 @@
         android:textColor="@color/darkGrey"
         android:textSize="26dp"/>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
+    <ListView
+        android:id="@+id/review_list"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:orientation="horizontal"
-        android:paddingTop="12dp"
-        android:paddingBottom="6dp">
-
-        <ImageView
-            android:layout_width="@dimen/box_size"
-            android:layout_height="@dimen/box_size"
-            android:layout_marginTop="12dp"
-            android:layout_marginRight="12dp"
-            android:src="@drawable/ic_pictures" />
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_reviewer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginTop="6dp"
-                    android:text="User name reviewer"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/darkGrey"
-                    android:textSize="18dp" />
+        />
 
 
-            <RatingBar
-                android:id="@+id/rating_bar_reviewer"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:layout_gravity="center"
-                android:layout_marginBottom="12dp"
-                android:numStars="5"
-                android:progressTint="@color/golden"
-                android:rating="4"
-                android:stepSize="1" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/et_user_review"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|left"
-        android:inputType="textMultiLine"
-        android:hint="Great person, it was a pleasure working for him"
-        android:lines="2"
-        android:maxLines="4"
-        android:minLines="2"
-        android:scrollbars="vertical" />
 
 </LinearLayout>

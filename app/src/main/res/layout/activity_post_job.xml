@@ -1,165 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/background"
-    android:paddingTop="18dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
-        android:drawableLeft="@drawable/ic_title"
-        android:text="Job Title"
-        android:textAlignment="textStart"
-        android:textColor="@color/darkGrey"
-        android:textSize="18dp" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/background"
+        android:paddingTop="18dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:orientation="vertical">
 
-
-
-    <EditText
-        android:id="@+id/et_job_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:textColor="@color/darkGrey"
-        android:textSize="18dp"
-        android:hint="Job title"
-        android:textColorHighlight="@color/white"
-        android:textColorHint="@color/lightGrey"/>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="6dp"
-        android:drawableLeft="@drawable/ic_description"
-        android:text=" Description"
-        android:textAlignment="textStart"
-        android:textColor="@color/darkGrey"
-        android:textSize="18dp" />
-
-
-    <EditText
-        android:id="@+id/et_job_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|left"
-        android:inputType="textMultiLine"
-        android:hint="Add an (optional) description for the job"
-        android:lines="4"
-        android:maxLines="6"
-        android:minLines="4"
-        android:scrollbars="vertical" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="32dp"
-        android:drawableLeft="@drawable/ic_business"
-        android:text="Category"
-        android:textAlignment="textStart"
-        android:textSize="18dp"
-        android:textColor="@color/darkGrey" />
-
-    <Spinner
-        android:id="@+id/spn_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="6dp"
-        android:drawableLeft="@drawable/ic_pictures"
-        android:text=" Pictures"
-        android:textAlignment="textStart"
-        android:textColor="@color/darkGrey"
-        android:textSize="18dp" />
-
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/hsv_pictures"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" >
-
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/pic_thumbnail_margin"
-            android:orientation="horizontal">
+            android:layout_marginBottom="6dp"
+            android:drawableLeft="@drawable/ic_title"
+            android:text="Job Title"
+            android:textAlignment="textStart"
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp" />
+
+
+
+        <EditText
+            android:id="@+id/et_job_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp"
+            android:hint="Job title"
+            android:textColorHighlight="@color/white"
+            android:textColorHint="@color/lightGrey"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="6dp"
+            android:drawableLeft="@drawable/ic_description"
+            android:text=" Description"
+            android:textAlignment="textStart"
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp" />
+
+
+        <EditText
+            android:id="@+id/et_job_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:hint="Add an (optional) description for the job"
+            android:lines="4"
+            android:maxLines="6"
+            android:minLines="4"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="32dp"
+            android:drawableLeft="@drawable/ic_business"
+            android:text="Category"
+            android:textAlignment="textStart"
+            android:textSize="18dp"
+            android:textColor="@color/darkGrey" />
+
+        <Spinner
+            android:id="@+id/spn_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="6dp"
+            android:drawableLeft="@drawable/ic_pictures"
+            android:text=" Pictures"
+            android:textAlignment="textStart"
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp" />
+
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/hsv_pictures"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/ll_pictures"
+                android:layout_marginTop="@dimen/pic_thumbnail_margin"
                 android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ll_pictures"
+                    android:orientation="horizontal">
+                </LinearLayout>
+
+
+                <ImageView
+                    android:id="@+id/btn_add_picture"
+                    android:layout_width="@dimen/pic_thumbnail_size"
+                    android:layout_height="@dimen/pic_thumbnail_size"
+                    android:src="@drawable/ic_add_image"
+                    android:background="@drawable/button_blue_selector"/>
             </LinearLayout>
+        </HorizontalScrollView>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginRight="12dp"
+            android:orientation="horizontal">
 
-             <ImageView
-                 android:id="@+id/btn_add_picture"
-                 android:layout_width="@dimen/pic_thumbnail_size"
-                 android:layout_height="@dimen/pic_thumbnail_size"
-                 android:src="@drawable/ic_add_image"
-                 android:background="@drawable/button_blue_selector"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pay"
+                android:textColor="@color/darkGrey"
+                android:textSize="16dp" />
+
+            <EditText
+                android:id="@+id/et_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:drawableLeft="@drawable/ic_euro"
+                android:drawablePadding="10dp"
+                android:hint="20.00"
+                android:inputType="numberDecimal"
+                android:maxLength="3"
+                android:textAlignment="textEnd"
+                android:textColor="@color/darkGrey"
+                android:textColorHighlight="@color/white"
+                android:textColorHint="@color/lightGrey" />
         </LinearLayout>
-    </HorizontalScrollView>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginRight="12dp"
-        android:orientation="horizontal">
 
-        <TextView
+        <Button
+            android:id="@+id/btn_post_job"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pay"
-            android:textColor="@color/darkGrey"
-            android:textSize="16dp" />
-
-        <EditText
-            android:id="@+id/et_pay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:drawableLeft="@drawable/ic_euro"
-            android:drawablePadding="10dp"
-            android:hint="20.00"
-            android:inputType="numberDecimal"
-            android:maxLength="3"
-            android:textAlignment="textEnd"
-            android:textColor="@color/darkGrey"
-            android:textColorHighlight="@color/white"
-            android:textColorHint="@color/lightGrey" />
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="48dp"
+            android:background="@drawable/button_red_selector"
+            android:drawableRight="@drawable/ic_post"
+            android:padding="15dp"
+            android:shadowColor="@android:color/transparent"
+            android:text="Post job"
+            android:textColor="@color/white" />
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/btn_post_job"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_red_selector"
-        android:drawableRight="@drawable/ic_post"
-        android:padding="15dp"
-        android:shadowColor="@android:color/transparent"
-        android:text="Post job"
-        android:textColor="@color/white" />
+</ScrollView>
 
 
-</LinearLayout>
