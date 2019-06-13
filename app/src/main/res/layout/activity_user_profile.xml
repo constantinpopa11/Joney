@@ -1,110 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/background"
-    android:orientation="vertical"
-    android:padding="8dp">
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-
-    <LinearLayout
+    <include
+        layout="@layout/app_bar_user_profile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background"
-        android:orientation="horizontal">
+        android:layout_height="match_parent" />
 
-        <ImageView
-            android:layout_width="@dimen/user_avatar_size_medium"
-            android:layout_height="@dimen/user_avatar_size_medium"
-            android:layout_marginRight="12dp"
-            android:src="@drawable/ic_pictures" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/background"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="User name"
-                android:textAlignment="textStart"
-                android:textColor="@color/darkGrey"
-                android:textSize="18dp" />
-
-
-            <RatingBar
-                android:id="@+id/rb_rating_average"
-                style="@style/joneyRatingBar"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="12dp"
-                android:numStars="5"
-                android:rating="3.5"
-                android:isIndicator="true"/>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/button_blue_selector"
-            android:drawableLeft="@drawable/ic_send"
-            android:shadowColor="@android:color/transparent"
-            android:text="Text"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
-
-    <TextView
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="About me:"
-        android:textAlignment="textStart"
-        android:textColor="@color/darkGrey"
-        android:textSize="18dp"/>
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/side_drawer" />
 
-    <EditText
-        android:id="@+id/et_user_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|left"
-        android:inputType="textMultiLine"
-        android:hint="I'm sexy and I know it"
-        android:lines="4"
-        android:maxLines="6"
-        android:minLines="4"
-        android:scrollbars="vertical" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@android:color/darker_gray" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reviews"
-        android:textAlignment="textStart"
-        android:textColor="@color/darkGrey"
-        android:textSize="26dp"/>
-
-    <ListView
-        android:id="@+id/review_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-
-
-
-</LinearLayout>
+</android.support.v4.widget.DrawerLayout>

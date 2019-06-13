@@ -64,11 +64,11 @@ public class ImageUploadUtils {
     }
 
 
-    public static String saveImage(Context context, Bitmap bitmap) {
+    public static String saveImage(Context context, Bitmap bitmap, String savePath) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
         File wallpaperDirectory = new File(
-                Environment.getExternalStorageDirectory().toString() + Constants.PATH_JOB_IMAGES);
+                Environment.getExternalStorageDirectory().toString() + savePath);
         //Toast.makeText(getApplicationContext(), Environment.getExternalStorageDirectory().toString() + "/post_job_image/", Toast.LENGTH_SHORT).show();
         // have the object build the directory structure, if needed.
         if (!wallpaperDirectory.exists()) {

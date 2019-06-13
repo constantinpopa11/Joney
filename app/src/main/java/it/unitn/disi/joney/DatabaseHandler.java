@@ -21,7 +21,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COL_USER_FIRST_NAME = "firstName";
     private static final String COL_USER_LAST_NAME = "lastName";
     private static final String COL_USER_EMAIL = "email";
+    private static final String COL_USER_DESCRIPTION = "description";
     private static final String COL_USER_PASSWORD = "password";
+
+    private static final String TABLE_USER_PROFILE_IMAGES = "UserProfileImages";
+    private static final String COL_USER_PROFILE_IMG_SOURCE = "source";
+    private static final String COL_USER_PROFILE_IMG_USER_ID = "userId";
 
     private static final String TABLE_TICKET_IMAGES = "TicketImages";
     private static final String COL_TICKET_IMG_SOURCE = "source";
@@ -64,12 +69,24 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COL_FEEDBACK_AUTHOR_ID = "authorId";
     private static final String COL_FEEDBACK_RECEIVER_ID = "receiverId";
 
+    private static final String TABLE_MESSAGES = "Messages";
+    private static final String COL_MESSAGE_SENDER = "senderId";
+    private static final String COL_MESSAGE_RECEIVER = "receiverId";
+    private static final String COL_MESSAGE_DATE = "date";
+    private static final String COL_MESSAGE_TEXT = "message";
+
     private static String CREATE_TABLE_USERS  = "CREATE TABLE IF NOT EXISTS " + TABLE_USERS  +
             "(" + COL_USER_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             COL_USER_EMAIL + " varchar(100) NOT NULL UNIQUE, " +
             COL_USER_FIRST_NAME + " varchar(50) NOT NULL, " +
             COL_USER_LAST_NAME + " varchar(50) NOT NULL, " +
+            COL_USER_DESCRIPTION + " varchar(300), " +
             COL_USER_PASSWORD + " varchar(255) NOT NULL);";
+
+    private static String CREATE_TABLE_USER_PROFILE_IMAGES  = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_PROFILE_IMAGES +
+            "(" + COL_USER_PROFILE_IMG_SOURCE + " varchar(255) PRIMARY KEY NOT NULL, " +
+            COL_USER_PROFILE_IMG_USER_ID + " integer NOT NULL, " +
+            "FOREIGN KEY (" + COL_USER_PROFILE_IMG_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COL_USER_ID + "));";
 
     private static String CREATE_TABLE_JOBS = "CREATE TABLE IF NOT EXISTS " + TABLE_JOBS +
             "(" + COL_JOB_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +
@@ -125,6 +142,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             COL_TICKET_IMG_TICKET_ID + " integer NOT NULL, " +
             "FOREIGN KEY (" + COL_TICKET_IMG_TICKET_ID + ") REFERENCES " + TABLE_TICKETS + "(" + COL_TICKET_ID + "));";
 
+    private static String CREATE_TABLE_MESSAGES  = "CREATE TABLE IF NOT EXISTS " + TABLE_MESSAGES +
+            "(" + COL_MESSAGE_SENDER + " integer NOT NULL, " +
+            COL_MESSAGE_RECEIVER + " integer NOT NULL, " +
+            COL_MESSAGE_DATE + " date NOT NULL, " +
+            COL_MESSAGE_TEXT + " varchar(100));";
+
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -136,6 +159,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(CREATE_TABLE_USERS);
+        db.execSQL(CREATE_TABLE_USER_PROFILE_IMAGES);
         db.execSQL(CREATE_TABLE_JOBS);
         db.execSQL(CREATE_TABLE_JOB_CANDIDATES);
         db.execSQL(CREATE_TABLE_JOB_CATEGORIES);
@@ -143,6 +167,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TICKETS);
         db.execSQL(CREATE_TABLE_TICKET_IMAGES);
         db.execSQL(CREATE_TABLE_FEEDBACKS);
+        db.execSQL(CREATE_TABLE_MESSAGES);
 
         JobCategory jobCategory = new JobCategory("Teaching and Tutoring", null);
         addJobCategory(db, jobCategory);
@@ -162,6 +187,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PROFILE_IMAGES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_JOBS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_JOB_CANDIDATES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_JOB_CATEGORIES);
@@ -169,6 +195,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKETS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TICKET_IMAGES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEEDBACKS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
 
         // Create tables again
         onCreate(db);
@@ -182,6 +209,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COL_USER_FIRST_NAME, user.getFirstName());
         values.put(COL_USER_LAST_NAME, user.getLastName());
         values.put(COL_USER_EMAIL, user.getEmail());
+        values.put(COL_USER_DESCRIPTION,"Write something about you");
         values.put(COL_USER_PASSWORD, user.getPassword());
 
         // Inserting Row
@@ -215,7 +243,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS,
-                new String[] { COL_USER_FIRST_NAME, COL_USER_LAST_NAME, COL_USER_EMAIL },
+                new String[] { COL_USER_FIRST_NAME, COL_USER_LAST_NAME, COL_USER_EMAIL, COL_USER_DESCRIPTION },
                 COL_USER_ID + "=?",
                 new String[] { Integer.toString(userId) },
                 null,
@@ -230,6 +258,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             user.setFirstName(cursor.getString(0));
             user.setLastName(cursor.getString(1));
             user.setEmail(cursor.getString(2));
+            user.setDescription(cursor.getString(3));
         }
         return user;
     }
@@ -300,6 +329,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_JOB_IMAGES,null,values);
         db.close();
+    }
+
+    void addUserProfileImage(UserProfileImage userProfileImage){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_USER_PROFILE_IMG_SOURCE, userProfileImage.getSource());
+        values.put(COL_USER_PROFILE_IMG_USER_ID, userProfileImage.getUserId());
+
+        db.insert(TABLE_USER_PROFILE_IMAGES,null,values);
+        db.close();
+    }
+
+    void addMessage(Message message){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_MESSAGE_SENDER, message.getSenderId());
+        values.put(COL_MESSAGE_RECEIVER, message.getReceiverId());
+        values.put(COL_MESSAGE_DATE, message.getDate());
+        values.put(COL_MESSAGE_TEXT, message.getMessage());
+
+        db.insert(TABLE_MESSAGES,null,values);
+        db.close();
+    }
+
+    void removeUserProfileImage(int userId)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_USER_PROFILE_IMAGES,COL_USER_PROFILE_IMG_USER_ID + "=?",new String[] { Integer.toString(userId) });
     }
 
 
@@ -492,6 +552,47 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         newValues.put(COL_USER_PASSWORD, password);
 
         db.update(TABLE_USERS, newValues, "email=?", new String[] { String.valueOf(email) });
+    }
+
+    public void updateUserDescription(int id,String description)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(COL_USER_DESCRIPTION, description);
+
+        db.update(TABLE_USERS, newValues, "id=?", new String[] { String.valueOf(id) });
+    }
+
+    public UserProfileImage getUserProfileImage(int userId){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_USER_PROFILE_IMAGES,
+                new String[] { COL_USER_PROFILE_IMG_SOURCE, COL_USER_PROFILE_IMG_USER_ID },
+                COL_USER_PROFILE_IMG_USER_ID + "=?",
+                new String[] { Integer.toString(userId) },
+                null,
+                null,
+                null,
+                null);
+
+        UserProfileImage userProfileImage = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            userProfileImage = new UserProfileImage();
+            userProfileImage.setSource(cursor.getString(0));
+            userProfileImage.setUserId(cursor.getInt(1));;
+        }
+        return userProfileImage;
+    }
+
+    public void updateUserProfileImage(int userId,String source)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(COL_USER_PROFILE_IMG_SOURCE, source);
+
+        db.update(TABLE_USER_PROFILE_IMAGES, newValues, "userId=?", new String[] { String.valueOf(userId) });
     }
 
     //SOTTO CI SONO ESEMPI DI QUERY DA SEGUIRE PER SCRIVERE FUTURE QUERY

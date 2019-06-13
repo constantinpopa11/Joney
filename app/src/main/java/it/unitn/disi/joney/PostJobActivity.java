@@ -113,7 +113,18 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         {
             location = getLocation();
             //etAddress.setText(location.first.toString() + "," + location.second.toString());
-            etAddress.setText(Constants.getStreetName(location.first,location.second,mContext));
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    final String streetName = Constants.getStreetName(location.first,location.second,mContext);
+                    etAddress.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            etAddress.setText(streetName);
+                        }
+                    });
+                }
+            }) .start();
         }
 
     }
@@ -175,7 +186,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                     //save image on the device and register it to the database
                     ImageView imgView = (ImageView) llPictures.getChildAt(i);
                     Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
-                    String path = saveImage(getApplicationContext(), bitmap);
+                    String path = saveImage(getApplicationContext(), bitmap, Constants.PATH_JOB_IMAGES);
                     JobImage jobImage = new JobImage(path, jobId);
                     db.addJobImage(jobImage);
                 }
@@ -241,6 +252,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         if (requestCode == Constants.UPLOAD_FROM_GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
+                Log.d("Img URI",contentURI.toString());
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                 } catch (IOException e) {
@@ -253,10 +265,22 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
             bitmap = (Bitmap) data.getExtras().get("data");
         } else if (requestCode == Constants.RECEIVED_LOCATION) {
             if(resultCode == RESULT_OK) {
-                Double lat = data.getDoubleExtra("latitude",0.0);
-                Double lon = data.getDoubleExtra("longitude",0.0);
+                final Double lat = data.getDoubleExtra("latitude",0.0);
+                final Double lon = data.getDoubleExtra("longitude",0.0);
                 location = new Pair<Double,Double>(lat,lon);
-                etAddress.setText(Constants.getStreetName(lat,lon,mContext));
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String streetName = Constants.getStreetName(lat,lon,mContext);
+                        etAddress.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                etAddress.setText(streetName);
+                            }
+                        });
+                    }
+                }) .start();
+
             }
         }
 

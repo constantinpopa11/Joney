@@ -166,7 +166,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
                     //save image on the device and register it to the database
                     ImageView imgView = (ImageView) llPictures.getChildAt(i);
                     Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
-                    String path = saveImage(getApplicationContext(), bitmap);
+                    String path = saveImage(getApplicationContext(), bitmap, Constants.PATH_TICKET_IMAGES);
                     TicketImage ticketImage = new TicketImage(path, ticketId);
                     db.addTicketImage(ticketImage);
                 }

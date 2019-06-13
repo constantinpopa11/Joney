@@ -64,6 +64,10 @@ public class SignupActivity extends AppCompatActivity {
                                 if(cbTos.isChecked()) {
                                     password = Constants.md5(password);
 
+                                    if(firstName.endsWith(" "))
+                                        firstName = firstName.substring(0, firstName.length() - 1);
+                                    if(lastName.endsWith(" "))
+                                        lastName = lastName.substring(0, lastName.length() - 1);
                                     User user = new User(email, firstName, lastName, password);
                                     db.addUser(user);
 

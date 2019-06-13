@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.Settings;
+import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -42,8 +46,9 @@ public class Constants {
     public static final int MAX_JOB_PICTURE_NUMBER = 4;
     public static final int MAX_TICKET_PICTURE_NUMBER = 4;
 
-    public static final String PATH_TICKET_IMAGES = "/Joney/ticket_image/";
-    public static final String PATH_JOB_IMAGES = "/Joney/post_job_image/";
+    public static final String PATH_TICKET_IMAGES = "/Joney/ticket_images/";
+    public static final String PATH_JOB_IMAGES = "/Joney/post_job_images/";
+    public static final String PATH_USER_PROFILE_IMAGES = "/Joney/user_profile_images/";
 
     public static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoibG92YXoiLCJhIjoiY2p3bTdqMGszMDJtOTN6cGY0YjNoZmc0eCJ9.d8C4iygw-U5rGxRlHiPDzw";
 
@@ -81,6 +86,7 @@ public class Constants {
         return (dist);
     }
 
+
     public static String getStreetName(double lat, double lon,Context c)
     {
         Geocoder geocoder = new Geocoder(c, Locale.getDefault());
@@ -107,6 +113,29 @@ public class Constants {
             e.printStackTrace();
             return "Cannot get Address!";
         }
+    }
+
+    public static Pair<Double,Double> getCoordinates(String address, Context c)
+    {
+        Geocoder geocoder = new Geocoder(c,Locale.getDefault());
+        Log.d("Street",address);
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocationName(address, 1);
+            Log.d("Size",String.valueOf(addresses.size()));
+            if (addresses.size() > 0) {
+                double latitude = addresses.get(0).getLatitude();
+                double longitude = addresses.get(0).getLongitude();
+                Log.d("Lat",String.valueOf(latitude));
+                Log.d("Lon",String.valueOf(longitude));
+                return new Pair<Double, Double>(latitude, longitude);
+            } else
+                return new Pair<Double, Double>(0.0, 0.0);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return new Pair<Double, Double>(0.0, 0.0);
     }
 
 }
