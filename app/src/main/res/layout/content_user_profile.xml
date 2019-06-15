@@ -19,14 +19,19 @@
         android:orientation="horizontal"
         android:id="@+id/rl_user_preview">
 
-        <ImageView
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/iv_user_profile_image"
             android:layout_width="@dimen/user_avatar_size_medium"
             android:layout_height="@dimen/user_avatar_size_medium"
             android:layout_marginRight="12dp"
             android:src="@drawable/ic_pictures"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            app:civ_border_color="@color/darkWhite"
+            app:civ_border_width="2dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="5"
+            app:civ_shadow_color="@color/black"/>
 
         <LinearLayout
             android:layout_width="wrap_content"

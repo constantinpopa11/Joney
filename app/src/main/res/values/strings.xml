@@ -12,6 +12,7 @@
     <string name="title_activity_my_jobs">My jobs</string>
     <string name="title_activity_send_ticket">Help</string>
     <string name="title_activity_user_profile">User Profile</string>
+    <string name="title_activity_chat">Chat</string>
 
     <string name="mapbox_access_token">pk.eyJ1IjoibG92YXoiLCJhIjoiY2p3bTdqMGszMDJtOTN6cGY0YjNoZmc0eCJ9.d8C4iygw-U5rGxRlHiPDzw</string>
 

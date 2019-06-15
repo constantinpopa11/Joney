@@ -175,7 +175,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = new Date();
                 String now = dateFormat.format(date);
-
+                //Log.d("Date",now);
                 //location = getLocation();
 
                 Job job = new Job(jobTitle, description, false, now, location.first, location.second, jobCategory.getId(), currentUserId, null);

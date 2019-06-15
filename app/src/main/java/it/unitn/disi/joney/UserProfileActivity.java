@@ -2,6 +2,7 @@ package it.unitn.disi.joney;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.net.Uri;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -37,10 +39,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
@@ -50,7 +56,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
     EditText etUserInfo;
     TextView tvUserName;
     FloatingActionButton btnSaveChanges;
-    ImageView ivUserProfileImage;
+    CircularImageView ivUserProfileImage;
     Button btnText;
 
     boolean descriptionChanged = false, profileImageChanged = false;
@@ -83,7 +89,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
 
         tvUserName = (TextView) findViewById(R.id.tv_user_name);
         etUserInfo = (EditText) findViewById(R.id.et_user_info);
-        ivUserProfileImage = (ImageView) findViewById(R.id.iv_user_profile_image);
+        ivUserProfileImage = (CircularImageView) findViewById(R.id.iv_user_profile_image);
         btnSaveChanges = (FloatingActionButton) findViewById(R.id.btn_save_description);
         btnText = (Button) findViewById(R.id.btn_text);
 
@@ -152,10 +158,15 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                     if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                         showMissingPermissionAlert("Storage", "Pictures");
                     else {
-                        if (upi == null) {
-                            ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, -1);
-                        } else
-                            ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, 0);
+                        try {
+                            if (upi == null) {
+                                ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, -1);
+                            } else
+                                ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, 0);
+                        } catch (Exception e) {
+                            Log.d("Error","can't create file");
+                        }
+                        //photo.renameTo(new File(Environment.getExternalStorageDirectory().getAbsolutePath().toString() + Constants.PATH_USER_PROFILE_FULL_IMAGES + "culo.jpg"));
                     }
                 }
             });
@@ -171,13 +182,14 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                     }
                     if (profileImageChanged) {
                         if (!ivUserProfileImage.getDrawable().getConstantState().equals(getResources().getDrawable(R.drawable.ic_pictures).getConstantState())) {
-                            Bitmap bitmap = ((BitmapDrawable) ivUserProfileImage.getDrawable()).getBitmap();
+                            Bitmap bitmap =  ((BitmapDrawable) ivUserProfileImage.getDrawable()).getBitmap();
                             Log.d("Pictures","Different");
                             String path = saveImage(getApplicationContext(), bitmap, Constants.PATH_USER_PROFILE_IMAGES);
                             if (upi == null) {
                                 UserProfileImage userProfileImage = new UserProfileImage(path, currentUserId);
                                 db.addUserProfileImage(userProfileImage);
                             } else {
+                                Log.d("Path",path);
                                 db.updateUserProfileImage(currentUserId, path);
                             }
                         } else {
@@ -209,17 +221,23 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
 
                 }
             });
+            btnText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    /*Intent intUser = new Intent(UserProfileActivity.this,UserProfileActivity.class);
+                    intUser.putExtra("userId",2);
+                    startActivity(intUser);*/
+
+                    Intent intChat = new Intent(UserProfileActivity.this,ChatActivity.class);
+                    intChat.putExtra("senderId",currentUserId);
+                    intChat.putExtra("receiverId",currentUserId==2?1:2);
+                    startActivity(intChat);
+                }
+            });
+
+
         }
-
-        btnText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intUser = new Intent(UserProfileActivity.this,UserProfileActivity.class);
-                intUser.putExtra("userId",2);
-                startActivity(intUser);
-            }
-        });
-
+        //outside else
     }
 
     @Override
@@ -300,10 +318,24 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
                 }
+                cropImage(contentURI);
             }
 
         } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
-            bitmap = (Bitmap) data.getExtras().get("data");
+            bitmap = /*getBitmap();*/ (Bitmap) data.getExtras().get("data");
+            Uri tempUri = getImageUri(getApplicationContext(), bitmap);
+            Log.d("URI getUri", tempUri.toString());
+            bitmap = null;
+            cropImage(tempUri);
+        } else if(requestCode == Constants.CROP_PIC) {
+            Uri contentURI = data.getData();
+            Log.d("Img URI", contentURI.toString());
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+            }
         }
 
         if (bitmap != null) {
@@ -339,4 +371,49 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         Log.d("Change", String.valueOf(index));
         /*this.picToBeChangedIndex = index;*/
     }
+
+    public void cropImage(Uri uri)
+    {
+        try {
+            Intent myCropIntent = new Intent("com.android.camera.action.CROP");
+
+            myCropIntent.setDataAndType(uri,"image/*");
+            myCropIntent.putExtra("crop", "true");
+            myCropIntent.putExtra("aspectX", 1);
+            myCropIntent.putExtra("aspectY", 1);
+            myCropIntent.putExtra("outputX", 256);
+            myCropIntent.putExtra("outputY", 256);
+            myCropIntent.putExtra("return-data", false);
+            //myCropIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            startActivityForResult(myCropIntent, Constants.CROP_PIC);
+        }
+
+        catch (Exception e) {
+            Log.d("Error",e.getMessage().toString());
+        }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    /*public Bitmap getBitmap(){
+        //this.getContentResolver().notifyChange(Uri.fromFile(photo), null);
+        ContentResolver cr = this.getContentResolver();
+        Bitmap bitmap = null;
+        try
+        {
+            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, Uri.fromFile(photo));
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(this, "Failed to load", Toast.LENGTH_SHORT).show();
+            Log.d("Error", "Failed to load", e);
+        }
+        return bitmap;
+    }*/
+
 }

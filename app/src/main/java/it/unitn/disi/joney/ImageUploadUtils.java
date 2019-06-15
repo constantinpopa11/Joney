@@ -7,7 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -66,7 +70,7 @@ public class ImageUploadUtils {
 
     public static String saveImage(Context context, Bitmap bitmap, String savePath) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         File wallpaperDirectory = new File(
                 Environment.getExternalStorageDirectory().toString() + savePath);
         //Toast.makeText(getApplicationContext(), Environment.getExternalStorageDirectory().toString() + "/post_job_image/", Toast.LENGTH_SHORT).show();
@@ -84,7 +88,7 @@ public class ImageUploadUtils {
             fo.write(bytes.toByteArray());
             MediaScannerConnection.scanFile(context,
                     new String[]{f.getPath()},
-                    new String[]{"image/jpeg"}, null);
+                    new String[]{"image/png"}, null);
             fo.close();
             //Log.d("TAG", "File Saved::--->" + f.getAbsolutePath());
 

@@ -353,6 +353,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_MESSAGES,null,values);
         db.close();
+        //Log.d("Message","inserted");
     }
 
     void removeUserProfileImage(int userId)
@@ -522,6 +523,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return completedJobs;
     }
 
+    public ArrayList<Message> getUserMessages(int currentUserId) {
+        ArrayList<Message> messages = new ArrayList<Message>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_MESSAGES,
+                new String[] {COL_MESSAGE_SENDER, COL_MESSAGE_RECEIVER, COL_MESSAGE_DATE,
+                        COL_MESSAGE_TEXT},
+                COL_MESSAGE_SENDER + "=? OR " + COL_MESSAGE_RECEIVER + "=?",
+                new String[] {Integer.toString(currentUserId),Integer.toString(currentUserId)},
+                null,
+                null,
+                COL_MESSAGE_DATE,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Message message = new Message();
+                message.setSenderId(cursor.getInt(0));
+                message.setReceiverId(cursor.getInt(1));
+                message.setDate(cursor.getString(2));
+                message.setMessage(cursor.getString(3));
+                messages.add(message);
+                //Log.d("Going","trough");
+            } while (cursor.moveToNext());
+        }
+
+        // return job list
+        return messages;
+    }
+
     JobCategory getJobCategoryById(int jobCategoryId) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -543,6 +575,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return jobCategory;
     }
+
+
 
     public void updatePassword(String email, String password)
     {
