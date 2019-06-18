@@ -112,21 +112,23 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         else
         {
             location = getLocation();
-            //etAddress.setText(location.first.toString() + "," + location.second.toString());
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    final String streetName = Constants.getStreetName(location.first,location.second,mContext);
-                    etAddress.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            etAddress.setText(streetName);
-                        }
-                    });
-                }
-            }) .start();
-        }
 
+            if(location != null) {
+                //etAddress.setText(location.first.toString() + "," + location.second.toString());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final String streetName = Utils.getStreetName(location.first,location.second,mContext);
+                        etAddress.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                etAddress.setText(streetName);
+                            }
+                        });
+                    }
+                }) .start();
+            }
+        }
     }
 
     @Override
@@ -209,11 +211,20 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
             Toast.makeText(this, "Granted", Toast.LENGTH_SHORT);
 
             Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-            // now get the lat/lon from the location and do something with it.
-            lat = location.getLatitude();
-            lon = location.getLongitude();
-            //Log.d("LATLON",lat.toString() + " " + lon.toString());
-            return new Pair<Double, Double>(lat, lon);
+
+
+
+
+            if(location != null) {
+                // now get the lat/lon from the location and do something with it.
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+                //Log.d("LATLON",lat.toString() + " " + lon.toString());
+                return new Pair<Double, Double>(lat, lon);
+            } else {
+                return null;
+            }
+
         }
     }
 
@@ -271,7 +282,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        final String streetName = Constants.getStreetName(lat,lon,mContext);
+                        final String streetName = Utils.getStreetName(lat,lon,mContext);
                         etAddress.post(new Runnable() {
                             @Override
                             public void run() {

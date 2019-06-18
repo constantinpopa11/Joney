@@ -2,7 +2,6 @@ package it.unitn.disi.joney;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,9 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -29,12 +26,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,10 +39,6 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
 
@@ -57,7 +48,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
     TextView tvUserName;
     FloatingActionButton btnSaveChanges;
     CircularImageView ivUserProfileImage;
-    Button btnText;
+    LinearLayout llChat;
 
     boolean descriptionChanged = false, profileImageChanged = false;
     boolean isAnotherUser = false;
@@ -91,7 +82,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         etUserInfo = (EditText) findViewById(R.id.et_user_info);
         ivUserProfileImage = (CircularImageView) findViewById(R.id.iv_user_profile_image);
         btnSaveChanges = (FloatingActionButton) findViewById(R.id.btn_save_description);
-        btnText = (Button) findViewById(R.id.btn_text);
+        llChat = (LinearLayout) findViewById(R.id.ll_chat);
 
         /*Intent*/ intent = getIntent();
         //looking for another user profile
@@ -221,7 +212,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
 
                 }
             });
-            btnText.setOnClickListener(new View.OnClickListener() {
+            llChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     /*Intent intUser = new Intent(UserProfileActivity.this,UserProfileActivity.class);

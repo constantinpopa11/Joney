@@ -80,7 +80,7 @@ public class MapActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final Pair<Double,Double> latLon = Constants.getCoordinates(etAddress.getText().toString(),getApplicationContext());
+                            final Pair<Double,Double> latLon = Utils.getCoordinates(etAddress.getText().toString(),getApplicationContext());
                             etAddress.post(new Runnable() {
                                 @Override
                                 public void run() {

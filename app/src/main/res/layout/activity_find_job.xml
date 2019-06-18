@@ -4,161 +4,212 @@
     android:layout_height="fill_parent"
     android:background="@color/background"
     android:paddingTop="18dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:drawableLeft="@drawable/ic_place"
-        android:text="Distance"
-        android:textAlignment="textStart"
-        android:textSize="18dp"
-        android:textColor="@color/darkGrey" />
-
-    <SeekBar
-        android:id="@+id/sb_distance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="30"
-        android:progress="0" />
-
     <LinearLayout
+        android:id="@+id/ll_search_filters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:orientation="horizontal">
-
-        <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Min: 0"
-        android:layout_weight="1"
-        android:gravity="left"
-        android:textSize="12dp"
-        android:textColor="@color/lightGrey" />
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textSize="12dp"
+            android:layout_marginBottom="12dp"
+            android:drawableLeft="@drawable/ic_place"
+            android:text="Distance"
+            android:textAlignment="textStart"
+            android:textSize="18dp"
             android:textColor="@color/darkGrey" />
 
+        <SeekBar
+            android:id="@+id/sb_distance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="30"
+            android:progress="0" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Min: 0"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:textSize="12dp"
+                android:textColor="@color/lightGrey" />
+
+            <TextView
+                android:id="@+id/tv_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="12dp"
+                android:textColor="@color/darkGrey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Max: 30"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:textSize="12dp"
+                android:textColor="@color/lightGrey" />
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Max: 30"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textSize="12dp"
-            android:textColor="@color/lightGrey" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="32dp"
+            android:drawableLeft="@drawable/ic_business"
+            android:text="Category"
+            android:textAlignment="textStart"
+            android:textSize="18dp"
+            android:textColor="@color/darkGrey" />
+
+        <Spinner
+            android:id="@+id/spn_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="left">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Min"
+                    android:textSize="16dp"
+                    android:textColor="@color/darkGrey" />
+
+                <EditText
+                    android:id="@+id/et_min_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableLeft="@drawable/ic_euro"
+                    android:drawablePadding="10dp"
+                    android:hint="0.00"
+                    android:maxLength="3"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/darkGrey"
+                    android:textColorHighlight="@color/white"
+                    android:textColorHint="@color/lightGrey" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:gravity="right">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Max"
+                    android:textSize="16dp"
+                    android:textColor="@color/darkGrey" />
+
+                <EditText
+                    android:id="@+id/et_max_pay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:drawableLeft="@drawable/ic_euro"
+                    android:drawablePadding="10dp"
+                    android:hint="100.00"
+                    android:maxLength="3"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/darkGrey"
+                    android:textColorHighlight="@color/white"
+                    android:textColorHint="@color/lightGrey" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_find_jobs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/button_red_selector"
+            android:drawableLeft="@drawable/ic_search_white"
+            android:padding="15dp"
+            android:shadowColor="@android:color/transparent"
+            android:textColor="@color/white"
+            android:text="Find jobs" />
+
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="32dp"
-        android:drawableLeft="@drawable/ic_business"
-        android:text="Category"
-        android:textAlignment="textStart"
-        android:textSize="18dp"
-        android:textColor="@color/darkGrey" />
-
-    <Spinner
-        android:id="@+id/spn_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
 
     <LinearLayout
+        android:id="@+id/ll_filter_toggle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="horizontal">
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="vertical"
+        android:gravity="center">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_filter_toggle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="12dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="left">
+            android:background="@drawable/ic_arrow_up"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Min"
-                android:textSize="16dp"
-                android:textColor="@color/darkGrey" />
-
-            <EditText
-                android:id="@+id/et_min_pay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:drawableLeft="@drawable/ic_euro"
-                android:drawablePadding="10dp"
-                android:hint="0.00"
-                android:maxLength="3"
-                android:inputType="numberDecimal"
-                android:textAlignment="textEnd"
-                android:textColor="@color/darkGrey"
-                android:textColorHighlight="@color/white"
-                android:textColorHint="@color/lightGrey" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_filter_toggle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:gravity="right">
+            android:text="Hide filters"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Max"
-                android:textSize="16dp"
-                android:textColor="@color/darkGrey" />
 
-            <EditText
-                android:id="@+id/et_max_pay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:drawableLeft="@drawable/ic_euro"
-                android:drawablePadding="10dp"
-                android:hint="100.00"
-                android:maxLength="3"
-                android:inputType="numberDecimal"
-                android:textAlignment="textEnd"
-                android:textColor="@color/darkGrey"
-                android:textColorHighlight="@color/white"
-                android:textColorHint="@color/lightGrey" />
-        </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_search_results"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_find_job"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/button_red_selector"
-        android:drawableLeft="@drawable/ic_search_white"
-        android:padding="15dp"
-        android:shadowColor="@android:color/transparent"
-        android:textColor="@color/white"
-        android:text="Find jobs" />
+        <ExpandableListView
+            android:id="@+id/elv_job_results"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:divider="@color/lightGrey"
+            android:dividerHeight="0.5dp"
+            android:childDivider="#00000000" />
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

@@ -6,36 +6,32 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/background"
-    android:padding="20dp"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
     <LinearLayout
-    android:id="@+id/ll_find_job"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center">
-
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:background="@drawable/ic_search_primary" />
-
-    <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="12dp"
-        android:drawablePadding="6dp"
-        android:padding="4dp"
-        android:text="Find a job"
-        android:textAlignment="center"
-        android:textSize="40dp"
-        android:textColor="@color/colorPrimary" />
+        android:gravity="right"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:id="@+id/ll_post_job"
+        android:background="@color/colorSecondary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post a new job"
+            android:textAlignment="center"
+            android:textSize="32dp"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/ic_home_post" />
 
     </LinearLayout>
 
@@ -43,35 +39,38 @@
     android:layout_width="match_parent"
     android:layout_height="1dp"
     android:background="@android:color/darker_gray"
-    android:layout_marginTop="48dp"
-    android:layout_marginBottom="48dp" />
+    android:layout_marginTop="96dp"
+    android:layout_marginBottom="96dp" />
 
 
     <LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:id="@+id/ll_post_job">
-
-    <ImageView
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:background="@drawable/ic_add" />
-
-    <TextView
+        android:id="@+id/ll_find_job"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="0dp"
-        android:drawablePadding="6dp"
-        android:padding="4dp"
-        android:text="Post a new job"
-        android:textAlignment="center"
-        android:textSize="40dp"
-        android:textColor="@color/colorSecondary" />
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="start"
+        android:background="@color/colorPrimary">
+
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/ic_home_search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Find a job"
+            android:textAlignment="center"
+            android:textSize="40dp"
+            android:textColor="@color/white" />
+
 
     </LinearLayout>
+
+
+
+
 
 </LinearLayout>

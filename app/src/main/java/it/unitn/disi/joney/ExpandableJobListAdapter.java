@@ -14,18 +14,18 @@ import android.widget.TextView;
 public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<Job> postedJobs;
+    private List<Job> jobs;
     int tab;
 
-    public ExpandableJobListAdapter(Context context, List<Job> postedJobs, int tab) {
+    public ExpandableJobListAdapter(Context context, List<Job> jobs, int tab) {
         this.context = context;
-        this.postedJobs = postedJobs;
+        this.jobs = jobs;
         this.tab = tab;
     }
 
     @Override
     public Object getChild(int listPosition, int expandedListPosition) {
-        return this.postedJobs.get(listPosition);
+        return this.jobs.get(listPosition);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
 
         TextView tvJobLocation = (TextView) convertView.findViewById(R.id.tv_job_location);
         //String addressLatLon = String.valueOf(job.getLatitude()) + "," + String.valueOf(job.getLongitude());
-        String address = Constants.getStreetName(job.getLatitude(),job.getLongitude(),context);
+        String address = Utils.getStreetName(job.getLatitude(),job.getLongitude(),context);
         tvJobLocation.setText(address);
 
         return convertView;
@@ -60,12 +60,12 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int listPosition) {
-        return this.postedJobs.get(listPosition);
+        return this.jobs.get(listPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this.postedJobs.size();
+        return this.jobs.size();
     }
 
     @Override

@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/text_message_body"
         android:text="hello, hello!"
-        android:background="@drawable/rounded_rectangle_red"
+        android:background="@drawable/shape_msg_sent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="240dp"
