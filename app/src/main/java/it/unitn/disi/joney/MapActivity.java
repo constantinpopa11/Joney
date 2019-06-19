@@ -2,11 +2,13 @@ package it.unitn.disi.joney;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PointF;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -45,6 +47,7 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
 
 import java.util.List;
+import java.util.prefs.Preferences;
 
 public class MapActivity extends AppCompatActivity {
 
@@ -55,9 +58,14 @@ public class MapActivity extends AppCompatActivity {
     ImageView dropPinView;
     EditText etAddress;
 
+    Context mContext;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mContext = this;
+
 
         // Mapbox access token is configured here. This needs to be called either in your application
         // object or in the same activity which contains the mapview.
@@ -67,7 +75,7 @@ public class MapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map);
 
         Button btnChooseAddress = (Button) findViewById(R.id.btn_choose_address);
-        FloatingActionButton btnLocateuser = (FloatingActionButton) findViewById(R.id.btn_locate_user);
+        FloatingActionButton btnLocateUser = (FloatingActionButton) findViewById(R.id.btn_locate_user);
         etAddress = (EditText) findViewById(R.id.et_address);
         etAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -153,10 +161,18 @@ public class MapActivity extends AppCompatActivity {
             }
         });
 
-        btnLocateuser.setOnClickListener(new View.OnClickListener() {
+        btnLocateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                        enableLocationComponent(mapStyle,true);
+                if(!Utils.isLocationPermissionGranted(mContext)) {
+                    showMissingPermissionAlert("Location", "GPS");
+                } else if(!Utils.isGPSEnabled(mContext)) {
+                    int gpsAlertPref = PreferenceManager.getDefaultSharedPreferences(mContext).getInt(Constants.PREF_GPS_ALERT, Constants.GPS_ALERT_SHOW);
+                    if(gpsAlertPref == Constants.GPS_ALERT_SHOW)
+                        Utils.showGPSDisabledAlert(mContext);
+                } else {
+                    enableLocationComponent(mapStyle,true);
+                }
             }
         });
     }
@@ -236,7 +252,7 @@ public class MapActivity extends AppCompatActivity {
     private void showMissingPermissionAlert(String permission, String hardware) {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Enable " + permission)
-                .setMessage("Your need to grant " + permission + " Permission if you want to use " + hardware +".")
+                .setMessage("You need to grant " + permission + " Permission if you want to use " + hardware +".")
                 .setPositiveButton("App Settings", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {

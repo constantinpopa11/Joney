@@ -8,17 +8,17 @@
       android:pathData="M113.42,261.85a12.37,12.37 0,1 1,0 -24.73h74.22a12.37,12.37 0,1 1,0 24.73ZM113.42,261.85"/>
   <path
       android:pathData="M113.42,261.85a12.37,12.37 0,1 1,0 -24.73h74.22a12.37,12.37 0,1 1,0 24.73ZM113.42,261.85"
-      android:fillColor="@color/white"/>
+      android:fillColor="@color/colorPrimary"/>
   <path
       android:pathData="M150.53,299a12.37,12.37 0,0 1,-12.37 -12.37L138.16,212.38a12.37,12.37 0,0 1,24.74 0v74.21A12.37,12.37 0,0 1,150.53 299ZM150.53,299"
-      android:fillColor="@color/white"/>
+      android:fillColor="@color/colorPrimary"/>
   <path
       android:pathData="M278.34,332a12.37,12.37 0,1 1,0 -24.74h74.22a20.65,20.65 0,0 0,20.62 -20.62L373.18,47.45a20.65,20.65 0,0 0,-20.62 -20.61L109.3,26.84A20.64,20.64 0,0 0,88.68 47.45v74.22a12.37,12.37 0,0 1,-24.74 0L63.94,47.45A45.39,45.39 0,0 1,109.3 2.1L352.56,2.1a45.39,45.39 0,0 1,45.36 45.35L397.92,286.59A45.4,45.4 0,0 1,352.56 332ZM278.34,332"
-      android:fillColor="@color/white"/>
+      android:fillColor="@color/colorPrimary"/>
   <group>
     <clip-path android:pathData="M2.08,2.08h395.83v395.83h-395.83z M 0,0"/>
     <path
         android:pathData="M150.53,348.44a99,99,0,1,1,99,-99,99,99,0,0,1,-99,99Zm0,-173.17a74.22,74.22,0,1,0,74.22,74.21,74.3,74.3,0,0,0,-74.22,-74.21Zm0,0"
-        android:fillColor="@color/white"/>
+        android:fillColor="@color/colorPrimary"/>
   </group>
 </vector>

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COL_JOB_ID = "id";
     private static final String COL_JOB_TITLE = "title";
     private static final String COL_JOB_DESCRIPTION = "description";
+    private static final String COL_JOB_PAY = "pay";
     private static final String COL_JOB_COMPLETED = "completed";
     private static final String COL_JOB_CREATED_AT = "createdAt";
     private static final String COL_JOB_LATITUDE = "latitude";
@@ -92,6 +94,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             "(" + COL_JOB_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             COL_JOB_TITLE + " varchar(100) NOT NULL, " +
             COL_JOB_DESCRIPTION + " varchar(1000), " +
+            COL_JOB_PAY + " integer NOT NULL, " +
             COL_JOB_COMPLETED + " boolean NOT NULL DEFAULT(0), " +
             COL_JOB_CREATED_AT + " date NOT NULL, " +
             COL_JOB_LATITUDE + " double NOT NULL, " +
@@ -270,6 +273,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COL_JOB_TITLE, job.getTitle());
         values.put(COL_JOB_DESCRIPTION, job.getDescription());
+        values.put(COL_JOB_PAY, job.getPay());
         values.put(COL_JOB_COMPLETED, job.isCompleted());
         values.put(COL_JOB_CREATED_AT, job.getCreatedAt());
         values.put(COL_JOB_LATITUDE, job.getLatitude());
@@ -409,7 +413,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_JOBS,
-                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION, COL_JOB_PAY,
                         COL_JOB_JOB_CATEGORY_ID, COL_JOB_COMPLETED, COL_JOB_CREATED_AT,
                         COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
                 COL_JOB_AUTHOR_ID + "=?",
@@ -426,13 +430,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 job.setId(cursor.getInt(0));
                 job.setTitle(cursor.getString(1));
                 job.setDescription(cursor.getString(2));
-                job.setCategoryId(cursor.getInt(3));
-                job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
-                job.setCreatedAt(cursor.getString(5));
-                job.setLatitude(cursor.getDouble(6));
-                job.setLongitude(cursor.getDouble(7));
-                job.setAuthorId(cursor.getInt(8));
-                job.setWorkerId(cursor.getInt(9));
+                job.setPay(cursor.getInt(3));
+                job.setCategoryId(cursor.getInt(4));
+                job.setCompleted(Boolean.parseBoolean(cursor.getString(5)));
+                job.setCreatedAt(cursor.getString(6));
+                job.setLatitude(cursor.getDouble(7));
+                job.setLongitude(cursor.getDouble(8));
+                job.setAuthorId(cursor.getInt(9));
+                job.setWorkerId(cursor.getInt(10));
                 postedJobs.add(job);
 
             } while (cursor.moveToNext());
@@ -448,7 +453,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_JOBS + ", " + TABLE_JOB_CANDIDATES,
-                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION, COL_JOB_PAY,
                         COL_JOB_JOB_CATEGORY_ID, COL_JOB_COMPLETED, COL_JOB_CREATED_AT,
                         COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
                 "(" +
@@ -468,13 +473,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 job.setId(cursor.getInt(0));
                 job.setTitle(cursor.getString(1));
                 job.setDescription(cursor.getString(2));
-                job.setCategoryId(cursor.getInt(3));
-                job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
-                job.setCreatedAt(cursor.getString(5));
-                job.setLatitude(cursor.getDouble(6));
-                job.setLongitude(cursor.getDouble(7));
-                job.setAuthorId(cursor.getInt(8));
-                job.setWorkerId(cursor.getInt(9));
+                job.setPay(cursor.getInt(3));
+                job.setCategoryId(cursor.getInt(4));
+                job.setCompleted(Boolean.parseBoolean(cursor.getString(5)));
+                job.setCreatedAt(cursor.getString(6));
+                job.setLatitude(cursor.getDouble(7));
+                job.setLongitude(cursor.getDouble(8));
+                job.setAuthorId(cursor.getInt(9));
+                job.setWorkerId(cursor.getInt(10));
                 pendingJobs.add(job);
 
             } while (cursor.moveToNext());
@@ -490,7 +496,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_JOBS,
-                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION, COL_JOB_PAY,
                         COL_JOB_JOB_CATEGORY_ID, COL_JOB_COMPLETED, COL_JOB_CREATED_AT,
                         COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
                 COL_JOB_WORKER_ID + "=? AND " + COL_JOB_COMPLETED + "=1",
@@ -507,13 +513,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 job.setId(cursor.getInt(0));
                 job.setTitle(cursor.getString(1));
                 job.setDescription(cursor.getString(2));
-                job.setCategoryId(cursor.getInt(3));
-                job.setCompleted(Boolean.parseBoolean(cursor.getString(4)));
-                job.setCreatedAt(cursor.getString(5));
-                job.setLatitude(cursor.getDouble(6));
-                job.setLongitude(cursor.getDouble(7));
-                job.setAuthorId(cursor.getInt(8));
-                job.setWorkerId(cursor.getInt(9));
+                job.setPay(cursor.getInt(3));
+                job.setCategoryId(cursor.getInt(4));
+                job.setCompleted(Boolean.parseBoolean(cursor.getString(5)));
+                job.setCreatedAt(cursor.getString(6));
+                job.setLatitude(cursor.getDouble(7));
+                job.setLongitude(cursor.getDouble(8));
+                job.setAuthorId(cursor.getInt(9));
+                job.setWorkerId(cursor.getInt(10));
                 completedJobs.add(job);
 
             } while (cursor.moveToNext());
@@ -521,6 +528,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // return job list
         return completedJobs;
+    }
+
+
+    //code to get job results based on search filters
+    public List<Job> getJobsBySearchFilters(int currentUserId, Pair<Double, Double> location, int distance, int jobCategory, int minPay, int maxPay) {
+        List<Job> eligibleJobs = new ArrayList<>();
+
+        String whereClause = COL_JOB_AUTHOR_ID + "<>? AND " +
+                COL_JOB_COMPLETED + "=0 AND " +
+                COL_JOB_PAY + ">=? " +
+                "AND " + COL_JOB_PAY + "<=? " +
+                "AND " + COL_JOB_JOB_CATEGORY_ID;
+
+        if(jobCategory == Constants.INVALID_ITEM_VALUE)
+            whereClause = whereClause.concat(">?");
+        else
+            whereClause = whereClause.concat("=?");
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_JOBS,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION, COL_JOB_PAY,
+                        COL_JOB_JOB_CATEGORY_ID, COL_JOB_COMPLETED, COL_JOB_CREATED_AT,
+                        COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
+                whereClause,
+                new String[] {Integer.toString(currentUserId), Integer.toString(minPay), Integer.toString(maxPay), Integer.toString(jobCategory)},
+                null,
+                null,
+                null,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                double lat = cursor.getDouble(7);
+                double lon = cursor.getDouble(8);
+                int tempDistance = (int) Utils.getDistance(lat, lon, location.first, location.second);
+
+                if(tempDistance < distance) {
+                    Job job = new Job();
+                    job.setId(cursor.getInt(0));
+                    job.setTitle(cursor.getString(1));
+                    job.setDescription(cursor.getString(2));
+                    job.setPay(cursor.getInt(3));
+                    job.setCategoryId(cursor.getInt(4));
+                    job.setCompleted(Boolean.parseBoolean(cursor.getString(5)));
+                    job.setCreatedAt(cursor.getString(6));
+                    job.setLatitude(cursor.getDouble(7));
+                    job.setLongitude(cursor.getDouble(8));
+                    job.setAuthorId(cursor.getInt(9));
+                    job.setWorkerId(cursor.getInt(10));
+                    eligibleJobs.add(job);
+                }
+            } while (cursor.moveToNext());
+        }
+
+        // return job list
+        return eligibleJobs;
     }
 
     public ArrayList<Message> getUserMessages(int currentUserId) {

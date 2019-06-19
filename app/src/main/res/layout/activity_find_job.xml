@@ -3,13 +3,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/background"
-    android:paddingTop="18dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/ll_search_filters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="18dp"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:orientation="vertical">
@@ -29,7 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="30"
-            android:progress="0" />
+            android:min="1"
+            android:progress="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +41,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Min: 0"
+                android:text="Min: 1"
                 android:layout_weight="1"
                 android:gravity="left"
                 android:textSize="12dp"
@@ -82,11 +83,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="18dp"
+            android:drawableLeft="@drawable/ic_address"
+            android:text="Your location"
+            android:textAlignment="textStart"
+            android:textSize="18dp"
+            android:textColor="@color/darkGrey" />
+
+        <EditText
+            android:id="@+id/et_job_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darkGrey"
+            android:textSize="16dp"
+            android:focusable="false"
+            android:inputType="none"
+            android:hint="Via Padre Pio 69"
+            android:textColorHighlight="@color/white"
+            android:textColorHint="@color/lightGrey"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -111,10 +135,11 @@
                     android:layout_marginLeft="10dp"
                     android:drawableLeft="@drawable/ic_euro"
                     android:drawablePadding="10dp"
-                    android:hint="0.00"
+                    android:hint="0"
                     android:maxLength="3"
-                    android:inputType="numberDecimal"
+                    android:inputType="numberSigned"
                     android:textAlignment="textEnd"
+                    android:textSize="16dp"
                     android:textColor="@color/darkGrey"
                     android:textColorHighlight="@color/white"
                     android:textColorHint="@color/lightGrey" />
@@ -142,9 +167,10 @@
                     android:layout_marginLeft="10dp"
                     android:drawableLeft="@drawable/ic_euro"
                     android:drawablePadding="10dp"
-                    android:hint="100.00"
+                    android:hint="500"
                     android:maxLength="3"
-                    android:inputType="numberDecimal"
+                    android:textSize="16dp"
+                    android:inputType="numberSigned"
                     android:textAlignment="textEnd"
                     android:textColor="@color/darkGrey"
                     android:textColorHighlight="@color/white"
@@ -199,6 +225,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_search_results"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:paddingLeft="64dp"
+            android:paddingRight="64dp"
+            android:text="There are no jobs matching your search criteria"
+            android:visibility="gone"/>
 
         <ExpandableListView
             android:id="@+id/elv_job_results"

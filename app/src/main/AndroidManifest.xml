@@ -39,8 +39,12 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PostJobActivity"
+            android:label="@string/title_activity_post_job"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".FindJobActivity" /> <!-- Facebook Login -->
+        <activity
+            android:name=".FindJobActivity"
+            android:label="@string/title_activity_find_job"
+            android:windowSoftInputMode="stateHidden"/> <!-- Facebook Login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

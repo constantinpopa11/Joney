@@ -12,65 +12,96 @@
     tools:showIn="@layout/app_bar_home">
 
     <LinearLayout
+        android:id="@+id/ll_post_job"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:layout_marginRight="16dp"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:id="@+id/ll_post_job"
-        android:background="@color/colorSecondary">
+        android:padding="8dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Post a new job"
+            android:layout_height="match_parent"
+            android:text="Post a job"
             android:textAlignment="center"
-            android:textSize="32dp"
-            android:textColor="@color/white" />
+            android:gravity="center_vertical"
+            android:textColor="@color/mediumGrey"
+            android:textSize="30dp" />
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:background="@drawable/ic_home_post" />
 
     </LinearLayout>
 
-    <View
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@android:color/darker_gray"
-    android:layout_marginTop="96dp"
-    android:layout_marginBottom="96dp" />
-
-
     <LinearLayout
-        android:id="@+id/ll_find_job"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:gravity="start"
-        android:background="@color/colorPrimary">
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="48dp">
 
-
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:background="@drawable/ic_home_search" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginRight="8dp"
+            android:background="@color/mediumGrey"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Find a job"
-            android:textAlignment="center"
-            android:textSize="40dp"
-            android:textColor="@color/white" />
+            android:text="OR"
+            android:textSize="18dp"
+            android:textColor="@color/mediumGrey"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:background="@color/mediumGrey"/>
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary" />
 
 
+    <LinearLayout
+        android:id="@+id/ll_find_job"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:layout_marginLeft="16dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/ic_home_search" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Find a job"
+            android:textAlignment="center"
+            android:gravity="center_vertical"
+            android:textColor="@color/mediumGrey"
+            android:textSize="30dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorSecondary" />
 
 </LinearLayout>

@@ -1,23 +1,16 @@
 package it.unitn.disi.joney;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Location;
-import android.location.LocationManager;
-import android.media.Image;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,13 +25,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.MapView;
-
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +41,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
     LinearLayout llPictures;
     EditText etAddress;
 
-    Pair<Double,Double> location = new Pair<Double,Double>(46.068051,11.149887);
+    Pair<Double,Double> location = null;
 
     int uploadedPicCounter = 0;
     int picToBeChangedIndex = -1;
@@ -60,6 +49,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
     private Context mContext;
 
     DatabaseHandler db = new DatabaseHandler(this);
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +57,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         setContentView(R.layout.activity_post_job);
 
         mContext = this;
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -76,7 +67,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         btnAddPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                if(Utils.isStoragePermissionGranted(getApplicationContext()))
                     showMissingPermissionAlert("Storage","Pictures");
                 else if(uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
                     ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, -1);
@@ -88,7 +79,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
 
         List<JobCategory> jobCategoryList = db.getAllJobCategories();
         //add invalid choice manually at the beginning
-        jobCategoryList.add(0, new JobCategory(Constants.INVALID_ITEM_VALUE, Constants.NO_SPINNER_SELCTION, null));
+        jobCategoryList.add(0, new JobCategory(Constants.INVALID_ITEM_VALUE, Constants.NO_SPINNER_SELECTION, null));
         ArrayAdapter<JobCategory> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, jobCategoryList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -102,16 +93,19 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         etAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mapIntent = new Intent(PostJobActivity.this,MapActivity.class);
-                startActivityForResult(mapIntent,69);
+                Intent mapIntent = new Intent(PostJobActivity.this, MapActivity.class);
+                startActivityForResult(mapIntent,Constants.PICK_LOCATION);
             }
         });
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        if (!Utils.isLocationPermissionGranted(this))
             showMissingPermissionAlert("Location","GPS");
-        else
-        {
-            location = getLocation();
+        else if(!Utils.isGPSEnabled(this)) {
+            int gpsAlertPref = prefs.getInt(Constants.PREF_GPS_ALERT, Constants.GPS_ALERT_SHOW);
+            if(gpsAlertPref == Constants.GPS_ALERT_SHOW)
+                Utils.showGPSDisabledAlert(this);
+        } else {
+            location = Utils.getLocation(this);
 
             if(location != null) {
                 //etAddress.setText(location.first.toString() + "," + location.second.toString());
@@ -149,10 +143,10 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         public void onClick(View view) {
             String jobTitle, description;
             String payStr;
-            double pay = 0.0d;
+            int pay = 0;
             EditText etJobTitle, etDescription, etPay;
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
             int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
             Log.i("Current user ", Integer.toString(currentUserId));
 
@@ -163,7 +157,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
             etPay = (EditText) findViewById(R.id.et_pay);
             payStr = etPay.getText().toString();
             if(payStr != null && !payStr.trim().equalsIgnoreCase("")) {
-                pay = Double.parseDouble(payStr);
+                pay = Integer.parseInt(payStr);
             }
             JobCategory jobCategory = (JobCategory) spnCategory.getSelectedItem();
 
@@ -171,16 +165,17 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 Toast.makeText(getApplicationContext(), "You must specify a job title", Toast.LENGTH_SHORT).show();
             else if(jobCategory.getId() == Constants.INVALID_ITEM_VALUE)
                 Toast.makeText(getApplicationContext(), "You must select a job category from the dropdown", Toast.LENGTH_SHORT).show();
-            else if(pay <= 0.0)
+            else if(location == null)
+                Toast.makeText(getApplicationContext(), "You have inserted an invalid address", Toast.LENGTH_SHORT).show();
+            else if(pay <= 0)
                 Toast.makeText(getApplicationContext(), "You have inserted an invalid pay amount", Toast.LENGTH_SHORT).show();
             else {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = new Date();
                 String now = dateFormat.format(date);
                 //Log.d("Date",now);
-                //location = getLocation();
 
-                Job job = new Job(jobTitle, description, false, now, location.first, location.second, jobCategory.getId(), currentUserId, null);
+                Job job = new Job(jobTitle, description, pay, false, now, location.first, location.second, jobCategory.getId(), currentUserId, null);
                 int jobId = db.addJob(job);
 
                 int attachmentNum = llPictures.getChildCount();
@@ -199,54 +194,25 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         }
     }
 
-    private Pair<Double, Double> getLocation() {
-        Double lat, lon;
-        // instantiate the location manager, note you will need to request permissions in your manifest
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        // get the last know location from your location manager.
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                showMissingPermissionAlert("Location","GPS");
-                return new Pair<Double,Double>(46.068051,11.149887);
-        } else {
-            Toast.makeText(this, "Granted", Toast.LENGTH_SHORT);
-
-            Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-
-
-
-            if(location != null) {
-                // now get the lat/lon from the location and do something with it.
-                lat = location.getLatitude();
-                lon = location.getLongitude();
-                //Log.d("LATLON",lat.toString() + " " + lon.toString());
-                return new Pair<Double, Double>(lat, lon);
-            } else {
-                return null;
-            }
-
-        }
-    }
-
     private void showMissingPermissionAlert(String permission, String hardware) {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Enable " + permission)
-                .setMessage("Your need to grant " + permission + " Permission if you want to use " + hardware +".")
-                .setPositiveButton("App Settings", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                        Intent myIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        Uri uri = Uri.fromParts("package", getPackageName(), null);
-                        myIntent.setData(uri);
-                        startActivity(myIntent);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    }
-                });
+            .setMessage("You need to grant " + permission + " Permission if you want to use " + hardware +".")
+            .setPositiveButton("App Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent myIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    myIntent.setData(uri);
+                    startActivity(myIntent);
+                }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                }
+            });
         dialog.show();
     }
 
@@ -274,7 +240,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
 
         } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
             bitmap = (Bitmap) data.getExtras().get("data");
-        } else if (requestCode == Constants.RECEIVED_LOCATION) {
+        } else if (requestCode == Constants.PICK_LOCATION) {
             if(resultCode == RESULT_OK) {
                 final Double lat = data.getDoubleExtra("latitude",0.0);
                 final Double lon = data.getDoubleExtra("longitude",0.0);

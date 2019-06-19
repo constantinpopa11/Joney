@@ -1,14 +1,23 @@
 package it.unitn.disi.joney;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -29,6 +38,51 @@ public class Utils {
         return (dist);
     }
 
+    public static boolean isGPSEnabled(Context context) {
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        boolean enabled = false;
+
+        try {
+            enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+        return enabled;
+    }
+
+    public static boolean isLocationPermissionGranted(Context context) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isStoragePermissionGranted(Context context) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static Pair<Double, Double> getLocation(Context context) {
+        Double lat, lon;
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            Location location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+
+            if (location != null) {
+                // now get the lat/lon from the location and do something with it.
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+                //Log.d("LATLON",lat.toString() + " " + lon.toString());
+                return new Pair<Double, Double>(lat, lon);
+            }
+        }
+        return null;
+    }
 
     public static String getStreetName(double lat, double lon, Context c)
     {
@@ -83,7 +137,7 @@ public class Utils {
 
     public static void expand(final View v) {
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        final int targtetHeight = v.getMeasuredHeight();
+        final int targetHeight = v.getMeasuredHeight();
 
         v.getLayoutParams().height = 0;
         v.setVisibility(View.VISIBLE);
@@ -93,7 +147,7 @@ public class Utils {
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1
                         ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int)(targtetHeight * interpolatedTime);
+                        : (int)(targetHeight * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -103,7 +157,7 @@ public class Utils {
             }
         };
 
-        a.setDuration((int)(1.5 * targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        a.setDuration((int)(1.5 * targetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
     }
 
@@ -130,5 +184,18 @@ public class Utils {
 
         a.setDuration((int)(1.5 * initialHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
+    }
+
+    public static void showGPSDisabledAlert(final Context context){
+        new AlertDialog.Builder(context)
+            .setMessage("GPS needs to be enabled in order to use full location features.")
+            .setPositiveButton("Don't show again", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREF_GPS_ALERT, Constants.GPS_ALERT_HIDE).commit();
+                }
+            })
+            .setNegativeButton("Dismiss", null)
+            .show();
     }
 }

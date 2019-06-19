@@ -26,10 +26,15 @@ public class Constants {
     // Global variables
     public static final String PREF_REMEMBER_ME = "is_user_logged_in";
     public static final String PREF_CURRENT_USER_ID = "current_user_id";
+
     public static final int NO_USER_LOGGED_IN = -1;
 
+    public static final String PREF_GPS_ALERT = "no_gps_alert";
+    public static final int GPS_ALERT_SHOW = 1;
+    public static final int GPS_ALERT_HIDE = 0;
+
     public static final int INVALID_ITEM_VALUE = -1;
-    public static final String NO_SPINNER_SELCTION = "No selection";
+    public static final String NO_SPINNER_SELECTION = "No selection";
 
     public static final int POSTED_JOB_TAB = 0;
     public static final int PENDING_JOB_TAB = 1;
@@ -40,7 +45,7 @@ public class Constants {
     public static final int REMOVE_PICTURE = 2;
     public static final int CROP_PIC = 3;
 
-    public static final int RECEIVED_LOCATION = 69;
+    public static final int PICK_LOCATION = 10;
 
     public static final String OLD_IMG_VIEW_INDEX = "old_img_view_index";
 

@@ -4,6 +4,7 @@ public class Job {
     int id;
     String title;
     String description;
+    int pay;
     boolean completed;
     String createdAt;
     double latitude;
@@ -18,10 +19,11 @@ public class Job {
     public Job() {
     }
 
-    public Job(int jobID, String title, String description, boolean completed, String createdAt, double latitude, double longitude, int categoryID, int authorID, Integer workerID) {
+    public Job(int jobID, String title, String description, int pay, boolean completed, String createdAt, double latitude, double longitude, int categoryID, int authorID, Integer workerID) {
         this.id = jobID;
         this.title = title;
         this.description = description;
+        this.pay = pay;
         this.completed = completed;
         this.createdAt = createdAt;
         this.latitude = latitude;
@@ -31,9 +33,10 @@ public class Job {
         this.workerId = workerID;
     }
 
-    public Job(String title, String description, boolean completed, String createdAt,  double latitude, double longitude, int categoryId, int authorId, Integer workerId) {
+    public Job(String title, String description, int pay, boolean completed, String createdAt,  double latitude, double longitude, int categoryId, int authorId, Integer workerId) {
         this.title = title;
         this.description = description;
+        this.pay = pay;
         this.completed = completed;
         this.createdAt = createdAt;
         this.latitude = latitude;
@@ -72,6 +75,14 @@ public class Job {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getPay() {
+        return pay;
+    }
+
+    public void setPay(int pay) {
+        this.pay = pay;
     }
 
     public boolean isCompleted() {

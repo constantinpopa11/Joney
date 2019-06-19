@@ -9,15 +9,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,12 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
@@ -99,7 +91,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
 
         List<Job> jobList = db.getAllUserJobs(currentUserId);
         //add invalid choice manually at the beginning
-        jobList.add(0, new Job(Constants.INVALID_ITEM_VALUE, Constants.NO_SPINNER_SELCTION, null));
+        jobList.add(0, new Job(Constants.INVALID_ITEM_VALUE, Constants.NO_SPINNER_SELECTION, null));
         ArrayAdapter<Job> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, jobList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
