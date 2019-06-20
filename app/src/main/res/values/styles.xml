@@ -23,4 +23,11 @@
         <item name="android:maxHeight">24dp</item>
     </style>
 
+    <style name="feedbackRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/feedback_rating_stars</item>
+        <item name="android:minHeight">24dp</item>
+        <item name="android:maxHeight">24dp</item>
+    </style>
+
+
 </resources>

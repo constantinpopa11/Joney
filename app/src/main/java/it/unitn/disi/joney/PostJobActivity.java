@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -25,6 +26,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
+
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -70,7 +75,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 if(Utils.isStoragePermissionGranted(getApplicationContext()))
                     showMissingPermissionAlert("Storage","Pictures");
                 else if(uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
-                    ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, -1);
+                    ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, -1, Constants.PATH_JOB_IMAGES);
                 }
             }
         });
@@ -241,6 +246,17 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
             bitmap = (Bitmap) data.getExtras().get("data");
         } else if (requestCode == Constants.PICK_LOCATION) {
+            File tempImg = new File(Environment.getExternalStorageDirectory(), Constants.PATH_JOB_IMAGES + "temp.jpg");
+            Uri photoUri = Uri.fromFile(tempImg);
+            //bitmap = (Bitmap) data.getExtras().get("data");
+            Log.d("Uri", photoUri.toString());
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == Constants.RECEIVED_LOCATION) {
             if(resultCode == RESULT_OK) {
                 final Double lat = data.getDoubleExtra("latitude",0.0);
                 final Double lon = data.getDoubleExtra("longitude",0.0);
@@ -292,7 +308,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                     @Override
                     public void onClick(View view) {
                         int clickedImgIndex = llPictures.indexOfChild(imageView);
-                        ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, clickedImgIndex);
+                        ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, clickedImgIndex,Constants.PATH_JOB_IMAGES);
                     }
                 });
             }

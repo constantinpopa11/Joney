@@ -31,6 +31,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,11 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
 
@@ -48,6 +56,12 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
     TextView tvUserName;
     FloatingActionButton btnSaveChanges;
     CircularImageView ivUserProfileImage;
+    Button btnText;
+    RatingBar rbUserAverage;
+
+    ArrayList<Feedback> feedbackList;
+    ListView lvReviews;
+    FeedbackListAdapter flaReviews;
     LinearLayout llChat;
 
     boolean descriptionChanged = false, profileImageChanged = false;
@@ -79,9 +93,12 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         //Toast.makeText(getApplicationContext(),"User id: " + String.valueOf(currentUserId),Toast.LENGTH_LONG).show();
 
         tvUserName = (TextView) findViewById(R.id.tv_user_name);
+        rbUserAverage = (RatingBar) findViewById(R.id.rb_rating_average);
         etUserInfo = (EditText) findViewById(R.id.et_user_info);
         ivUserProfileImage = (CircularImageView) findViewById(R.id.iv_user_profile_image);
         btnSaveChanges = (FloatingActionButton) findViewById(R.id.btn_save_description);
+        btnText = (Button) findViewById(R.id.btn_text);
+        lvReviews = (ListView) findViewById(R.id.review_list);
         llChat = (LinearLayout) findViewById(R.id.ll_chat);
 
         /*Intent*/ intent = getIntent();
@@ -108,6 +125,12 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                 }
             }
 
+            feedbackList = db.getUserFeedbacks(userId);
+            rbUserAverage.setRating(getAverageRating(feedbackList));
+            Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
+            flaReviews = new FeedbackListAdapter(this,feedbackList);
+            lvReviews.setAdapter(flaReviews);
+
         }
         //going to my profile
         else {
@@ -124,6 +147,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener(getApplicationContext(), drawer));
 
             User user = db.getUserById(currentUserId);
+
 
             this.setTitle(user.getFirstName() + "'s Profile");
             tvUserName.setText(user.getFirstName() + " " + user.getLastName());
@@ -143,6 +167,13 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                 }
             }
 
+            feedbackList = db.getUserFeedbacks(currentUserId);
+            rbUserAverage.setRating(getAverageRating(feedbackList));
+            Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
+            flaReviews = new FeedbackListAdapter(this,feedbackList);
+            lvReviews.setAdapter(flaReviews);
+
+
             ivUserProfileImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -151,9 +182,9 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                     else {
                         try {
                             if (upi == null) {
-                                ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, -1);
+                                ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, -1, Constants.PATH_USER_PROFILE_IMAGES);
                             } else
-                                ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, 0);
+                                ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, 0, Constants.PATH_USER_PROFILE_IMAGES);
                         } catch (Exception e) {
                             Log.d("Error","can't create file");
                         }
@@ -216,13 +247,17 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                 @Override
                 public void onClick(View v) {
                     /*Intent intUser = new Intent(UserProfileActivity.this,UserProfileActivity.class);
-                    intUser.putExtra("userId",2);
+                    intUser.putExtra("userId",1);
                     startActivity(intUser);*/
 
                     Intent intChat = new Intent(UserProfileActivity.this,ChatActivity.class);
                     intChat.putExtra("senderId",currentUserId);
                     intChat.putExtra("receiverId",currentUserId==2?1:2);
                     startActivity(intChat);
+
+                    /*Intent intFeed = new Intent(UserProfileActivity.this,AddFeedbackActivity.class);
+                    intFeed.putExtra("jobId",3);
+                    startActivity(intFeed);*/
                 }
             });
 
@@ -303,21 +338,25 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             if (data != null) {
                 Uri contentURI = data.getData();
                 Log.d("Img URI", contentURI.toString());
-                try {
+                /*try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
-                }
+                }*/
                 cropImage(contentURI);
             }
 
         } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
-            bitmap = /*getBitmap();*/ (Bitmap) data.getExtras().get("data");
-            Uri tempUri = getImageUri(getApplicationContext(), bitmap);
-            Log.d("URI getUri", tempUri.toString());
-            bitmap = null;
-            cropImage(tempUri);
+            //bitmap = /*getBitmap();*/ (Bitmap) data.getExtras().get("data");
+            //Uri tempUri = getImageUri(getApplicationContext(), bitmap);
+            //Log.d("URI getUri", tempUri.toString());
+            //bitmap = null;
+            File tempImg = new File(Environment.getExternalStorageDirectory(), Constants.PATH_USER_PROFILE_IMAGES + "temp.jpg");
+            Uri userImageUri = Uri.fromFile(tempImg);
+            Log.d("Uri",userImageUri.toString());
+            //cropImage(tempUri);
+            cropImage(userImageUri);
         } else if(requestCode == Constants.CROP_PIC) {
             Uri contentURI = data.getData();
             Log.d("Img URI", contentURI.toString());
@@ -344,7 +383,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                 @Override
                 public void onClick(View view) {
                     int clickedImgIndex = 0;
-                    ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, clickedImgIndex);
+                    ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, clickedImgIndex, Constants.PATH_USER_PROFILE_IMAGES);
                 }
             });
         }
@@ -372,8 +411,8 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             myCropIntent.putExtra("crop", "true");
             myCropIntent.putExtra("aspectX", 1);
             myCropIntent.putExtra("aspectY", 1);
-            myCropIntent.putExtra("outputX", 256);
-            myCropIntent.putExtra("outputY", 256);
+            myCropIntent.putExtra("outputX", 512);
+            myCropIntent.putExtra("outputY", 512);
             myCropIntent.putExtra("return-data", false);
             //myCropIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(myCropIntent, Constants.CROP_PIC);
@@ -389,6 +428,16 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
+    }
+
+    public float getAverageRating(ArrayList<Feedback> feedbacks)
+    {
+        float sum = 0;
+        for(Feedback f:feedbacks)
+        {
+            sum += f.getRating();
+        }
+        return sum/(float)feedbacks.size();
     }
 
     /*public Bitmap getBitmap(){

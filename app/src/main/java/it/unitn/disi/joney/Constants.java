@@ -53,11 +53,8 @@ public class Constants {
     public static final int MAX_TICKET_PICTURE_NUMBER = 4;
 
     public static final String PATH_TICKET_IMAGES = "/Joney/ticket_images/";
-    public static final String PATH_TICKET_FULL_IMAGES = "/Joney/ticket_images/full_image/";
     public static final String PATH_JOB_IMAGES = "/Joney/post_job_images/";
-    public static final String PATH_JOB_FULL_IMAGES = "/Joney/post_job_images/full_image/";
     public static final String PATH_USER_PROFILE_IMAGES = "/Joney/user_profile_images/";
-    public static final String PATH_USER_PROFILE_FULL_IMAGES = "/Joney/user_profile_images/full_image/";
 
     public static final String MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoibG92YXoiLCJhIjoiY2p3bTdqMGszMDJtOTN6cGY0YjNoZmc0eCJ9.d8C4iygw-U5rGxRlHiPDzw";
 

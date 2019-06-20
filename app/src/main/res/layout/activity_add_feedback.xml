@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/background"
+        android:paddingTop="18dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_job_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:drawableLeft="@drawable/ic_title"
+            android:text=" Job title"
+            android:textAlignment="textStart"
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp" />
+
+
+        <EditText
+            android:id="@+id/et_feedback_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:hint="Add a review to the user. Once saved you can't change it."
+            android:lines="4"
+            android:maxLines="6"
+            android:minLines="4"
+            android:scrollbars="vertical" />
+
+        <RatingBar
+            android:id="@+id/rb_feedback_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:stepSize="1"
+            android:progressTint="@color/golden"/>
+
+        <Button
+            android:id="@+id/btn_save_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="48dp"
+            android:background="@drawable/button_red_selector"
+            android:drawableRight="@drawable/ic_done"
+            android:padding="15dp"
+            android:shadowColor="@android:color/transparent"
+            android:text="Save"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</ScrollView>
+
+

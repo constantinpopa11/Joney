@@ -31,7 +31,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
@@ -46,6 +54,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
 
     int uploadedPicCounter = 0;
     int picToBeChangedIndex = -1;
+    int currentUserId;
 
     private Context mContext;
 
@@ -57,7 +66,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
         setContentView(R.layout.activity_send_ticket);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
+        currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
 
         mContext = this;
 
@@ -82,9 +91,9 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
             @Override
             public void onClick(View view) {
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
-                    showMissingPermissionAlert("Storage","Pictures");
-                else if(uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
-                    ImageUploadUtils.showPictureOptionDialog(mContext, SendTicketActivity.this, -1);
+                    showMissingPermissionAlert("Storage", "Pictures");
+                else if (uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
+                    ImageUploadUtils.showPictureOptionDialog(mContext, SendTicketActivity.this, -1,Constants.PATH_TICKET_IMAGES);
                 }
             }
         });
@@ -100,7 +109,6 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
 
         btnSendTicket = (Button) findViewById(R.id.btn_send_ticket);
         btnSendTicket.setOnClickListener(new SendTicketListener());
-
     }
 
     @Override
@@ -149,15 +157,15 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
             else if (issue.length() == 0)
                 Toast.makeText(getApplicationContext(), "Issue can't be empty", Toast.LENGTH_SHORT).show();
             else {
-                Ticket ticket = new Ticket(job.getId(),issue);
+                Ticket ticket = new Ticket(job.getId(), issue);
                 int ticketId = db.addTicket(ticket);
 
 
                 int attachmentNum = llPictures.getChildCount();
-                for(int i=0; i<attachmentNum; i++) {
+                for (int i = 0; i < attachmentNum; i++) {
                     //save image on the device and register it to the database
                     ImageView imgView = (ImageView) llPictures.getChildAt(i);
-                    Bitmap bitmap = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
+                    Bitmap bitmap = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
                     String path = saveImage(getApplicationContext(), bitmap, Constants.PATH_TICKET_IMAGES);
                     TicketImage ticketImage = new TicketImage(path, ticketId);
                     db.addTicketImage(ticketImage);
@@ -172,7 +180,6 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -185,6 +192,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
         if (requestCode == Constants.UPLOAD_FROM_GALLERY) {
             if (data != null) {
                 Uri contentURI = data.getData();
+                Log.d("Uri", contentURI.toString());
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                 } catch (IOException e) {
@@ -194,14 +202,28 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
             }
 
         } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
-            bitmap = (Bitmap) data.getExtras().get("data");
+            File tempImg = new File(Environment.getExternalStorageDirectory(), Constants.PATH_TICKET_IMAGES + "temp.jpg");
+            /*try {
+                copyFile(tempImg, new File(Environment.getExternalStorageDirectory(), Constants.PATH_TICKET_IMAGES + Calendar.getInstance().getTimeInMillis() + ".jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+            Uri photoUri = Uri.fromFile(tempImg);
+            //bitmap = (Bitmap) data.getExtras().get("data");
+            Log.d("Uri", photoUri.toString());
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+            }
         }
 
-        if(bitmap != null) {
+        if (bitmap != null) {
             //Toast.makeText(getApplicationContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
 
             ImageView newImgView;
-            if(picToBeChangedIndex != -1) {
+            if (picToBeChangedIndex != -1) {
                 newImgView = (ImageView) llPictures.getChildAt(picToBeChangedIndex);
             } else {
                 newImgView = new ImageView(this);
@@ -211,7 +233,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
             //setting image resource
             imageView.setImageBitmap(bitmap);
 
-            if(picToBeChangedIndex == -1) {
+            if (picToBeChangedIndex == -1) {
 
                 final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_size);
                 final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_margin);
@@ -228,7 +250,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
                     @Override
                     public void onClick(View view) {
                         int clickedImgIndex = llPictures.indexOfChild(imageView);
-                        ImageUploadUtils.showPictureOptionDialog(mContext, SendTicketActivity.this, clickedImgIndex);
+                        ImageUploadUtils.showPictureOptionDialog(mContext, SendTicketActivity.this, clickedImgIndex, Constants.PATH_TICKET_IMAGES);
                     }
                 });
             }
@@ -236,7 +258,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
             picToBeChangedIndex = -1;
             uploadedPicCounter++;
             //hide add btn if there are 4 pics already
-            if(uploadedPicCounter == Constants.MAX_JOB_PICTURE_NUMBER) {
+            if (uploadedPicCounter == Constants.MAX_JOB_PICTURE_NUMBER) {
                 btnAddPicture.setVisibility(View.GONE);
             }
         }
@@ -246,11 +268,11 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
 
         ImageView imgView = (ImageView) llPictures.getChildAt(imgViewIndex);
 
-        if(imgView != null) {
+        if (imgView != null) {
             llPictures.removeView(imgView);
             uploadedPicCounter--;
 
-            if(btnAddPicture.getVisibility() == View.GONE) {
+            if (btnAddPicture.getVisibility() == View.GONE) {
                 btnAddPicture.setVisibility(View.VISIBLE);
             }
         }
@@ -263,7 +285,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
     private void showMissingPermissionAlert(String permission, String hardware) {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Enable " + permission)
-                .setMessage("Your need to grant " + permission + " Permission if you want to use " + hardware +".")
+                .setMessage("Your need to grant " + permission + " Permission if you want to use " + hardware + ".")
                 .setPositiveButton("App Settings", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface paramDialogInterface, int paramInt) {

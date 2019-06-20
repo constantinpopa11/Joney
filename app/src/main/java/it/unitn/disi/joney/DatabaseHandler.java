@@ -70,6 +70,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COL_FEEDBACK_COMMENT = "comment";
     private static final String COL_FEEDBACK_AUTHOR_ID = "authorId";
     private static final String COL_FEEDBACK_RECEIVER_ID = "receiverId";
+    private static final String COL_FEEDBACK_JOB_ID = "jobId";
+    private static final String COL_FEEDBACK_DATE = "date";
 
     private static final String TABLE_MESSAGES = "Messages";
     private static final String COL_MESSAGE_SENDER = "senderId";
@@ -110,9 +112,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             "(" + COL_FEEDBACK_ID + " integer PRIMARY KEY AUTOINCREMENT NOT NULL, " +
             COL_FEEDBACK_RATING + " integer NOT NULL, " +
             COL_FEEDBACK_COMMENT + " varchar(1000), " +
+            COL_FEEDBACK_DATE + " date NOT NULL, " +
             COL_FEEDBACK_AUTHOR_ID + " integer NOT NULL, " +
             COL_FEEDBACK_RECEIVER_ID + " integer NOT NULL, " +
+            COL_FEEDBACK_JOB_ID + " integer NOT NULL, " +
             "FOREIGN KEY (" + COL_FEEDBACK_AUTHOR_ID + ") REFERENCES " + TABLE_USERS + "(" + COL_USER_ID + "), " +
+            "FOREIGN KEY (" + COL_FEEDBACK_JOB_ID + ") REFERENCES " + TABLE_JOBS + "(" + COL_JOB_ID + "), " +
             "FOREIGN KEY (" + COL_FEEDBACK_RECEIVER_ID + ") REFERENCES " + TABLE_USERS + "(" + COL_USER_ID + "));";
 
     private static String CREATE_TABLE_JOB_CANDIDATES  = "CREATE TABLE IF NOT EXISTS " + TABLE_JOB_CANDIDATES +
@@ -360,11 +365,55 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //Log.d("Message","inserted");
     }
 
+    void addFeedback(Feedback feedback){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COL_FEEDBACK_RATING, feedback.getRating());
+        values.put(COL_FEEDBACK_COMMENT, feedback.getComment());
+        values.put(COL_FEEDBACK_DATE, feedback.getDate());
+        values.put(COL_FEEDBACK_JOB_ID, feedback.getJobId());
+        values.put(COL_FEEDBACK_AUTHOR_ID, feedback.getAuthorId());
+        values.put(COL_FEEDBACK_RECEIVER_ID, feedback.getReceiverId());
+
+        db.insert(TABLE_FEEDBACKS,null,values);
+        db.close();
+        //Log.d("Message","inserted");
+    }
+
     void removeUserProfileImage(int userId)
     {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(TABLE_USER_PROFILE_IMAGES,COL_USER_PROFILE_IMG_USER_ID + "=?",new String[] { Integer.toString(userId) });
+    }
+
+
+    Job getJobById(int jobId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_JOBS,
+                new String[] { COL_JOB_TITLE, COL_JOB_DESCRIPTION, COL_JOB_LATITUDE,
+                        COL_JOB_LONGITUDE, COL_JOB_JOB_CATEGORY_ID, COL_JOB_AUTHOR_ID },
+                COL_JOB_ID + "=?",
+                new String[] { Integer.toString(jobId) },
+                null,
+                null,
+                null,
+                null);
+
+        Job job = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            job = new Job();
+            job.setId(jobId);
+            job.setTitle(cursor.getString(0));
+            job.setDescription(cursor.getString(1));
+            job.setLatitude(cursor.getDouble(2));
+            job.setLongitude(cursor.getDouble(3));
+            job.setCategoryId(cursor.getInt(4));
+            job.setAuthorId(cursor.getInt(5));
+        }
+        return job;
     }
 
 
@@ -614,8 +663,40 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        // return job list
+        // return messages list
         return messages;
+    }
+
+    public ArrayList<Feedback> getUserFeedbacks(int currentUserId) {
+        ArrayList<Feedback> feedbacks = new ArrayList<Feedback>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_FEEDBACKS,
+                new String[] {COL_FEEDBACK_COMMENT, COL_FEEDBACK_DATE, COL_FEEDBACK_RATING,
+                        COL_FEEDBACK_AUTHOR_ID, COL_FEEDBACK_JOB_ID},
+                COL_FEEDBACK_RECEIVER_ID + "=?",
+                new String[] {Integer.toString(currentUserId)},
+                null,
+                null,
+                COL_FEEDBACK_DATE,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Feedback feedback = new Feedback();
+                feedback.setComment(cursor.getString(0));
+                feedback.setDate(cursor.getString(1));
+                feedback.setRating(cursor.getInt(2));
+                feedback.setAuthorId(cursor.getInt(3));
+                feedback.setJobId(cursor.getInt(4));
+                feedbacks.add(feedback);
+                //Log.d("Going","trough");
+            } while (cursor.moveToNext());
+        }
+
+        // return feedbacks list
+        return feedbacks;
     }
 
     JobCategory getJobCategoryById(int jobCategoryId) {

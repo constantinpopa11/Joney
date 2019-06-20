@@ -74,6 +74,9 @@ public class MapActivity extends AppCompatActivity {
         // This contains the MapView in XML and needs to be called after the access token is configured.
         setContentView(R.layout.activity_map);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Button btnChooseAddress = (Button) findViewById(R.id.btn_choose_address);
         FloatingActionButton btnLocateUser = (FloatingActionButton) findViewById(R.id.btn_locate_user);
         etAddress = (EditText) findViewById(R.id.et_address);

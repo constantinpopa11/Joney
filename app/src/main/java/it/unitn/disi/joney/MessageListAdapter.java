@@ -91,6 +91,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     // Passes the message object to a ViewHolder so that the contents can be bound to UI.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         Message message = (Message) mMessageList.get(position);
         //Log.d("Position",String.valueOf(position));
         boolean nextIsReceived = false, previousIsDifferentDate = false;
