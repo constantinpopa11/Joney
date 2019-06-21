@@ -1,5 +1,6 @@
 package it.unitn.disi.joney;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -18,14 +19,21 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin, btnSignup;
     TextView tvForgotPassword;
     DatabaseHandler db = new DatabaseHandler(this);
+    Context mContext;
 
     //Facebook Login
     CallbackManager cbm = CallbackManager.Factory.create();
@@ -36,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
+        mContext = this;
         boolean isLoggedIn = prefs.getBoolean(Constants.PREF_REMEMBER_ME, false); // get value of last login status
         int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
 
@@ -118,6 +126,31 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(LoginResult loginResult) {
                         // App code
                         Toast.makeText(getApplicationContext(), "Successfully logged in with FB!", Toast.LENGTH_SHORT).show();
+                        String accessToken = loginResult.getAccessToken().getToken();
+
+                        GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Toast.makeText(mContext, "Going", Toast.LENGTH_SHORT).show();
+                                try {
+                                    if (object.has("first_name"))
+                                        Toast.makeText(getApplicationContext(), object.getString("first_name"), Toast.LENGTH_SHORT).show();
+                                    if (object.has("last_name"))
+                                        Toast.makeText(getApplicationContext(), object.getString("last_name"), Toast.LENGTH_SHORT).show();
+                                    if (object.has("email"))
+                                        Toast.makeText(getApplicationContext(), object.get("email").toString(), Toast.LENGTH_SHORT).show();
+                                } catch (Exception e)
+                                {
+                                    Log.d("Error",e.getMessage().toString());
+                                    Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                }
+                            }
+                        });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,first_name,last_name,email");
+                        request.setParameters(parameters);
+                        request.executeAsync();
                     }
 
                     @Override

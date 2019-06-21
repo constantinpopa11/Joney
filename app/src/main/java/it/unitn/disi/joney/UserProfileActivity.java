@@ -2,6 +2,10 @@ package it.unitn.disi.joney;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,12 +15,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -250,14 +258,19 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                     intUser.putExtra("userId",1);
                     startActivity(intUser);*/
 
-                    Intent intChat = new Intent(UserProfileActivity.this,ChatActivity.class);
+                    /*Intent intChat = new Intent(UserProfileActivity.this,ChatActivity.class);
                     intChat.putExtra("senderId",currentUserId);
                     intChat.putExtra("receiverId",currentUserId==2?1:2);
-                    startActivity(intChat);
+                    startActivity(intChat);*/
 
                     /*Intent intFeed = new Intent(UserProfileActivity.this,AddFeedbackActivity.class);
                     intFeed.putExtra("jobId",3);
                     startActivity(intFeed);*/
+
+                    createNotificationChannel();
+                    NotificationCompat.Builder ncb = getNotification();
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
+                    notificationManager.notify(1, ncb.build());
                 }
             });
 
@@ -438,6 +451,40 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             sum += f.getRating();
         }
         return sum/(float)feedbacks.size();
+    }
+
+    public NotificationCompat.Builder getNotification()
+    {
+        Intent intent = new Intent(this, PostJobActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "id")
+                .setSmallIcon(R.drawable.logo_joney_grey)
+                .setContentTitle("Title")
+                .setContentText("Text")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);;
+
+        return builder;
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Test";
+            String description = "Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("id", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 
     /*public Bitmap getBitmap(){
