@@ -107,7 +107,7 @@ public class JobDetailActivity extends AppCompatActivity {
                     final Feedback feedback = db.getUserFeedbackForJob(jobId, currentUserId);
 
                     if(feedback == null) {
-                        tvCandidateAction.setText("Were you happy with the work the other user has done? Let us know!");
+                        tvCandidateAction.setText("Are you happy with the work the other user has done? Let us know!");
                         btnCandidateAction.setText("Leave feedback");
 
                         btnCandidateAction.setOnClickListener(new View.OnClickListener() {
@@ -152,19 +152,26 @@ public class JobDetailActivity extends AppCompatActivity {
 
                     btnCandidateAction.setVisibility(View.GONE);
                 } else if(job.getStatus() > Constants.JOB_STATUS_AWAITING_CANDIDATES && job.workerId == currentUserId){
-                    tvCandidateAction.setText("Were you happy to work for the other user? Let us know!");
-                    btnCandidateAction.setText("Leave feedback");
+                    Feedback feedback = db.getUserFeedbackForJob(jobId, currentUserId);
 
-                    btnCandidateAction.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent feedbackIntent = new Intent(mContext, AddFeedbackActivity.class);
-                            feedbackIntent.putExtra("receiverId", job.getAuthorId());
-                            feedbackIntent.putExtra("jobId", job.getId());
-                            feedbackIntent.putExtra("activityType", Constants.PENDING_JOB_DETAILS);
-                            startActivity(feedbackIntent);
-                        }
-                    });
+                    if(feedback == null) {
+                        tvCandidateAction.setText("Were you happy to work for the other user? Let us know!");
+                        btnCandidateAction.setText("Leave feedback");
+
+                        btnCandidateAction.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent feedbackIntent = new Intent(mContext, AddFeedbackActivity.class);
+                                feedbackIntent.putExtra("receiverId", job.getAuthorId());
+                                feedbackIntent.putExtra("jobId", job.getId());
+                                feedbackIntent.putExtra("activityType", Constants.COMPLETED_JOB_DETAILS);
+                                startActivity(feedbackIntent);
+                            }
+                        });
+                    } else {
+                        tvCandidateAction.setText("Thank you for your feedback!");
+                        btnCandidateAction.setVisibility(View.GONE);
+                    }
                 }
                 break;
 

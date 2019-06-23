@@ -142,13 +142,21 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
             }
         }
 
+        final Intent jobDetailIntent = new Intent(context, JobDetailActivity.class);
+        jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, job.getId());
+        jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, activityType);
+
         ivMainPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Job job = jobs.get(listPosition);
-                Intent jobDetailIntent = new Intent(context, JobDetailActivity.class);
-                jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, job.getId());
-                jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, activityType);
+                context.startActivity(jobDetailIntent);
+            }
+        });
+
+        LinearLayout llJobHeader = convertView.findViewById(R.id.ll_job_header);
+        llJobHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 context.startActivity(jobDetailIntent);
             }
         });
