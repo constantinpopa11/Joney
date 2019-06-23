@@ -5,14 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
 
 public class FindJobActivity extends AppCompatActivity {
@@ -210,7 +206,7 @@ public class FindJobActivity extends AppCompatActivity {
                         collapseSearchFilters();
                     }
 
-                    jobListAdapter = new ExpandableJobListAdapter(getApplicationContext(), eligibleJobs, Constants.PENDING_JOB_TAB);
+                    jobListAdapter = new ExpandableJobListAdapter(getApplicationContext(), eligibleJobs, Constants.SEARCH_RESULT_TAB);
                     elvJobResults.setAdapter(jobListAdapter);
 
                     elvJobResults.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {

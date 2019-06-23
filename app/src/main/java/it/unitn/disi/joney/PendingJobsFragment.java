@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,7 @@ public class PendingJobsFragment extends Fragment {
         int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
 
         final List<Job> pendingJobs = db.getUserPendingJobs(currentUserId);
+        Log.i("PENDING_JOBS", Integer.toString(pendingJobs.size()));
         for(Job job : pendingJobs) {
             job.setJobCategory(db.getJobCategoryById(job.getCategoryId()));
             job.setWorker(db.getUserById(job.getWorkerId()));
@@ -91,7 +93,7 @@ public class PendingJobsFragment extends Fragment {
 
         if(pendingJobs.size() > 0) {
             expandableListView = (ExpandableListView) view.findViewById(R.id.elv_posted_jobs);
-            expandableListAdapter = new ExpandableJobListAdapter(context, pendingJobs, Constants.POSTED_JOB_TAB);
+            expandableListAdapter = new ExpandableJobListAdapter(context, pendingJobs, Constants.PENDING_JOB_TAB);
             expandableListView.setAdapter(expandableListAdapter);
             expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 

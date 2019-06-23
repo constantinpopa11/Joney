@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,10 +35,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -50,11 +47,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
 
@@ -64,7 +57,6 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
     TextView tvUserName;
     FloatingActionButton btnSaveChanges;
     CircularImageView ivUserProfileImage;
-    Button btnText;
     RatingBar rbUserAverage;
 
     ArrayList<Feedback> feedbackList;
@@ -105,7 +97,6 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         etUserInfo = (EditText) findViewById(R.id.et_user_info);
         ivUserProfileImage = (CircularImageView) findViewById(R.id.iv_user_profile_image);
         btnSaveChanges = (FloatingActionButton) findViewById(R.id.btn_save_description);
-        btnText = (Button) findViewById(R.id.btn_text);
         lvReviews = (ListView) findViewById(R.id.review_list);
         llChat = (LinearLayout) findViewById(R.id.ll_chat);
 
@@ -134,7 +125,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             }
 
             feedbackList = db.getUserFeedbacks(userId);
-            rbUserAverage.setRating(getAverageRating(feedbackList));
+            rbUserAverage.setRating(Utils.getUserAverageRating(this, user.id));
             Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
             flaReviews = new FeedbackListAdapter(this,feedbackList);
             lvReviews.setAdapter(flaReviews);
@@ -176,7 +167,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             }
 
             feedbackList = db.getUserFeedbacks(currentUserId);
-            rbUserAverage.setRating(getAverageRating(feedbackList));
+            rbUserAverage.setRating(Utils.getUserAverageRating(this, user.id));
             Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
             flaReviews = new FeedbackListAdapter(this,feedbackList);
             lvReviews.setAdapter(flaReviews);
@@ -389,8 +380,8 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             //setting image resource
             ivUserProfileImage.setImageBitmap(bitmap);
 
-            final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_size);
-            final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_margin);
+            //final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.post_job_thumbnail_size);
+            //final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.post_job_thumbnail_margin);
 
             ivUserProfileImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -441,16 +432,6 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         inImage.compress(Bitmap.CompressFormat.PNG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
-    }
-
-    public float getAverageRating(ArrayList<Feedback> feedbacks)
-    {
-        float sum = 0;
-        for(Feedback f:feedbacks)
-        {
-            sum += f.getRating();
-        }
-        return sum/(float)feedbacks.size();
     }
 
     public NotificationCompat.Builder getNotification()

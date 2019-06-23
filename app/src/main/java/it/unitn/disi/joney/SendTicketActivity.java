@@ -11,10 +11,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,15 +33,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
@@ -174,6 +169,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
                 Toast.makeText(getApplicationContext(), "Ticket sent successfully", Toast.LENGTH_SHORT).show();
                 Intent intHome = new Intent(SendTicketActivity.this, HomeActivity.class);
                 startActivity(intHome);
+                finish();
             }
 
         }
@@ -235,8 +231,8 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
 
             if (picToBeChangedIndex == -1) {
 
-                final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_size);
-                final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_margin);
+                final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.post_job_thumbnail_size);
+                final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.post_job_thumbnail_margin);
 
                 //setting image size and margins
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);

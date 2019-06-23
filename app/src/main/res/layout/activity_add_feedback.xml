@@ -54,10 +54,10 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="48dp"
             android:background="@drawable/button_red_selector"
-            android:drawableRight="@drawable/ic_done"
+            android:drawableLeft="@drawable/ic_done"
             android:padding="15dp"
             android:shadowColor="@android:color/transparent"
-            android:text="Save"
+            android:text="Leave feedback"
             android:textColor="@color/white" />
     </LinearLayout>
 

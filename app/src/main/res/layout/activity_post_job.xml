@@ -20,7 +20,7 @@
             android:drawableLeft="@drawable/ic_title"
             android:text="Job Title"
             android:textAlignment="textStart"
-            android:textColor="@color/darkGrey"
+            android:textColor="@color/mediumGrey"
             android:textSize="18dp" />
 
 
@@ -43,9 +43,10 @@
             android:layout_marginTop="24dp"
             android:layout_marginBottom="6dp"
             android:drawableLeft="@drawable/ic_description"
-            android:text=" Description"
+            android:drawablePadding="4dp"
+            android:text="Description"
             android:textAlignment="textStart"
-            android:textColor="@color/darkGrey"
+            android:textColor="@color/mediumGrey"
             android:textSize="18dp" />
 
 
@@ -53,93 +54,96 @@
             android:id="@+id/et_job_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             android:gravity="top|left"
-            android:inputType="textMultiLine"
             android:hint="Add an (optional) description for the job"
-            android:textSize="16dp"
+            android:inputType="textMultiLine"
             android:lines="4"
-            android:maxLines="6"
-            android:minLines="4"
-            android:scrollbars="vertical" />
+            android:maxLines="4"
+            android:minLines="1"
+            android:scrollbars="vertical"
+            android:textSize="16dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginBottom="6dp"
             android:drawableLeft="@drawable/ic_business"
+            android:drawablePadding="4dp"
             android:text="Category"
             android:textAlignment="textStart"
-            android:textSize="18dp"
-            android:textColor="@color/darkGrey" />
+            android:textColor="@color/mediumGrey"
+            android:textSize="18dp" />
 
         <Spinner
             android:id="@+id/spn_category"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginBottom="6dp"
             android:drawableLeft="@drawable/ic_address"
+            android:drawablePadding="4dp"
             android:text="Address"
             android:textAlignment="textStart"
-            android:textSize="18dp"
-            android:textColor="@color/darkGrey" />
+            android:textColor="@color/mediumGrey"
+            android:textSize="18dp" />
 
         <EditText
             android:id="@+id/et_job_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/darkGrey"
-            android:textSize="16dp"
+            android:layout_marginBottom="24dp"
             android:focusable="false"
-            android:inputType="none"
             android:hint="Via Padre Pio 69"
+            android:inputType="none"
+            android:textColor="@color/darkGrey"
             android:textColorHighlight="@color/white"
-            android:textColorHint="@color/lightGrey"/>
+            android:textColorHint="@color/lightGrey"
+            android:textSize="16dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginBottom="6dp"
             android:drawableLeft="@drawable/ic_pictures"
-            android:text=" Pictures"
+            android:drawablePadding="4dp"
+            android:text="Pictures"
             android:textAlignment="textStart"
-            android:textColor="@color/darkGrey"
+            android:textColor="@color/mediumGrey"
             android:textSize="18dp" />
 
 
         <HorizontalScrollView
+            android:id="@+id/hsv_pictures"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/hsv_pictures"
+            android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" >
+            android:layout_marginBottom="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/pic_thumbnail_margin"
+                android:layout_marginTop="@dimen/post_job_thumbnail_margin"
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ll_pictures"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ll_pictures"
-                    android:orientation="horizontal">
-                </LinearLayout>
+                    android:orientation="horizontal"></LinearLayout>
 
 
                 <ImageView
                     android:id="@+id/btn_add_picture"
-                    android:layout_width="@dimen/pic_thumbnail_size"
-                    android:layout_height="@dimen/pic_thumbnail_size"
-                    android:src="@drawable/ic_add_image"
-                    android:background="@drawable/button_blue_selector"/>
+                    android:layout_width="@dimen/post_job_thumbnail_size"
+                    android:layout_height="@dimen/post_job_thumbnail_size"
+                    android:background="@drawable/button_blue_selector"
+                    android:src="@drawable/ic_add_image" />
             </LinearLayout>
         </HorizontalScrollView>
 
@@ -148,7 +152,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="12dp"
-            android:layout_marginTop="18dp"
             android:layout_marginRight="12dp"
             android:orientation="horizontal">
 
@@ -156,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pay"
-                android:textColor="@color/darkGrey"
+                android:textColor="@color/mediumGrey"
                 android:textSize="16dp" />
 
             <EditText
@@ -169,11 +172,11 @@
                 android:hint="10"
                 android:inputType="numberSigned"
                 android:maxLength="3"
-                android:textSize="16dp"
                 android:textAlignment="textEnd"
                 android:textColor="@color/darkGrey"
                 android:textColorHighlight="@color/white"
-                android:textColorHint="@color/lightGrey" />
+                android:textColorHint="@color/lightGrey"
+                android:textSize="16dp" />
         </LinearLayout>
 
 
@@ -182,10 +185,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="48dp"
             android:background="@drawable/button_red_selector"
-            android:drawableRight="@drawable/ic_post"
+            android:drawableLeft="@drawable/ic_post"
+            android:drawablePadding="4dp"
             android:padding="15dp"
             android:shadowColor="@android:color/transparent"
             android:text="Post job"

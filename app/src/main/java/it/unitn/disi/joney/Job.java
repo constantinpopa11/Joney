@@ -5,7 +5,7 @@ public class Job {
     String title;
     String description;
     int pay;
-    boolean completed;
+    int status;
     String createdAt;
     double latitude;
     double longitude;
@@ -19,12 +19,12 @@ public class Job {
     public Job() {
     }
 
-    public Job(int jobID, String title, String description, int pay, boolean completed, String createdAt, double latitude, double longitude, int categoryID, int authorID, Integer workerID) {
+    public Job(int jobID, String title, String description, int pay, int status, String createdAt, double latitude, double longitude, int categoryID, int authorID, Integer workerID) {
         this.id = jobID;
         this.title = title;
         this.description = description;
         this.pay = pay;
-        this.completed = completed;
+        this.status = status;
         this.createdAt = createdAt;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -33,11 +33,11 @@ public class Job {
         this.workerId = workerID;
     }
 
-    public Job(String title, String description, int pay, boolean completed, String createdAt,  double latitude, double longitude, int categoryId, int authorId, Integer workerId) {
+    public Job(String title, String description, int pay, int status, String createdAt,  double latitude, double longitude, int categoryId, int authorId, Integer workerId) {
         this.title = title;
         this.description = description;
         this.pay = pay;
-        this.completed = completed;
+        this.status = status;
         this.createdAt = createdAt;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -85,12 +85,12 @@ public class Job {
         this.pay = pay;
     }
 
-    public boolean isCompleted() {
-        return completed;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public double getLatitude() {

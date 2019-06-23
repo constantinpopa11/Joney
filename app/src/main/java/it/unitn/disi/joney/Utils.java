@@ -198,4 +198,17 @@ public class Utils {
             .setNegativeButton("Dismiss", null)
             .show();
     }
+
+    public static float getUserAverageRating(Context context, int userId){
+        DatabaseHandler db = new DatabaseHandler(context);
+        List<Feedback> feedbacks = db.getUserFeedbacks(userId);
+
+        float sum = 0.0f;
+        for(Feedback f:feedbacks)
+        {
+            sum += f.getRating();
+        }
+
+        return sum/(float)feedbacks.size();
+    }
 }

@@ -26,9 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.maps.MapView;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -72,7 +69,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
         btnAddPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Utils.isStoragePermissionGranted(getApplicationContext()))
+                if(!Utils.isStoragePermissionGranted(getApplicationContext()))
                     showMissingPermissionAlert("Storage","Pictures");
                 else if(uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
                     ImageUploadUtils.showPictureOptionDialog(mContext, PostJobActivity.this, -1, Constants.PATH_JOB_IMAGES);
@@ -180,7 +177,10 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 String now = dateFormat.format(date);
                 //Log.d("Date",now);
 
-                Job job = new Job(jobTitle, description, pay, false, now, location.first, location.second, jobCategory.getId(), currentUserId, null);
+                if(description == null || description.trim().equals(""))
+                    description = "There is no description for this job";
+
+                Job job = new Job(jobTitle, description, pay, Constants.JOB_STATUS_AWAITING_CANDIDATES, now, location.first, location.second, jobCategory.getId(), currentUserId, null);
                 int jobId = db.addJob(job);
 
                 int attachmentNum = llPictures.getChildCount();
@@ -244,8 +244,6 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
             }
 
         } else if (requestCode == Constants.UPLOAD_FROM_CAMERA) {
-            bitmap = (Bitmap) data.getExtras().get("data");
-        } else if (requestCode == Constants.PICK_LOCATION) {
             File tempImg = new File(Environment.getExternalStorageDirectory(), Constants.PATH_JOB_IMAGES + "temp.jpg");
             Uri photoUri = Uri.fromFile(tempImg);
             //bitmap = (Bitmap) data.getExtras().get("data");
@@ -256,7 +254,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == Constants.RECEIVED_LOCATION) {
+        } else if (requestCode == Constants.PICK_LOCATION) {
             if(resultCode == RESULT_OK) {
                 final Double lat = data.getDoubleExtra("latitude",0.0);
                 final Double lon = data.getDoubleExtra("longitude",0.0);
@@ -293,8 +291,8 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
 
             if(picToBeChangedIndex == -1) {
 
-                final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_size);
-                final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.pic_thumbnail_margin);
+                final int thumbnailSize = (int) getApplicationContext().getResources().getDimension(R.dimen.post_job_thumbnail_size);
+                final int thumbnailMargin = (int) getApplicationContext().getResources().getDimension(R.dimen.post_job_thumbnail_margin);
 
                 //setting image size and margins
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(thumbnailSize, thumbnailSize);

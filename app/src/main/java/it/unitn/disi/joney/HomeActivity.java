@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener(getApplicationContext(), drawer));
+        navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener(this, drawer));
 
         llFindJob = (LinearLayout) findViewById(R.id.ll_find_job);
         llPostJob = (LinearLayout) findViewById(R.id.ll_post_job);

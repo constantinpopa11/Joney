@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,7 @@ public class PostedJobsFragment extends Fragment {
         int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
 
         final List<Job> postedJobs = db.getUserPostedJobs(currentUserId);
+        Log.i("POSTED_JOBS", Integer.toString(postedJobs.size()));
         for(Job job : postedJobs) {
             job.setJobCategory(db.getJobCategoryById(job.getCategoryId()));
             job.setWorker(db.getUserById(job.getWorkerId()));

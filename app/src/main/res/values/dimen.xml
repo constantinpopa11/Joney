@@ -4,8 +4,10 @@
     <dimen name="user_avatar_size_medium">64dp</dimen>
     <dimen name="user_avatar_size_large">100dp</dimen>
 
-    <dimen name="pic_thumbnail_size">48dp</dimen>
-    <dimen name="pic_thumbnail_margin">12dp</dimen>
+    <dimen name="post_job_thumbnail_size">48dp</dimen>
+    <dimen name="post_job_thumbnail_margin">12dp</dimen>
 
+    <dimen name="job_detail_thumbnail_size">64dp</dimen>
+    <dimen name="job_detail_thumbnail_margin">4dp</dimen>
 
 </resources>

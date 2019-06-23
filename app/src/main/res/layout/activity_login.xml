@@ -64,35 +64,24 @@
                 android:id="@+id/cb_remember_me"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="6dp"
+                android:layout_weight="1"
                 android:buttonTint="@color/colorPrimary"
                 android:checked="true"
                 android:text="Remember Me"
-                android:textColor="@color/darkGrey" />
+                android:textColor="@color/darkGrey"
+                android:textSize="14dp" />
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="right">
-
-                <TextView
-                    android:id="@+id/forgot_password"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:drawableLeft="@drawable/ic_lock_open"
-                    android:drawablePadding="6dp"
-                    android:padding="4dp"
-                    android:text="Forgot your Password?"
-                    android:textColor="@color/darkGrey" />
-
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/forgot_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:drawableLeft="@drawable/ic_lock_open"
+                android:gravity="center_vertical"
+                android:text="Forgot your Password?"
+                android:textColor="@color/darkGrey"
+                android:textSize="14dp" />
 
         </LinearLayout>
 
@@ -102,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="0dp"
             android:background="@drawable/button_red_selector"
             android:padding="15dp"

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:background="@color/background"
         android:orientation="horizontal"
-        android:id="@+id/rl_user_preview">
+        android:id="@+id/ll_user_preview">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/iv_user_profile_image"
@@ -47,21 +47,22 @@
                 android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User name"
+                android:fontFamily="@font/quicksand_medium"
+                android:text="Mario Rossi"
                 android:textAlignment="textStart"
                 android:textColor="@color/darkGrey"
-                android:textSize="18dp" />
+                android:textSize="24dp" />
 
 
             <RatingBar
                 android:id="@+id/rb_rating_average"
                 style="@style/joneyRatingBar"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:isIndicator="true"
                 android:numStars="5"
-                android:rating="3.5"
-                android:isIndicator="true"/>
+                android:rating="3.5" />
 
         </LinearLayout>
 
@@ -108,7 +109,7 @@
         android:textColor="@color/darkGrey"
         android:textSize="18dp"
         android:id="@+id/tv_user_info"
-        android:layout_below="@+id/rl_user_preview"/>
+        android:layout_below="@+id/ll_user_preview"/>
 
     <EditText
         android:id="@+id/et_user_info"

@@ -34,7 +34,7 @@ public class OnNavigationItemSelectedListener implements NavigationView.OnNaviga
             intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intHome);
         } else if (id == R.id.nav_profile) {
-            Intent intUserProfile = new Intent(context,UserProfileActivity.class);
+            Intent intUserProfile = new Intent(context, UserProfileActivity.class);
             intUserProfile.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intUserProfile);
         } else if (id == R.id.nav_my_jobs) {

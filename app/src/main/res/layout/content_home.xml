@@ -23,15 +23,16 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:fontFamily="@font/rubik_light"
+            android:gravity="center_vertical"
             android:text="Post a job"
             android:textAlignment="center"
-            android:gravity="center_vertical"
             android:textColor="@color/mediumGrey"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:background="@drawable/ic_home_post" />
 
     </LinearLayout>
@@ -54,9 +55,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/rubik_light"
             android:text="OR"
-            android:textSize="18dp"
-            android:textColor="@color/mediumGrey"/>
+            android:textColor="@color/mediumGrey"
+            android:textSize="18dp" />
 
         <View
             android:layout_width="match_parent"
@@ -85,18 +87,19 @@
 
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:background="@drawable/ic_home_search" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:fontFamily="@font/rubik_light"
+            android:gravity="center_vertical"
             android:text="Find a job"
             android:textAlignment="center"
-            android:gravity="center_vertical"
             android:textColor="@color/mediumGrey"
-            android:textSize="30dp" />
+            android:textSize="28dp" />
     </LinearLayout>
 
     <View

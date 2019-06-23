@@ -17,12 +17,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="10dp"
             android:drawableLeft="@drawable/ic_place"
             android:text="Distance"
             android:textAlignment="textStart"
-            android:textSize="18dp"
-            android:textColor="@color/darkGrey" />
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp" />
 
         <SeekBar
             android:id="@+id/sb_distance"
@@ -41,42 +41,42 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Min: 1"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:textSize="12dp"
-                android:textColor="@color/lightGrey" />
+                android:text="Min: 1"
+                android:textColor="@color/lightGrey"
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/tv_distance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="12dp"
-                android:textColor="@color/darkGrey" />
+                android:text=""
+                android:textColor="@color/darkGrey"
+                android:textSize="12dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Max: 30"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:textSize="12dp"
-                android:textColor="@color/lightGrey" />
+                android:text="Max: 30"
+                android:textColor="@color/lightGrey"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="6dp"
             android:drawableLeft="@drawable/ic_business"
             android:text="Category"
             android:textAlignment="textStart"
-            android:textSize="18dp"
-            android:textColor="@color/darkGrey" />
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp" />
 
         <Spinner
             android:id="@+id/spn_category"
@@ -86,13 +86,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="6dp"
             android:drawableLeft="@drawable/ic_address"
             android:text="Your location"
             android:textAlignment="textStart"
-            android:textSize="18dp"
-            android:textColor="@color/darkGrey" />
+            android:textColor="@color/darkGrey"
+            android:textSize="18dp" />
 
         <EditText
             android:id="@+id/et_job_address"
@@ -117,16 +117,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="12dp"
-                android:orientation="horizontal"
                 android:layout_weight="1"
-                android:gravity="left">
+                android:gravity="left"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Min"
-                    android:textSize="16dp"
-                    android:textColor="@color/darkGrey" />
+                    android:textColor="@color/darkGrey"
+                    android:textSize="16dp" />
 
                 <EditText
                     android:id="@+id/et_min_pay"
@@ -136,29 +136,29 @@
                     android:drawableLeft="@drawable/ic_euro"
                     android:drawablePadding="10dp"
                     android:hint="0"
-                    android:maxLength="3"
                     android:inputType="numberSigned"
+                    android:maxLength="3"
                     android:textAlignment="textEnd"
-                    android:textSize="16dp"
                     android:textColor="@color/darkGrey"
                     android:textColorHighlight="@color/white"
-                    android:textColorHint="@color/lightGrey" />
+                    android:textColorHint="@color/lightGrey"
+                    android:textSize="16dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:orientation="horizontal"
                 android:layout_weight="1"
-                android:gravity="right">
+                android:gravity="right"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Max"
-                    android:textSize="16dp"
-                    android:textColor="@color/darkGrey" />
+                    android:textColor="@color/darkGrey"
+                    android:textSize="16dp" />
 
                 <EditText
                     android:id="@+id/et_max_pay"
@@ -168,13 +168,13 @@
                     android:drawableLeft="@drawable/ic_euro"
                     android:drawablePadding="10dp"
                     android:hint="500"
-                    android:maxLength="3"
-                    android:textSize="16dp"
                     android:inputType="numberSigned"
+                    android:maxLength="3"
                     android:textAlignment="textEnd"
                     android:textColor="@color/darkGrey"
                     android:textColorHighlight="@color/white"
-                    android:textColorHint="@color/lightGrey" />
+                    android:textColorHint="@color/lightGrey"
+                    android:textSize="16dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -185,12 +185,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/button_red_selector"
             android:drawableLeft="@drawable/ic_search_white"
+            android:drawablePadding="4dp"
             android:padding="15dp"
             android:shadowColor="@android:color/transparent"
-            android:textColor="@color/white"
-            android:text="Find jobs" />
+            android:text="Find jobs"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

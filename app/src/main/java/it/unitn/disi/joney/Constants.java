@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class Constants {
+    public static final String JOB_ID_EXTRA = "job_id_extra";
     private static Constants instance;
 
     // Global variables
@@ -39,6 +40,7 @@ public class Constants {
     public static final int POSTED_JOB_TAB = 0;
     public static final int PENDING_JOB_TAB = 1;
     public static final int COMPLETED_JOB_TAB = 2;
+    public static final int SEARCH_RESULT_TAB = 3;
 
     public static final int UPLOAD_FROM_GALLERY = 0;
     public static final int UPLOAD_FROM_CAMERA = 1;
@@ -46,6 +48,16 @@ public class Constants {
     public static final int CROP_PIC = 3;
 
     public static final int PICK_LOCATION = 10;
+
+    public static final int JOB_STATUS_AWAITING_CANDIDATES = 0;
+    public static final int JOB_STATUS_AWAITING_COMPLETION = 1;
+    public static final int JOB_STATUS_COMPLETED = 2;
+
+    public static final String JOB_DETAIL_ACTIVITY_TYPE = "job_detail_activity_type";
+    public static final int POSTED_JOB_DETAILS = 0;
+    public static final int PENDING_JOB_DETAILS = 1;
+    public static final int COMPLETED_JOB_DETAILS = 2;
+    public static final int JOB_RESULT_DETAILS = 3;
 
     public static final String OLD_IMG_VIEW_INDEX = "old_img_view_index";
 
