@@ -105,8 +105,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text=" About me:"
+        android:fontFamily="@font/quicksand"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGrey"
+        android:textColor="@color/mediumGrey"
         android:textSize="18dp"
         android:id="@+id/tv_user_info"
         android:layout_below="@+id/ll_user_preview"/>
@@ -137,7 +138,7 @@
         android:textStyle="bold"
         android:text="Reviews"
         android:textAlignment="textStart"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/mediumGrey"
         android:textSize="23dp"
         android:layout_below="@+id/et_user_info"/>
 
@@ -157,6 +158,19 @@
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
         />
+
+    <TextView
+        android:id="@+id/tv_no_reviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_centerHorizontal="true"
+        android:text="No reviews found for this user"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:layout_below="@+id/tv_review"
+        android:visibility="invisible"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_save_description"

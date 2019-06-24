@@ -95,6 +95,7 @@ public class JobDetailActivity extends AppCompatActivity {
                                 Intent intent = new Intent(mContext, ChooseCandidateActivity.class);
                                 intent.putExtra(Constants.JOB_ID_EXTRA, jobId);
                                 startActivity(intent);
+                                finish();
                             }
                         });
 
@@ -245,7 +246,7 @@ public class JobDetailActivity extends AppCompatActivity {
             if (imgFile.exists()) {
                 final Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ivMainPicture.setImageBitmap(bitmap);
-
+                ivMainPicture.setBackgroundResource(0);
                 ivMainPicture.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

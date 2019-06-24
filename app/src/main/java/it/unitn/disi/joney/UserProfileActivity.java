@@ -113,7 +113,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-            int userId = intent.getIntExtra("userId",-1);
+            final int userId = intent.getIntExtra("userId",-1);
             etUserInfo.setFocusable(false);
             //ivUserProfileImage.setClickable(false);
 
@@ -131,11 +131,34 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                 }
             }
 
-            feedbackList = db.getUserFeedbacks(userId);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    feedbackList = db.getUserFeedbacks(userId);
+                    rbUserAverage.setRating(Utils.getUserAverageRating(mContext, user.id));
+                    //Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
+                    flaReviews = new FeedbackListAdapter(mContext,feedbackList);
+
+                    lvReviews.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            lvReviews.setAdapter(flaReviews);
+                            if (feedbackList.size() == 0) {
+                                TextView tvNoReview = (TextView) findViewById(R.id.tv_no_reviews);
+                                tvNoReview.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    });
+                }
+            }) .start();
+
+            /*feedbackList = db.getUserFeedbacks(userId);
             rbUserAverage.setRating(Utils.getUserAverageRating(this, user.id));
             //Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
             flaReviews = new FeedbackListAdapter(this,feedbackList);
-            lvReviews.setAdapter(flaReviews);
+            lvReviews.setAdapter(flaReviews);*/
+
+
 
         }
         //going to my profile
@@ -186,6 +209,10 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                         @Override
                         public void run() {
                             lvReviews.setAdapter(flaReviews);
+                            if (feedbackList.size() == 0) {
+                                TextView tvNoReview = (TextView) findViewById(R.id.tv_no_reviews);
+                                tvNoReview.setVisibility(View.VISIBLE);
+                            }
                         }
                     });
                 }

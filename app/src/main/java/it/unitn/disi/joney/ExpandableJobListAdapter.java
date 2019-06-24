@@ -3,6 +3,7 @@ package it.unitn.disi.joney;
 import java.io.File;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -56,6 +57,9 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
         User author = db.getUserById(job.getAuthorId());
         TextView tvAuthor = (TextView) convertView.findViewById(R.id.tv_job_author);
         tvAuthor.setText(author.getFirstName() + " " + author.getLastName());
+
+        if(tab == Constants.POSTED_JOB_TAB)
+            tvAuthor.setVisibility(View.GONE);
 
         TextView tvJobDescription = (TextView) convertView.findViewById(R.id.tv_job_description);
         tvJobDescription.setText(job.getDescription());
@@ -143,6 +147,7 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
             if (imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ivMainPicture.setImageBitmap(myBitmap);
+                ivMainPicture.setBackgroundResource(0);
             }
         } else {
             ivMainPicture.setImageResource(R.drawable.logo_joney_grey);

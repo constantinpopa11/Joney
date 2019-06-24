@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:focusable="false"
-            android:hint="Via Padre Pio 69"
+            android:hint="Via Sommarive 5, Povo"
             android:inputType="none"
             android:textColor="@color/darkGrey"
             android:textColorHighlight="@color/white"
