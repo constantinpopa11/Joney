@@ -94,8 +94,8 @@ public class CandidateListAdapter extends ArrayAdapter<JobCandidate> {
                 Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
                 jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobCandidate.getJobId());
                 jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, Constants.POSTED_JOB_DETAILS);
+                jobDetailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 mContext.startActivity(jobDetailIntent);
-                ((Activity)mContext).finish();
             }
         });
 

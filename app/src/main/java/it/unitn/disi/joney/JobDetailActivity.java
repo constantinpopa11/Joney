@@ -94,6 +94,7 @@ public class JobDetailActivity extends AppCompatActivity {
                             public void onClick(View view) {
                                 Intent intent = new Intent(mContext, ChooseCandidateActivity.class);
                                 intent.putExtra(Constants.JOB_ID_EXTRA, jobId);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();
                             }
@@ -116,8 +117,8 @@ public class JobDetailActivity extends AppCompatActivity {
                             Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
                             jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobId);
                             jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, Constants.POSTED_JOB_DETAILS);
+                            jobDetailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             mContext.startActivity(jobDetailIntent);
-                            finish();
                         }
                     });
 
@@ -162,8 +163,8 @@ public class JobDetailActivity extends AppCompatActivity {
                             db.removeJobCandidate(currentUserId, jobId);
                             //Toast.makeText(mContext, "Your request has been canceled successfully", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(mContext, MyJobsActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
-                            finish();
                         }
                     });
                 } else if(job.getStatus() > Constants.JOB_STATUS_AWAITING_CANDIDATES && job.workerId != currentUserId){
@@ -232,8 +233,8 @@ public class JobDetailActivity extends AppCompatActivity {
                         Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
                         jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobId);
                         jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, Constants.PENDING_JOB_DETAILS);
+                        jobDetailIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         mContext.startActivity(jobDetailIntent);
-                        finish();
                     }
                 });
                 break;

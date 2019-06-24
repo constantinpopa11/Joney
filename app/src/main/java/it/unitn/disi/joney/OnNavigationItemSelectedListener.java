@@ -62,7 +62,7 @@ public class OnNavigationItemSelectedListener implements NavigationView.OnNaviga
             prefs.edit().putInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN).commit();
             LoginManager.getInstance().logOut();
             Intent intLogIn = new Intent(context, LoginActivity.class);
-            intLogIn.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intLogIn.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intLogIn);
         }
 

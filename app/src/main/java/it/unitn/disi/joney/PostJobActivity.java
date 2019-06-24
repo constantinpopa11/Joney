@@ -199,8 +199,8 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 }
 
                 Intent intMyJobs = new Intent(PostJobActivity.this, MyJobsActivity.class);
+                intMyJobs.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intMyJobs);
-                finish();
             }
         }
     }

@@ -147,8 +147,8 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
 
                 //Toast.makeText(getApplicationContext(), "Ticket sent successfully", Toast.LENGTH_SHORT).show();
                 Intent intHome = new Intent(SendTicketActivity.this, HomeActivity.class);
+                intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intHome);
-                finish();
             }
 
         }

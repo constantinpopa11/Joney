@@ -69,8 +69,8 @@ public class LoginActivity extends AppCompatActivity {
         if (isLoggedIn && currentUserId != Constants.NO_USER_LOGGED_IN) {
             Log.i("Already logged in ", isLoggedIn + " " + currentUserId);
             Intent intHome = new Intent(LoginActivity.this, MyJobsActivity.class);
+            intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intHome);
-            finish();
         }
 
         //otherwise show login form
@@ -114,8 +114,8 @@ public class LoginActivity extends AppCompatActivity {
                             prefs.edit().putInt(Constants.PREF_CURRENT_USER_ID, user.getId()).commit();
                             //Toast.makeText(getApplicationContext(), "Successfully logged in!", Toast.LENGTH_SHORT).show();
                             Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
+                            intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intHome);
-                            finish();
                         } else
                             Toast.makeText(getApplicationContext(), "Wrong password!", Toast.LENGTH_SHORT).show();
                     } else
@@ -185,8 +185,8 @@ public class LoginActivity extends AppCompatActivity {
                                     prefs.edit().putInt(Constants.PREF_CURRENT_USER_ID, user.getId()).commit();
                                     //Toast.makeText(getApplicationContext(), "Successfully logged in with Facebook!", Toast.LENGTH_SHORT).show();
                                     Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
+                                    intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intHome);
-                                    finish();
                                 } else {
                                     String email = null, firstName = null, lastName = null, id = null, profile_pic = null;
                                     try {
@@ -224,8 +224,8 @@ public class LoginActivity extends AppCompatActivity {
                                         //Toast.makeText(getApplicationContext(),String.valueOf(user.getId()),Toast.LENGTH_SHORT).show();
 
                                         Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
+                                        intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity(intHome);
-                                        finish();
                                     }
 
                                 }
