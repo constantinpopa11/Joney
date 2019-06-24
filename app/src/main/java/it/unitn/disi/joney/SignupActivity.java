@@ -72,6 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                                     db.addUser(user);
 
                                     Intent intLogin = new Intent(SignupActivity.this, LoginActivity.class);
+                                    intLogin.putExtra("email",email);
                                     startActivity(intLogin);
                                     finish();
                                 }

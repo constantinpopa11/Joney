@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -92,7 +94,7 @@ public class JobDetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             db.updateJobStatus(jobId, Constants.JOB_STATUS_COMPLETED);
-                            Toast.makeText(mContext, "Job has been marked as completed", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mContext, "Job has been marked as completed", Toast.LENGTH_SHORT).show();
 
                             Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
                             jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobId);
@@ -141,7 +143,7 @@ public class JobDetailActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             db.removeJobCandidate(currentUserId, jobId);
-                            Toast.makeText(mContext, "Your request has been canceled successfully", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mContext, "Your request has been canceled successfully", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(mContext, MyJobsActivity.class);
                             startActivity(intent);
                             finish();
@@ -208,7 +210,7 @@ public class JobDetailActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         JobCandidate jobCandidate = new JobCandidate(jobId, currentUserId);
                         db.addJobCandidate(jobCandidate);
-                        Toast.makeText(mContext, "Your request has been sent successfully", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "Your request has been sent successfully", Toast.LENGTH_SHORT).show();
 
                         Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
                         jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobId);
@@ -227,6 +229,7 @@ public class JobDetailActivity extends AppCompatActivity {
             if (imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ivMainPicture.setImageBitmap(myBitmap);
+                ivMainPicture.setBackgroundResource(0);
             }
         }
 
@@ -279,8 +282,17 @@ public class JobDetailActivity extends AppCompatActivity {
             tvStatus.setText("Completed");
         }
 
-        TextView tvAddress = (TextView) findViewById(R.id.tv_job_location);
+        final TextView tvAddress = (TextView) findViewById(R.id.tv_job_location);
         tvAddress.setText(Utils.getStreetName(job.getLatitude(), job.getLongitude(), this));
+        tvAddress.setPaintFlags(tvAddress.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+        tvAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent geoIntent = new Intent(android.content.Intent.ACTION_VIEW, Uri
+                        .parse("geo:0,0?q=" + tvAddress.getText().toString()));
+                startActivity(geoIntent);
+            }
+        });
 
         TextView tvDescription = (TextView) findViewById(R.id.tv_job_description);
         tvDescription.setText(job.getDescription());

@@ -2,10 +2,12 @@ package it.unitn.disi.joney;
 
 import java.io.File;
 import java.util.List;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +62,7 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
 
         TextView tvJobLocation = (TextView) convertView.findViewById(R.id.tv_job_location);
         //String addressLatLon = String.valueOf(job.getLatitude()) + "," + String.valueOf(job.getLongitude());
-        String address = Utils.getStreetName(job.getLatitude(),job.getLongitude(),context);
+        String address = Utils.getStreetName(job.getLatitude(), job.getLongitude(), context);
         tvJobLocation.setText(address);
 
         return convertView;
@@ -89,110 +91,118 @@ public class ExpandableJobListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(final int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        Job job = (Job) getGroup(listPosition);
+        /*RecyclerView.ViewHolder fixer = null;
+        if (convertView == null) {*/
+            Job job = (Job) getGroup(listPosition);
 
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context.
-                    getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.list_job_item_header, null);
-        }
+            if (convertView == null) {
+                LayoutInflater layoutInflater = (LayoutInflater) this.context.
+                        getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = layoutInflater.inflate(R.layout.list_job_item_header, null);
+            }
 
-        TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tv_job_title);
-        tvJobTitle.setText(job.getTitle());
+            TextView tvJobTitle = (TextView) convertView.findViewById(R.id.tv_job_title);
+            tvJobTitle.setText(job.getTitle());
 
-        TextView tvJobCategory = (TextView) convertView.findViewById(R.id.tv_job_category);
-        tvJobCategory.setText(job.getJobCategory().getName());
+            TextView tvJobCategory = (TextView) convertView.findViewById(R.id.tv_job_category);
+            tvJobCategory.setText(job.getJobCategory().getName());
 
-        ImageView ivMainPicture = (ImageView) convertView.findViewById(R.id.iv_job_picture);
+            ImageView ivMainPicture = (ImageView) convertView.findViewById(R.id.iv_job_picture);
 
 
-        if (tab == Constants.POSTED_JOB_TAB) {
-            TextView tvNewCandidates = (TextView) convertView.findViewById(R.id.tv_new_candidates);
-            int candidatesNum = db.getCandidatesByJobId(job.getId()).size();
-            if(candidatesNum > 0)
-                tvNewCandidates.setText(candidatesNum + " new candidates");
-            else {
+            if (tab == Constants.POSTED_JOB_TAB) {
+                TextView tvNewCandidates = (TextView) convertView.findViewById(R.id.tv_new_candidates);
+                int candidatesNum = db.getCandidatesByJobId(job.getId()).size();
+                if (candidatesNum > 0)
+                    tvNewCandidates.setText(candidatesNum + " new candidates");
+                else {
+                    LinearLayout llCandidates = (LinearLayout) convertView.findViewById(R.id.ll_new_candidates);
+                    llCandidates.setVisibility(View.GONE);
+                }
+
+                activityType = Constants.POSTED_JOB_DETAILS;
+
+
+            } else {
+
                 LinearLayout llCandidates = (LinearLayout) convertView.findViewById(R.id.ll_new_candidates);
                 llCandidates.setVisibility(View.GONE);
+
+                if (tab == Constants.PENDING_JOB_TAB)
+                    activityType = Constants.PENDING_JOB_DETAILS;
+                else if (tab == Constants.COMPLETED_JOB_TAB)
+                    activityType = Constants.COMPLETED_JOB_DETAILS;
+                else if (tab == Constants.SEARCH_RESULT_TAB)
+                    activityType = Constants.JOB_RESULT_DETAILS;
+
             }
 
-            activityType = Constants.POSTED_JOB_DETAILS;
-
-
-        } else {
-
-            LinearLayout llCandidates = (LinearLayout) convertView.findViewById(R.id.ll_new_candidates);
-            llCandidates.setVisibility(View.GONE);
-
-            if(tab == Constants.PENDING_JOB_TAB)
-                activityType = Constants.PENDING_JOB_DETAILS;
-            else if(tab == Constants.COMPLETED_JOB_TAB)
-                activityType = Constants.COMPLETED_JOB_DETAILS;
-            else if(tab == Constants.SEARCH_RESULT_TAB)
-                activityType = Constants.JOB_RESULT_DETAILS;
-
-        }
-
-        List<JobImage> jobImages = db.getJobImages(job.getId());
-        if (jobImages.size() > 0) {
-            File imgFile = new File(jobImages.get(0).getSource());
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                ivMainPicture.setImageBitmap(myBitmap);
+            List<JobImage> jobImages = db.getJobImages(job.getId());
+            if (jobImages.size() > 0) {
+                File imgFile = new File(jobImages.get(0).getSource());
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    ivMainPicture.setImageBitmap(myBitmap);
+                    ivMainPicture.setBackgroundResource(0);
+                }
             }
-        }
 
-        final Intent jobDetailIntent = new Intent(context, JobDetailActivity.class);
-        jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, job.getId());
-        jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, activityType);
+            final Intent jobDetailIntent = new Intent(context, JobDetailActivity.class);
+            jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, job.getId());
+            jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, activityType);
 
-        ivMainPicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(jobDetailIntent);
-            }
-        });
+            ivMainPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    context.startActivity(jobDetailIntent);
+                }
+            });
 
-        LinearLayout llJobHeader = convertView.findViewById(R.id.ll_job_header);
-        llJobHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(jobDetailIntent);
-            }
-        });
+            LinearLayout llJobHeader = convertView.findViewById(R.id.ll_job_header);
+            llJobHeader.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    context.startActivity(jobDetailIntent);
+                }
+            });
 
-        TextView tvPay = (TextView) convertView.findViewById(R.id.tv_pay);
-        tvPay.setText("€ " + Integer.toString(job.getPay()));
+            TextView tvPay = (TextView) convertView.findViewById(R.id.tv_pay);
+            tvPay.setText("€ " + Integer.toString(job.getPay()));
 
-        TextView tvStatus = (TextView) convertView.findViewById(R.id.tv_status);
-        ImageView ivStatus = (ImageView) convertView.findViewById(R.id.iv_status);
+            TextView tvStatus = (TextView) convertView.findViewById(R.id.tv_status);
+            ImageView ivStatus = (ImageView) convertView.findViewById(R.id.iv_status);
 
 
-        if (job.getStatus() == Constants.JOB_STATUS_AWAITING_CANDIDATES) {
-            ivStatus.setBackground(context.getDrawable(R.drawable.ic_people));
-            tvStatus.setText("Awaiting candidates");
+            if (job.getStatus() == Constants.JOB_STATUS_AWAITING_CANDIDATES) {
+                ivStatus.setBackground(context.getDrawable(R.drawable.ic_people));
+                tvStatus.setText("Awaiting candidates");
 
-        } else {
-
-            LinearLayout llCandidates = (LinearLayout) convertView.findViewById(R.id.ll_new_candidates);
-            llCandidates.setVisibility(View.GONE);
-
-            if (job.getStatus() == Constants.JOB_STATUS_AWAITING_COMPLETION) {
-                ivStatus.setBackground(context.getDrawable(R.drawable.ic_times));
-                tvStatus.setText("In progress");
             } else {
-                ivStatus.setBackground(context.getDrawable(R.drawable.ic_check));
-                tvStatus.setText("Completed");
+
+                LinearLayout llCandidates = (LinearLayout) convertView.findViewById(R.id.ll_new_candidates);
+                llCandidates.setVisibility(View.GONE);
+
+                if (job.getStatus() == Constants.JOB_STATUS_AWAITING_COMPLETION) {
+                    ivStatus.setBackground(context.getDrawable(R.drawable.ic_times));
+                    tvStatus.setText("In progress");
+                } else {
+                    ivStatus.setBackground(context.getDrawable(R.drawable.ic_check));
+                    tvStatus.setText("Completed");
+                }
             }
-        }
 
-        TextView tvCreatedAt = (TextView) convertView.findViewById(R.id.tv_created_at);
-        tvCreatedAt.setText(job.getCreatedAt());
+            TextView tvCreatedAt = (TextView) convertView.findViewById(R.id.tv_created_at);
+            tvCreatedAt.setText(job.getCreatedAt());
 
-        //TextView tvAuthor = (TextView) convertView.findViewById(R.id.tv_author);
-        //tvAuthor.setText(job.getAuthor().getFirstName() + " " + job.getAuthor().getLastName());
+            //TextView tvAuthor = (TextView) convertView.findViewById(R.id.tv_author);
+            //tvAuthor.setText(job.getAuthor().getFirstName() + " " + job.getAuthor().getLastName());
 
-
+            /*convertView.setTag(fixer);
+        } else {
+            fixer = (RecyclerView.ViewHolder) convertView.getTag();
+            if (fixer != null)
+                fixer.setIsRecyclable(false);
+        }*/
         return convertView;
     }
 

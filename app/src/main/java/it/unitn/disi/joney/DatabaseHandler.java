@@ -216,7 +216,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COL_USER_FIRST_NAME, user.getFirstName());
         values.put(COL_USER_LAST_NAME, user.getLastName());
         values.put(COL_USER_EMAIL, user.getEmail());
-        values.put(COL_USER_DESCRIPTION, "Write something about you");
+        values.put(COL_USER_DESCRIPTION, "Hello, I'm new on Joney!");
         values.put(COL_USER_PASSWORD, user.getPassword());
 
         // Inserting Row
@@ -524,8 +524,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Job> getAllUserJobs(int userId) {
         List<Job> jobList = new ArrayList<>();
 
-        jobList.addAll(getUserPendingJobs(userId));
         jobList.addAll(getUserCompletedJobs(userId));
+        jobList.addAll(getOwnCompletedJobs(userId));
+        jobList.addAll(getAcceptedUserPendingJobs(userId));
 
         return jobList;
     }
@@ -614,6 +615,49 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return pendingJobs;
     }
 
+    //code to accepted user pending jobs
+    public List<Job> getAcceptedUserPendingJobs(int currentUserId) {
+        List<Job> pendingJobs = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_JOBS + ", " + TABLE_JOB_CANDIDATES,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION, COL_JOB_PAY,
+                        COL_JOB_JOB_CATEGORY_ID, COL_JOB_STATUS, COL_JOB_CREATED_AT,
+                        COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
+                "(" +
+                        COL_JOB_WORKER_ID + "=? " +
+                        ") AND " + COL_JOB_STATUS + "<" + Constants.JOB_STATUS_COMPLETED +
+                        " AND " + COL_JOB_ID + "=" + COL_JOB_CANDIDATE_JOB_ID,
+                new String[] {Integer.toString(currentUserId)},
+                null,
+                null,
+                COL_JOB_STATUS,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Job job = new Job();
+                job.setId(cursor.getInt(0));
+                job.setTitle(cursor.getString(1));
+                job.setDescription(cursor.getString(2));
+                job.setPay(cursor.getInt(3));
+                job.setCategoryId(cursor.getInt(4));
+                job.setStatus(cursor.getInt(5));
+                job.setCreatedAt(cursor.getString(6));
+                job.setLatitude(cursor.getDouble(7));
+                job.setLongitude(cursor.getDouble(8));
+                job.setAuthorId(cursor.getInt(9));
+                job.setWorkerId(cursor.getInt(10));
+                pendingJobs.add(job);
+
+            } while (cursor.moveToNext());
+        }
+
+        // return job list
+        return pendingJobs;
+    }
+
     //code to get all user's posted jobs
     public List<Job> getUserCompletedJobs(int currentUserId) {
         List<Job> completedJobs = new ArrayList<>();
@@ -624,6 +668,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         COL_JOB_JOB_CATEGORY_ID, COL_JOB_STATUS, COL_JOB_CREATED_AT,
                         COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
                 COL_JOB_WORKER_ID + "=? AND " + COL_JOB_STATUS + "=" + Constants.JOB_STATUS_COMPLETED,
+                new String[] {Integer.toString(currentUserId)},
+                null,
+                null,
+                null,
+                null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Job job = new Job();
+                job.setId(cursor.getInt(0));
+                job.setTitle(cursor.getString(1));
+                job.setDescription(cursor.getString(2));
+                job.setPay(cursor.getInt(3));
+                job.setCategoryId(cursor.getInt(4));
+                job.setStatus(cursor.getInt(5));
+                job.setCreatedAt(cursor.getString(6));
+                job.setLatitude(cursor.getDouble(7));
+                job.setLongitude(cursor.getDouble(8));
+                job.setAuthorId(cursor.getInt(9));
+                job.setWorkerId(cursor.getInt(10));
+                completedJobs.add(job);
+
+            } while (cursor.moveToNext());
+        }
+
+        // return job list
+        return completedJobs;
+    }
+
+    //code to get own completed job
+    public List<Job> getOwnCompletedJobs(int currentUserId) {
+        List<Job> completedJobs = new ArrayList<>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_JOBS,
+                new String[] {COL_JOB_ID, COL_JOB_TITLE, COL_JOB_DESCRIPTION, COL_JOB_PAY,
+                        COL_JOB_JOB_CATEGORY_ID, COL_JOB_STATUS, COL_JOB_CREATED_AT,
+                        COL_JOB_LATITUDE, COL_JOB_LONGITUDE, COL_JOB_AUTHOR_ID, COL_JOB_WORKER_ID},
+                COL_JOB_AUTHOR_ID + "=? AND " + COL_JOB_STATUS + "=" + Constants.JOB_STATUS_COMPLETED,
                 new String[] {Integer.toString(currentUserId)},
                 null,
                 null,
@@ -721,15 +805,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return eligibleJobs;
     }
 
-    public ArrayList<Message> getUserMessages(int currentUserId) {
+    public ArrayList<Message> getUserMessages(int currentUserId,int receiverId) {
         ArrayList<Message> messages = new ArrayList<Message>();
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_MESSAGES,
                 new String[] {COL_MESSAGE_SENDER, COL_MESSAGE_RECEIVER, COL_MESSAGE_DATE,
                         COL_MESSAGE_TEXT},
-                COL_MESSAGE_SENDER + "=? OR " + COL_MESSAGE_RECEIVER + "=?",
-                new String[] {Integer.toString(currentUserId),Integer.toString(currentUserId)},
+                COL_MESSAGE_SENDER + "=? AND " + COL_MESSAGE_RECEIVER + "=?"
+                + " OR " + COL_MESSAGE_SENDER + "=? AND " + COL_MESSAGE_RECEIVER + "=?",
+                new String[] {Integer.toString(currentUserId),Integer.toString(receiverId),
+                        Integer.toString(receiverId),Integer.toString(currentUserId)},
                 null,
                 null,
                 COL_MESSAGE_DATE,
@@ -750,6 +836,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // return messages list
         return messages;
+    }
+
+    public boolean isFeedbackGiven(int jobId, int authorId) {
+        boolean isGiven = false;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_FEEDBACKS,
+                new String[] { COL_FEEDBACK_JOB_ID, COL_FEEDBACK_COMMENT, COL_FEEDBACK_AUTHOR_ID},
+                COL_FEEDBACK_AUTHOR_ID + "=? AND " + COL_FEEDBACK_JOB_ID + "=?",
+                new String[] { String.valueOf(authorId),String.valueOf(jobId) },
+                null,
+                null,
+                null,
+                null);
+
+        Feedback feedback = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            feedback = new Feedback();
+            feedback.setJobId(cursor.getInt(0));
+            feedback.setComment(cursor.getString(1));
+            feedback.setAuthorId(cursor.getInt(2));
+        }
+        if (feedback != null)
+            isGiven = true;
+        return isGiven;
     }
 
     public ArrayList<Feedback> getUserFeedbacks(int currentUserId) {

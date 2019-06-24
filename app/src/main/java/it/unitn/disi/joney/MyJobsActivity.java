@@ -31,9 +31,19 @@ public class MyJobsActivity extends AppCompatActivity implements PostedJobsFragm
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener(getApplicationContext(), drawer));
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        MyJobsPagerAdapter myPagerAdapter = new MyJobsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(myPagerAdapter);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final MyJobsPagerAdapter myPagerAdapter = new MyJobsPagerAdapter(getSupportFragmentManager());
+                viewPager.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setAdapter(myPagerAdapter);
+                    }
+                });
+            }
+        }).start();
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tl_my_jobs);
         tabLayout.setupWithViewPager(viewPager);

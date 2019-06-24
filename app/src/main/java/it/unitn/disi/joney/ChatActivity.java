@@ -43,8 +43,8 @@ public class ChatActivity extends AppCompatActivity {
 
         this.setTitle("Chat with " + db.getUserById(receiverId).getFirstName());
 
-        messageList = db.getUserMessages(senderId);
-        Toast.makeText(getApplicationContext(),"Total messages = " + String.valueOf(messageList.size()),Toast.LENGTH_SHORT).show();
+        messageList = db.getUserMessages(senderId,receiverId);
+        //Toast.makeText(getApplicationContext(),"Total messages = " + String.valueOf(messageList.size()),Toast.LENGTH_SHORT).show();
 
         mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
         mMessageRecycler.setHasFixedSize(true);

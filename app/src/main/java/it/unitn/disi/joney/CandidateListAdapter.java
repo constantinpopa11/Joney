@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class CandidateListAdapter extends ArrayAdapter<JobCandidate> {
                 Intent intChat = new Intent(mContext, ChatActivity.class);
                 intChat.putExtra("senderId", currentUserId);
                 intChat.putExtra("receiverId", jobCandidate.getCandidateId());
+                //Log.d("ID",String.valueOf(jobCandidate.getCandidateId()));
                 mContext.startActivity(intChat);
             }
         });
@@ -87,7 +89,7 @@ public class CandidateListAdapter extends ArrayAdapter<JobCandidate> {
                 db.updateJobStatus(jobCandidate.getJobId(), Constants.JOB_STATUS_AWAITING_COMPLETION);
                 db.updateJobWorker(jobCandidate.getJobId(), jobCandidate.getCandidateId());
 
-                Toast.makeText(mContext, "Candidate accepted successfully", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "Candidate accepted successfully", Toast.LENGTH_SHORT).show();
 
                 Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
                 jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobCandidate.getJobId());

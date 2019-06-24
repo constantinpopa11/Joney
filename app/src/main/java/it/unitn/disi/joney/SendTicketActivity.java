@@ -85,7 +85,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
         btnAddPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                if (!Utils.isStoragePermissionGranted(getApplicationContext()))
                     showMissingPermissionAlert("Storage", "Pictures");
                 else if (uploadedPicCounter < Constants.MAX_JOB_PICTURE_NUMBER) {
                     ImageUploadUtils.showPictureOptionDialog(mContext, SendTicketActivity.this, -1,Constants.PATH_TICKET_IMAGES);
@@ -166,7 +166,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
                     db.addTicketImage(ticketImage);
                 }
 
-                Toast.makeText(getApplicationContext(), "Ticket sent successfully", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Ticket sent successfully", Toast.LENGTH_SHORT).show();
                 Intent intHome = new Intent(SendTicketActivity.this, HomeActivity.class);
                 startActivity(intHome);
                 finish();
@@ -193,7 +193,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -211,7 +211,7 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
             }
         }
 

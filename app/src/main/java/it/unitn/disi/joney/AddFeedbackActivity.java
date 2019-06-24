@@ -58,33 +58,41 @@ public class AddFeedbackActivity extends AppCompatActivity {
         rbRate = (RatingBar) findViewById(R.id.rb_feedback_rate);
         btnSave = (Button) findViewById(R.id.btn_save_feedback);
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String comment = etComment.getText().toString();
-                int rate = (int) rbRate.getRating();
-                if(comment.length() == 0)
-                    Toast.makeText(getApplicationContext(), "Review can't be empty", Toast.LENGTH_SHORT).show();
-                else if (rate == 0)
-                    Toast.makeText(getApplicationContext(), "Please choose a rating before submitting", Toast.LENGTH_SHORT).show();
-                else {
-                    //Toast.makeText(getApplicationContext(), String.valueOf(rate), Toast.LENGTH_SHORT).show();
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd/HH:mm");
-                    Date date = new Date();
-                    String now = dateFormat.format(date);
+        if(db.isFeedbackGiven(jobId,currentUserId)) {
+            btnSave.setVisibility(View.INVISIBLE);
+            etComment.setText("FEEDBACK ALREADY GIVEN!");
+            etComment.setEnabled(false);
+        }
+        else {
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String comment = etComment.getText().toString();
+                    int rate = (int) rbRate.getRating();
+                    if (comment.length() == 0)
+                        Toast.makeText(getApplicationContext(), "Review can't be empty", Toast.LENGTH_SHORT).show();
+                    else if (rate == 0)
+                        Toast.makeText(getApplicationContext(), "Please choose a rating before submitting", Toast.LENGTH_SHORT).show();
+                    else {
+                        //Toast.makeText(getApplicationContext(), String.valueOf(rate), Toast.LENGTH_SHORT).show();
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd/HH:mm");
+                        Date date = new Date();
+                        String now = dateFormat.format(date);
 
-                    Feedback feedback = new Feedback(rate,comment,now,jobId,currentUserId,receiverId);
-                    db.addFeedback(feedback);
-                    Toast.makeText(getApplicationContext(),"Feedback sent!",Toast.LENGTH_SHORT).show();
+                        Feedback feedback = new Feedback(rate, comment, now, jobId, currentUserId, receiverId);
+                        db.addFeedback(feedback);
+                        //Toast.makeText(getApplicationContext(), "Feedback sent!", Toast.LENGTH_SHORT).show();
 
-                    Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
-                    jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobId);
-                    jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, activityType);
-                    mContext.startActivity(jobDetailIntent);
-                    ((Activity)mContext).finish();
+                        Intent jobDetailIntent = new Intent(mContext, JobDetailActivity.class);
+                        jobDetailIntent.putExtra(Constants.JOB_ID_EXTRA, jobId);
+                        jobDetailIntent.putExtra(Constants.JOB_DETAIL_ACTIVITY_TYPE, activityType);
+                        mContext.startActivity(jobDetailIntent);
+                        ((Activity) mContext).finish();
+                        finish();
+                    }
                 }
-            }
-        });
+            });
+        }
 
     }
 

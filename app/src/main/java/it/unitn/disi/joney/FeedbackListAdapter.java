@@ -3,6 +3,7 @@ package it.unitn.disi.joney;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -68,6 +69,14 @@ public class FeedbackListAdapter extends ArrayAdapter<Feedback> {
         tvDate.setText(currentFeedback.dateToString());
         tvComment.setText(currentFeedback.getComment());
         rbRate.setRating((float)currentFeedback.getRating());
+        /*switch (currentFeedback.getRating())
+        {
+            case 1:
+            case 2: listItem.setBackgroundColor(Color.parseColor("#ff8484")); break;
+            case 3: listItem.setBackgroundColor(Color.parseColor("#fff59b")); break;
+            case 4:
+            default: listItem.setBackgroundColor(Color.parseColor("#bdffaa")); break;
+        }*/
 
         return listItem;
     }

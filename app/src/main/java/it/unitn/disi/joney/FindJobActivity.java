@@ -209,7 +209,7 @@ public class FindJobActivity extends AppCompatActivity {
                     jobListAdapter = new ExpandableJobListAdapter(getApplicationContext(), eligibleJobs, Constants.SEARCH_RESULT_TAB);
                     elvJobResults.setAdapter(jobListAdapter);
 
-                    elvJobResults.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+                    /*elvJobResults.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
                         @Override
                         public void onGroupExpand(int groupPosition) {
@@ -217,9 +217,9 @@ public class FindJobActivity extends AppCompatActivity {
                                     eligibleJobs.get(groupPosition).getTitle() + " List Expanded.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    });*/
 
-                    elvJobResults.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+                    /*elvJobResults.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
 
                         @Override
                         public void onGroupCollapse(int groupPosition) {
@@ -228,9 +228,9 @@ public class FindJobActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
 
                         }
-                    });
+                    });*/
 
-                    elvJobResults.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+                    /*elvJobResults.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                         @Override
                         public boolean onChildClick(ExpandableListView parent, View v,
                                                     int groupPosition, int childPosition, long id) {
@@ -242,7 +242,7 @@ public class FindJobActivity extends AppCompatActivity {
                             ).show();
                             return false;
                         }
-                    });
+                    });*/
                 } else {
                     tvSearchResults.setVisibility(View.VISIBLE);
                 }

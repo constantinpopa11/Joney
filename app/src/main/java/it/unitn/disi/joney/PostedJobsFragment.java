@@ -95,7 +95,7 @@ public class PostedJobsFragment extends Fragment {
             expandableListView = (ExpandableListView) view.findViewById(R.id.elv_posted_jobs);
             expandableListAdapter = new ExpandableJobListAdapter(context, postedJobs, Constants.POSTED_JOB_TAB);
             expandableListView.setAdapter(expandableListAdapter);
-            expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            /*expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
                 @Override
                 public void onGroupExpand(int groupPosition) {
@@ -128,12 +128,11 @@ public class PostedJobsFragment extends Fragment {
                     ).show();
                     return false;
                 }
-            });
+            });*/
         } else {
             TextView tvInfo = (TextView) view.findViewById(R.id.tv_info);
             tvInfo.setVisibility(View.VISIBLE);
         }
-
 
         return view;
     }

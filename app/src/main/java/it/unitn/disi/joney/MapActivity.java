@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -78,7 +79,7 @@ public class MapActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Button btnChooseAddress = (Button) findViewById(R.id.btn_choose_address);
-        FloatingActionButton btnLocateUser = (FloatingActionButton) findViewById(R.id.btn_locate_user);
+        final FloatingActionButton btnLocateUser = (FloatingActionButton) findViewById(R.id.btn_locate_user);
         etAddress = (EditText) findViewById(R.id.et_address);
         etAddress.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -152,8 +153,8 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
-                Toast.makeText(getApplicationContext(), "Lat: " + String.valueOf(mapTargetLatLng.getLatitude())
-                        + "\n" + "Lon: " + String.valueOf(mapTargetLatLng.getLongitude()), Toast.LENGTH_LONG).show();
+                /*Toast.makeText(getApplicationContext(), "Lat: " + String.valueOf(mapTargetLatLng.getLatitude())
+                        + "\n" + "Lon: " + String.valueOf(mapTargetLatLng.getLongitude()), Toast.LENGTH_LONG).show();*/
 
                 Intent postJobIntent = new Intent();
                 postJobIntent.putExtra("latitude", mapTargetLatLng.getLatitude());
@@ -179,6 +180,17 @@ public class MapActivity extends AppCompatActivity {
             }
         });
     }
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     // Add the mapView lifecycle to the activity's lifecycle methods
     @Override

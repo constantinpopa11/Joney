@@ -104,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="About me:"
+        android:text=" About me:"
         android:textAlignment="textStart"
         android:textColor="@color/darkGrey"
         android:textSize="18dp"
@@ -117,38 +117,45 @@
         android:layout_height="wrap_content"
         android:gravity="top|left"
         android:inputType="textMultiLine"
-        android:hint="I'm sexy and I know it"
+        android:hint="Write something about yourself. Other users will see this description on your profile"
         android:lines="4"
         android:maxLines="6"
         android:minLines="4"
         android:scrollbars="vertical"
         android:layout_below="@+id/tv_user_info"/>
 
-    <View
-        android:id="@+id/view_user_profile"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@+id/et_user_info"/>
+
 
 
     <TextView
         android:id="@+id/tv_review"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="12dp"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
         android:text="Reviews"
         android:textAlignment="textStart"
-        android:textColor="@color/darkGrey"
-        android:textSize="26dp"
-        android:layout_below="@+id/view_user_profile"/>
+        android:textColor="@color/colorAccent"
+        android:textSize="23dp"
+        android:layout_below="@+id/et_user_info"/>
+
+    <!--<View
+        android:id="@+id/view_user_profile"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="12dp"
+        android:background="@android:color/darker_gray"
+        android:layout_below="@+id/tv_review"/>-->
 
     <ListView
         android:id="@+id/review_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_review"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         />
 
     <android.support.design.widget.FloatingActionButton

@@ -107,14 +107,19 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
             if(gpsAlertPref == Constants.GPS_ALERT_SHOW)
                 Utils.showGPSDisabledAlert(this);
         } else {
+            Log.d("gps","ok");
             location = Utils.getLocation(this);
 
             if(location != null) {
+                Log.d("location","ok");
+
                 //etAddress.setText(location.first.toString() + "," + location.second.toString());
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         final String streetName = Utils.getStreetName(location.first,location.second,mContext);
+                        Log.d("street:",streetName);
+
                         etAddress.post(new Runnable() {
                             @Override
                             public void run() {
@@ -195,6 +200,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
 
                 Intent intMyJobs = new Intent(PostJobActivity.this, MyJobsActivity.class);
                 startActivity(intMyJobs);
+                finish();
             }
         }
     }
@@ -239,7 +245,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                     bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -252,7 +258,7 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == Constants.PICK_LOCATION) {
             if(resultCode == RESULT_OK) {

@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class OnNavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener  {
@@ -58,6 +60,7 @@ public class OnNavigationItemSelectedListener implements NavigationView.OnNaviga
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             prefs.edit().putBoolean(Constants.PREF_REMEMBER_ME, false).commit();
             prefs.edit().putInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN).commit();
+            LoginManager.getInstance().logOut();
             Intent intLogIn = new Intent(context, LoginActivity.class);
             intLogIn.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intLogIn);

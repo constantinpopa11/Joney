@@ -1,6 +1,8 @@
 package it.unitn.disi.joney;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +16,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -42,11 +45,13 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import static it.unitn.disi.joney.ImageUploadUtils.saveImage;
@@ -66,10 +71,12 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
 
     boolean descriptionChanged = false, profileImageChanged = false;
     boolean isAnotherUser = false;
+    int currentUserId;
 
     DatabaseHandler db = new DatabaseHandler(this);
 
     UserProfileImage upi;
+    User user;
 
     private Context mContext;
 
@@ -89,7 +96,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         mContext = this;
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        final int currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
+        currentUserId = prefs.getInt(Constants.PREF_CURRENT_USER_ID, Constants.NO_USER_LOGGED_IN);
         //Toast.makeText(getApplicationContext(),"User id: " + String.valueOf(currentUserId),Toast.LENGTH_LONG).show();
 
         tvUserName = (TextView) findViewById(R.id.tv_user_name);
@@ -110,7 +117,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             etUserInfo.setFocusable(false);
             //ivUserProfileImage.setClickable(false);
 
-            User user = db.getUserById(userId);
+            user = db.getUserById(userId);
 
             this.setTitle(user.getFirstName() + "'s Profile");
             tvUserName.setText(user.getFirstName() + " " + user.getLastName());
@@ -126,7 +133,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
 
             feedbackList = db.getUserFeedbacks(userId);
             rbUserAverage.setRating(Utils.getUserAverageRating(this, user.id));
-            Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
             flaReviews = new FeedbackListAdapter(this,feedbackList);
             lvReviews.setAdapter(flaReviews);
 
@@ -145,10 +152,10 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener(getApplicationContext(), drawer));
 
-            User user = db.getUserById(currentUserId);
+            user = db.getUserById(currentUserId);
 
 
-            this.setTitle(user.getFirstName() + "'s Profile");
+            this.setTitle("Your Profile");
             tvUserName.setText(user.getFirstName() + " " + user.getLastName());
             etUserInfo.setText(user.getDescription());
 
@@ -166,11 +173,28 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                 }
             }
 
-            feedbackList = db.getUserFeedbacks(currentUserId);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    feedbackList = db.getUserFeedbacks(currentUserId);
+                    rbUserAverage.setRating(Utils.getUserAverageRating(mContext, user.id));
+                    //Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
+                    flaReviews = new FeedbackListAdapter(mContext,feedbackList);
+
+                    lvReviews.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            lvReviews.setAdapter(flaReviews);
+                        }
+                    });
+                }
+            }) .start();
+            /*feedbackList = db.getUserFeedbacks(currentUserId);
             rbUserAverage.setRating(Utils.getUserAverageRating(this, user.id));
             Toast.makeText(getApplicationContext(),"Total feedbacks = " + String.valueOf(feedbackList.size()),Toast.LENGTH_SHORT).show();
             flaReviews = new FeedbackListAdapter(this,feedbackList);
-            lvReviews.setAdapter(flaReviews);
+            lvReviews.setAdapter(flaReviews);*/
 
 
             ivUserProfileImage.setOnClickListener(new View.OnClickListener() {
@@ -242,7 +266,9 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
 
                 }
             });
+            llChat.setVisibility(View.INVISIBLE);
             llChat.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("NewApi")
                 @Override
                 public void onClick(View v) {
                     /*Intent intUser = new Intent(UserProfileActivity.this,UserProfileActivity.class);
@@ -258,16 +284,38 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                     intFeed.putExtra("jobId",3);
                     startActivity(intFeed);*/
 
-                    createNotificationChannel();
+                    /*createNotificationChannel();
                     NotificationCompat.Builder ncb = getNotification();
                     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
-                    notificationManager.notify(1, ncb.build());
+                    notificationManager.notify(1, ncb.build());*/
+
+                    /*Utils.createNotificationChannel("newMessage","To notify new messages",
+                            "idNewMessage",getSystemService(NotificationManager.class));
+                    Intent intent = new Intent(UserProfileActivity.this, ChatActivity.class);
+                    intent.putExtra("senderId",1);
+                    intent.putExtra("receiverId",2);
+                    NotificationCompat.Builder build = Utils.getNotification(mContext,intent,"idNewMessage","New message!","You got a new message from " + db.getUserById(2).getFirstName());
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
+                    notificationManager.notify(1, build.build());*/
                 }
             });
 
 
         }
         //outside else
+        if(intent.hasExtra("FromFacebook")) {
+            //Load facebook picture
+            String profile_pic = "";
+            Log.d("Extra","found");
+            String id = AccessToken.getCurrentAccessToken().getUserId();
+            Log.d("UserId",id);
+            //String id = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Constants.PREF_CURRENT_USER_FACEBOOK_ID,"not_found");
+            if(id != null) {
+                profile_pic = "https://graph.facebook.com/" + id + "/picture?type=large";
+                Log.d("Path",profile_pic);
+                new saveProfileImage(currentUserId).execute(profile_pic);
+            }
+        }
     }
 
     @Override
@@ -368,7 +416,7 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -396,6 +444,12 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
     public void onRemovePicture(int imgViewIndex) {
         if (ivUserProfileImage != null) {
             ivUserProfileImage.setImageResource(R.drawable.ic_pictures);
+            ivUserProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, -1, Constants.PATH_USER_PROFILE_IMAGES);
+                }
+            });
             btnSaveChanges.setVisibility(View.VISIBLE);
             profileImageChanged = true;
         }
@@ -434,39 +488,53 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
         return Uri.parse(path);
     }
 
-    public NotificationCompat.Builder getNotification()
-    {
-        Intent intent = new Intent(this, PostJobActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+    private class saveProfileImage extends AsyncTask<String, Void, Bitmap> {
+        int userId;
+        public saveProfileImage(int userId) {
+            this.userId = userId;
+        }
 
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap bitmap = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                bitmap = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "id")
-                .setSmallIcon(R.drawable.logo_joney_grey)
-                .setContentTitle("Title")
-                .setContentText("Text")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);;
+        protected void onPostExecute(Bitmap result) {
 
-        return builder;
-    }
+            if (result != null) {
+                btnSaveChanges.setVisibility(View.VISIBLE);
+                profileImageChanged = true;
+                ivUserProfileImage.setImageBitmap(result);
+                ivUserProfileImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int clickedImgIndex = 0;
+                        ImageUploadUtils.showPictureOptionDialog(mContext, UserProfileActivity.this, clickedImgIndex, Constants.PATH_USER_PROFILE_IMAGES);
+                    }
+                });
+            }
 
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Test";
-            String description = "Description";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("id", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            /*String path = saveImage(getApplicationContext(), result, Constants.PATH_USER_PROFILE_IMAGES);
+
+            UserProfileImage userProfileImage = db.getUserProfileImage(currentUserId);
+            if (userProfileImage == null) {
+                userProfileImage = new UserProfileImage(path, currentUserId);
+                db.addUserProfileImage(userProfileImage);
+            } else {
+                Log.d("Path",path);
+                db.updateUserProfileImage(currentUserId, path);
+            }*/
         }
     }
+
 
     /*public Bitmap getBitmap(){
         //this.getContentResolver().notifyChange(Uri.fromFile(photo), null);

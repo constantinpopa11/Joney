@@ -66,7 +66,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                     if (user != null) {
                         String password = "joney2019";
                         db.updatePassword(email, Constants.md5(password));
-                        Toast.makeText(getApplicationContext(), "New password: joney2019", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Check your email for further information", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "There is no account with this email", Toast.LENGTH_LONG).show();
                     }

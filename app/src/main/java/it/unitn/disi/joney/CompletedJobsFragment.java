@@ -95,7 +95,7 @@ public class CompletedJobsFragment extends Fragment {
             expandableListView = (ExpandableListView) view.findViewById(R.id.elv_posted_jobs);
             expandableListAdapter = new ExpandableJobListAdapter(context, completedJobs, Constants.COMPLETED_JOB_TAB);
             expandableListView.setAdapter(expandableListAdapter);
-            expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            /*expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
                 @Override
                 public void onGroupExpand(int groupPosition) {
@@ -103,9 +103,9 @@ public class CompletedJobsFragment extends Fragment {
                             completedJobs.get(groupPosition).getTitle() + " List Expanded.",
                             Toast.LENGTH_SHORT).show();
                 }
-            });
+            });*/
 
-            expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            /*expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
 
                 @Override
                 public void onGroupCollapse(int groupPosition) {
@@ -114,9 +114,9 @@ public class CompletedJobsFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();
 
                 }
-            });
+            });*/
 
-            expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            /*expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v,
                                             int groupPosition, int childPosition, long id) {
@@ -128,7 +128,7 @@ public class CompletedJobsFragment extends Fragment {
                     ).show();
                     return false;
                 }
-            });
+            });*/
         } else {
             TextView tvInfo = (TextView) view.findViewById(R.id.tv_info);
             tvInfo.setVisibility(View.VISIBLE);

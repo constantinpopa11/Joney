@@ -10,9 +10,9 @@ public class OnSpinnerItemSelectedListener implements AdapterView.OnItemSelected
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         JobCategory jobCategory = (JobCategory) parent.getItemAtPosition(pos);
-        Toast.makeText(parent.getContext(),
+        /*Toast.makeText(parent.getContext(),
                 "OnItemSelectedListener : " + jobCategory.getName() + " " + jobCategory.getId(),
-                Toast.LENGTH_SHORT).show();
+                Toast.LENGTH_SHORT).show();*/
     }
 
     @Override
