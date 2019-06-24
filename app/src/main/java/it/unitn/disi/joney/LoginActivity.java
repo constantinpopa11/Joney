@@ -68,7 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         //login user and redirect to home
         if (isLoggedIn && currentUserId != Constants.NO_USER_LOGGED_IN) {
             Log.i("Already logged in ", isLoggedIn + " " + currentUserId);
-            Intent intHome = new Intent(LoginActivity.this, MyJobsActivity.class);
+            Intent intHome = new Intent(LoginActivity.this, HomeActivity.class);
             intHome.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intHome);
         }
