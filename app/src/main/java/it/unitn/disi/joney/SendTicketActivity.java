@@ -116,27 +116,6 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
         }
     }
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.send_ticket, menu);
-        return true;
-    }*/
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private class SendTicketListener implements View.OnClickListener {
         @Override
@@ -190,7 +169,8 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
                 Uri contentURI = data.getData();
                 Log.d("Uri", contentURI.toString());
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    bitmap = Utils.handleSamplingAndRotationBitmap(this, contentURI);
                 } catch (IOException e) {
                     e.printStackTrace();
                     //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
@@ -208,7 +188,8 @@ public class SendTicketActivity extends AppCompatActivity implements PictureUplo
             //bitmap = (Bitmap) data.getExtras().get("data");
             Log.d("Uri", photoUri.toString());
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                bitmap = Utils.handleSamplingAndRotationBitmap(this, photoUri);
             } catch (IOException e) {
                 e.printStackTrace();
                 //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();

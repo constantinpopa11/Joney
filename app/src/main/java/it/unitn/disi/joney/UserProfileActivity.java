@@ -344,14 +344,6 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
                     return true;
             }
         }
-        else {
-            int id = item.getItemId();
-
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_settings) {
-                return true;
-            }
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -413,7 +405,9 @@ public class UserProfileActivity extends AppCompatActivity implements PictureUpl
             Uri contentURI = data.getData();
             Log.d("Img URI", contentURI.toString());
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                //bitmap = Utils.handleSamplingAndRotationBitmap(this, contentURI);
+                bitmap = Utils.handleSamplingAndRotationBitmap(this, contentURI);
             } catch (IOException e) {
                 e.printStackTrace();
                 //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();

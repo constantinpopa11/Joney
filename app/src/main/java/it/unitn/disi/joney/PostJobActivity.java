@@ -242,7 +242,8 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
                 Uri contentURI = data.getData();
                 Log.d("Img URI",contentURI.toString());
                 try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
+                    bitmap = Utils.handleSamplingAndRotationBitmap(this, contentURI);
                 } catch (IOException e) {
                     e.printStackTrace();
                     //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
@@ -255,7 +256,8 @@ public class PostJobActivity extends AppCompatActivity implements PictureUploadL
             //bitmap = (Bitmap) data.getExtras().get("data");
             Log.d("Uri", photoUri.toString());
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                //bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+                bitmap = Utils.handleSamplingAndRotationBitmap(this, photoUri);
             } catch (IOException e) {
                 e.printStackTrace();
                 //Toast.makeText(getApplicationContext(), "Failed!", Toast.LENGTH_SHORT).show();
